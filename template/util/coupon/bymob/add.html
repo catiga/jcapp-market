@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 券发放信息管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/switchery/switchery.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/summernote/summernote.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/summernote/summernote-bs3.css|" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-lg-10">
+					<h2>手机号批量发券</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><a href="javascript:;">营销工具</a></li>
+						<li class="active"><strong>手机号发券</strong></li>
+					</ol>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+			<div class="wrapper wrapper-content animated fadeInRight">
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>基本信息</h5>
+								<div class="ibox-tools">
+									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
+									<a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#"> <i class="fa fa-wrench"></i></a>
+									<ul class="dropdown-menu dropdown-user">
+										<li><a href="javascript:;">暂无</a></li>
+									</ul>
+									<a class="close-link"> <i class="fa fa-times"></i></a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="row">
+									<div class="col-sm-8 b-r">
+										<form class="form-horizontal">
+											<div class="form-group">
+												<label class="col-lg-2 control-label">主题</label>
+												<div class="col-lg-10">
+													<input type="text" placeholder="主题信息" class="form-control" id="title" th:value="${pub.title}">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-lg-2 control-label">备注</label>
+												<div class="col-lg-10">
+													<textarea class="form-control" rows="" cols="" id="info" th:utext="${pub.info}"></textarea>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="col-sm-4">
+										<h4>操作</h4>
+										<p>仅保存基本信息:</p>
+										<button data-style="zoom-in" class="ladda-button btn btn-primary btn-sm save_basic_info"><i class="fa fa-pencil"></i> 保存基本信息 </button>
+										<button data-style="zoom-in" class="ladda-button btn btn-warning btn-sm save_and_back"><i class="fa fa-pencil"></i> 保存并返回 </button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>发券详情</h5>
+								<button id="edit" class="hidden btn btn-danger btn-xs m-l-sm edit_content" type="button">增加</button>
+								<button id="save" class="hidden btn btn-primary  btn-xs save_content" type="button">保存</button>
+							</div>
+							<div class="ibox-content no-padding">
+								<table id="datatable-buttons" class="table table-striped table-bordered">
+									<thead>
+										<tr>
+											<th>手机号码</th>
+											<th>券批次</th>
+											<th>发券数量</th>
+											<th style="width: 20%">操作</th>
+										</tr>
+									</thead>
+									<tbody id="tbale_item">
+										<tr th:each="pi:${pub_items}" th:attr_id="${pi.id}">
+											<th style="width:10%"><input class="item_mob" th:value="${pi.mobile}"></th>
+											<th style="width:40%">
+												<select class="item_cb form-control">
+													<option th:each="w:${available_cbs}" th:value="${w.id}" th:text="${w.title}" th:selected="${w.id==pi.cb}"></option>
+												</select>
+											</th>
+											<th style="width:5%"><input class="item_num" th:value="${pi.num}"></th>
+											<th>
+												<a href="javascript:void(0)" data-style="zoom-in" class="ladda-button btn btn-success btn-xs save_item"><i class="fa fa-pencil"></i>保存 </a>
+												<a href="javascript:void(0)" data-style="zoom-in" class="ladda-button btn btn-danger btn-xs  delete_item"><i class="fa fa-pencil"></i>删除 </a>
+											</th>
+										</tr>
+										<tr>
+											<th style="width:10%"><input class="item_mob"></th>
+											<th style="width:40%">
+												<select class="item_cb form-control">
+													<option th:each="w:${available_cbs}" th:value="${w.id}" th:text="${w.title}"></option>
+												</select>
+											</th>
+											<th style="width:5%"><input class="item_num"></th>
+											<th>
+												<a href="javascript:void(0)" data-style="zoom-in" class="ladda-button btn btn-success btn-xs save_item"><i class="fa fa-pencil"></i>保存 </a>
+												<a href="javascript:void(0)" data-style="zoom-in" class="ladda-button btn btn-danger btn-xs  delete_item"><i class="fa fa-pencil"></i>删除 </a>
+											</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<table style="display:none">
+				<tbody class="template">
+				<tr>
+					<th style="width:10%"><input class="item_mob"></th>
+					<th style="width:40%">
+						<select class="item_cb form-control">
+							<option th:each="w:${available_cbs}" th:value="${w.id}" th:text="${w.title}"></option>
+						</select>
+					</th>
+					<th style="width:5%"><input class="item_num"></th>
+					<th>
+						<a href="javascript:void(0)" data-style="zoom-in" class="ladda-button btn btn-success btn-xs save_item"><i class="fa fa-pencil"></i>保存 </a>
+						<a href="javascript:void(0)" data-style="zoom-in" class="ladda-button btn btn-danger btn-xs  delete_item"><i class="fa fa-pencil"></i>删除 </a>
+					</th>
+				</tr>
+				</tbody>
+			</table>
+			<div th:replace="../../../common/foot"></div>
+		</div>
+	</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/switchery/switchery.js(sp=${pub_bucket})}"></script>
+	<script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<!-- SUMMERNOTE -->
+    <script th:src="|${pub_bucket}/js/plugins/summernote/summernote.min.js|"></script>
+    
+    <!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    
+</body>
+
+<script type="text/javascript">
+$(function() {
+	let pubid = '[[${pubid}]]';
+	//$(".item_cb").select2({placeholder : "选择发券批次", allowClear : true});
+	var l = $(".ladda-button").ladda();
+	$(".save_basic_info").on("click", function() {
+		let title = $.trim($("#title").val());
+		let info = $("#info").val();
+		var $this = $(this);
+		$this.ladda('start');
+		$.post('/market/util/coupon/bymob/aj/save', {pubid:pubid, title:title, info:info}, function(data) {
+			$this.ladda('stop');
+			if(data.available) {
+				pubid = data.data.id;
+				layer.msg('操作成功');
+			} else {
+				swal("提示", data.messages[0] + ":" + data.messages[1], "error");
+			}
+		});
+	});
+	
+	$(".save_and_back").on("click", function() {
+		let title = $.trim($("#title").val());
+		let info = $("#info").val();
+		var $this = $(this);
+		$this.ladda('start');
+		$.post('/market/util/coupon/bymob/aj/save', {pubid:pubid, title:title, info:info}, function(data) {
+			$this.ladda('stop');
+			if(data.available) {
+				pubid = data.data.id;
+				layer.msg('操作成功');
+				location.href = '/market/util/coupon/bymob/index?' + new Date().getTime();
+			} else {
+				swal("提示", data.messages[0] + ":" + data.messages[1], "error");
+			}
+		});
+	});
+	
+	$("body").on("click", ".delete_item", function() {
+		let item_id = $(this).parent().parent().attr('attr_id');
+		if(!item_id) {
+			$(this).parent().parent().find('.item_mob').val('');
+			$(this).parent().parent().find('.item_num').val('')
+			return
+		}
+		var $this = $(this);
+		//$this.ladda('start');
+		$.post('/market/util/coupon/bymob/aj/remove_item', {pubid:pubid,item_id:item_id}, function(data) {
+			//$this.ladda('stop');
+			if(data.available) {
+				$this.parent().parent().remove();
+				layer.msg('操作成功');
+			} else {
+				swal("提示", data.messages[0] + ":" + data.messages[1], "error");
+			}
+		});
+	});
+	$("body").on("click", ".save_item", function() {
+		if(!pubid) {
+			swal("提示", '请先保存基本信息', "error");
+			return
+		}
+		let item_mob = $(this).parent().parent().find('.item_mob').val();
+		let item_cb = $(this).parent().parent().find('.item_cb').val();
+		let item_num = $(this).parent().parent().find('.item_num').val();
+		let item_id = $(this).parent().parent().attr('attr_id');
+		if(!item_id) {
+			item_id = 0;
+		}
+		if(!item_mob) {
+			layer.msg('请输入手机号码', {shift: 6});
+			return
+		}
+		if(!item_cb) {
+			layer.msg('请选择券批次', {shift: 6});
+			return
+		}
+		if(!item_num) {
+			layer.msg('请输入发券数量', {shift: 6});
+			return
+		}
+		var $this = $(this);
+		//$this.ladda('start');
+		$.post('/market/util/coupon/bymob/aj/save_item', {pubid:pubid,mob:item_mob,cb:item_cb,num:item_num,item_id:item_id}, function(data) {
+			//$this.ladda('stop');
+			if(data.available) {
+				if(item_id==0) {
+					$("#tbale_item").append($(".template").html());
+				}
+				$this.parent().parent().attr('attr_id', data.data.id);
+				layer.msg('操作成功');
+			} else {
+				swal("提示", data.messages[0] + ":" + data.messages[1], "error");
+			}
+		});
+	});
+});
+</script>
+
+</html>

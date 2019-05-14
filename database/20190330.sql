@@ -1,0 +1,1 @@
+alter table ma_movie_coupon_rule add column `halls` varchar(255) DEFAULT NULL;

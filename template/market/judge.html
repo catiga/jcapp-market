@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 营销管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>营销管理</h2>
+				</div>
+			</div>
+			<div class="x_content">
+			 <div class="text-c odd" role="row" th:each="sm: ${support_mtypes}">
+			     <!-- <div th:if="${sm=='2000' }">
+			         <div class="col-md-4">
+                          <div class="templatemo-progress">
+                              <div class="list-group">
+                                  <a href="javascript:void(0)" class="list-group-item active create_mt" th:value="${sm }" >
+                                      <h4 class="list-group-item-heading">影院票务类</h4>
+                                      <p class="list-group-item-text">创建影城在线选座营销活动</p>
+                                  </a> 
+                              </div>
+                          </div>
+                      </div>
+			     </div> -->
+			 </div>
+			  <div class="text-c odd" role="row" th:each="sm: ${support_mtypes}">
+                 <div th:if="${sm=='2200' }">
+                     <div class="col-md-4">
+                          <div class="templatemo-progress">
+                              <div class="list-group">
+                                  <a href="javascript:void(0)" class="list-group-item active create_mt" th:value="${sm }" >
+                                      <h4 class="list-group-item-heading">影院票务类</h4>
+                                      <p class="list-group-item-text">创建影城在线选座营销活动，支持电子会员卡</p>
+                                  </a> 
+                              </div>
+                          </div>
+                      </div>
+                 </div>
+               </div>
+                <div class="text-c odd" role="row" th:each="sm: ${support_mtypes}">
+                  <div th:if="${sm=='3000' }">
+                     <div class="col-md-4">
+                          <div class="templatemo-progress">
+                              <div class="list-group">
+                                  <a href="javascript:void(0)" class="list-group-item active create_mt" th:value="${sm }" >
+                                       <h4 class="list-group-item-heading">会员卡充值类</h4>
+                                       <p class="list-group-item-text">创建会员卡充值类营销活动</p>
+                                 </a>
+                              </div>
+                          </div>
+                      </div>
+                 </div>
+                </div>
+                 <div class="text-c odd" role="row" th:each="sm: ${support_mtypes}">
+                  <div th:if="${sm=='2110' }">
+                     <div class="col-md-4">
+                          <div class="templatemo-progress">
+                              <div class="list-group">
+                                  <a href="javascript:void(0)" class="list-group-item active create_mt" th:value="${sm }" >
+                                       <h4 class="list-group-item-heading">充值赠礼类</h4>
+                                       <p class="list-group-item-text">储值卡充值赠礼</p>
+                                 </a>
+                              </div>
+                          </div>
+                      </div>
+                 </div>
+             </div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				// Ajax example
+				//                $.ajax().always(function () {
+				//                    simpleLoad($(this), false)
+				//                });
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	var post_err_msg = "[[${error_msg}]]";
+    if(post_err_msg){
+        layer.msg(post_err_msg, {icon: 2}); 
+    }
+    $(".create_mt").on("click", function() {
+    	var attr_mt = $(this).attr("value");
+        var url = "[[${contextPath}]]/market/add_view?mt=" + attr_mt + "&" + Date.parse(new Date());
+        location.href = url;
+    });
+});
+
+</script>
+
+</html>

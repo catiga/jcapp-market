@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 营销管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${static})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${static})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${static})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${static})}" rel="stylesheet">
+<link th:href="@{{sp}/jqui1114/jquery-ui.css(sp=${static})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${static})}" rel="stylesheet">
+<script th:src="@{{sp}/kindeditor/kindeditor-min.js(sp=${pub_bucket})}"> </script>
+</head>
+<script>
+var editor;
+KindEditor.ready(function(K) {
+	editor = K.create('textarea[name="mc_content"]', {
+		allowFileManager : true
+	});
+	K('input[name=getHtml]').click(function(e) {
+		alert(editor.html());
+	});
+	K('input[name=isEmpty]').click(function(e) {
+		alert(editor.isEmpty());
+	});
+	K('input[name=getText]').click(function(e) {
+		alert(editor.text());
+	});
+	K('input[name=selectedHtml]').click(function(e) {
+		alert(editor.selectedHtml());
+	});
+	K('input[name=setHtml]').click(function(e) {
+		editor.html('<h3>Hello KindEditor</h3>');
+	});
+	K('input[name=setText]').click(function(e) {
+		editor.text('<h3>Hello KindEditor</h3>');
+	});
+	K('input[name=insertHtml]').click(function(e) {
+		editor.insertHtml('<strong>插入HTML</strong>');
+	});
+	K('input[name=appendHtml]').click(function(e) {
+		editor.appendHtml('<strong>添加HTML</strong>');
+	});
+	K('input[name=clear]').click(function(e) {
+		editor.html('');
+	});
+});
+</script>
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>   <!-- 顶部 -->
+			<div class="page-title"> <!-- tab栏目 -->
+				<div class="">
+                    <div class="page-title">
+                        <div class="title_left"><h3>创建会员卡充值营销活动</h3></div>
+                    </div>
+                </div>
+			</div>
+			<div class="row">
+                 <div class="col-md-12">
+                     <div class="col-md-12">
+                         <form class="goodsinfo_form" role="form" id="templatemo-preferences-form" method="post">
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label class="control-label" for="mc_name">活动名称</label> 
+                                         <input name="mc_name" type="text" class="form-control" id="mc_name" placeholder="输入活动名称"> 
+                                         <span class="fa fa-check form-control-feedback"></span>
+                                     </div>
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label class="control-label" for="mc_no">活动编号</label> 
+                                         <input name="mc_no" type="text" class="form-control" id="mc_no" placeholder="可手动输入编号，为空则自动生成"> 
+                                         <span class="fa fa-check form-control-feedback"></span>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label class="control-label" for="mc_info">活动简介</label>
+                                         <input name="mc_info" type="text" class="form-control" id="mc_info" placeholder="请输入活动简介">
+                                         <span class="fa fa-check form-control-feedback"></span>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-6 margin-bottom-15">
+                                     <label class="control-label" for="mc_start_time">活动开始时间</label>
+                                     <input name="mc_start_time" type="text" class="form-control" id="mc_start_time" placeholder="请输入活动开始时间" readonly>
+                                     <span class="fa fa-check form-control-feedback"></span>
+                                 </div>
+                                 <div class="col-md-6 margin-bottom-15">
+                                     <label class="control-label" for="mc_end_time">活动结束时间</label> 
+                                     <input name="mc_end_time" type="text" class="form-control" id="mc_end_time" placeholder="请输入活动结束时间" readonly>
+                                     <span class="fa fa-check form-control-feedback"></span>
+                                 </div>
+                             </div>
+                             <hr/>
+                             
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-12 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">优惠总量与结算信息设置</label><br/>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div style="background:#BC8F8F;padding:15px;">
+                                 <div class="has-feedback">
+                                     <div class="row">
+                                         <div class="col-md-6 margin-bottom-15">
+                                             <label for="l_cal_t_n" class="">充值总次数（次）：</label>
+                                             <input type="text" class="form-control" id="l_cal_t_n" placeholder="不限">
+                                         </div>
+                                         <div class="col-md-6 margin-bottom-15">
+                                             <label for="l_cal_t_a" class="">充值总金额（元）：</label>
+                                             <input type="text" class="form-control" id="l_cal_t_a" placeholder="不限">
+                                         </div>
+                                     </div>
+                                     <div class="row">
+                                         <div class="col-md-6 margin-bottom-15">
+                                             <!-- 新增字段 -->
+                                             <label for="low_price_settle" class="">第三方参与结算：</label>
+                                             <select id="low_price_settle" class="form-control">
+                                                 <option value="0">否</option>
+                                                 <option value="1">是</option>
+                                             </select>
+                                         </div>
+                                         <div class="col-md-6 margin-bottom-15">
+                                             <!-- 新增字段 -->
+                                             <label for="settle_aim" class="">结算对象：</label>
+                                             <input type="text" class="form-control" id="settle_aim" placeholder="记录结算对象，如建设银行">
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <hr/>
+                             
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-12 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">设置活动策略</label><br/>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-3 margin-bottom-15">
+                                     <label for="mc_price_streg">价格策略</label> 
+                                     <select name="mc_price_streg" class="form-control margin-bottom-15" id="mc_price_streg">
+                                         <option value="40">充值返现</option>
+                                     </select>
+                                 </div>
+                                 <div class="col-md-3 margin-bottom-15">
+                                     <label for="mc_price_value">充值金额</label> 
+                                     <input name="mc_price_value" type="text" class="form-control" id="mc_price_value" placeholder="请输入数字，充值金额">
+                                 </div>
+                                 <div class="col-md-3 margin-bottom-15">
+                                     <label for="mc_price_return">返还金额</label> 
+                                     <input name="mc_price_return" type="text" class="form-control" id="mc_price_return" placeholder="请输入数字，返还金额">
+                                 </div>
+                                 <div class="col-md-2 margin-bottom-15">
+                                     <label for="coupon_app">&nbsp;</label>
+                                     <button type="button" class="btn btn-primary form-control add_new_price_streg">添加一条</button>
+                                 </div>
+                             </div>
+                             <hr/>
+                             
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-12 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">会员卡级别限制</label><br/>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-12 margin-bottom-15">
+                                         <label for="mc_l_ms">选择参与活动的会员卡等级（为空则所有）</label> 
+                                         <select id="v_mc_l_ms" class="js-example-basic-multiple" multiple="multiple" style="width:100%;">
+                                         </select>
+                                     </div>
+                                 </div>
+                             </div>
+                             <hr/>
+                             
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-3 margin-bottom-15">
+                                         <label for="mc_l_f">限制首次优惠</label> 
+                                         <input name="mc_l_f" type="checkbox" id="mc_l_f">
+                                     </div>
+                                 </div>
+                             </div>
+                             
+                             <hr/>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-12 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">请设置购票具体约束条件</label><br/>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-2 margin-bottom-15">
+                                         <label for="mc_l_u">充值次数限制</label> 
+                                         <input name="mc_l_u" type="text" class="form-control" id="mc_l_u" placeholder="0则不限次数">
+                                     </div>
+                                     <div class="col-md-3 margin-bottom-15">
+                                         <label for="mc_l_u_f">充值频率限制</label> 
+                                         <select name="mc_l_u_f" class="form-control margin-bottom-15" id="mc_l_u_f">
+                                             <option value="-1">不限制</option>
+                                             <option value="d">每天</option>
+                                             <option value="w">每周</option>
+                                             <option value="m">每月</option>
+                                         </select>
+                                     </div>
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label for="mc_l_u_v">具体充值频率值</label> 
+                                         <input name="mc_l_u_v" type="text" class="form-control" id="mc_l_u_v" placeholder="如周一三五，则写1,3,5" disabled>
+                                     </div>
+                                 </div>
+                             </div>
+                             
+                             <div class="row">
+                                 <div class="col-md-12 margin-bottom-15">
+                                     <label for="mc_content">详细信息</label>
+                                     <textarea name="mc_content" class="form-control" rows="3" id="mc_content"></textarea>
+                                 </div>
+                             </div>
+                             
+                             <div class="row templatemo-form-buttons">
+                                 <div class="col-md-12">
+                                     <button type="button" class="btn btn-primary save">保存</button>
+                                     <!-- 
+                                     <button type="reset" class="btn btn-default">重置</button>
+                                      -->
+                                 </div>
+                             </div>
+                         </form>
+                     </div>
+                 </div>
+             </div>
+		</div>
+	</div>
+	
+	   
+	<!-- Mainly scripts -->
+    <script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${static})}"></script>
+    <script th:src="@{{sp}/js/bootstrap.min.js(sp=${static})}"></script>
+    <script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${static})}"></script>
+    <script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${static})}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script th:src="@{{sp}/js/inspinia.js(sp=${static})}"></script>
+    <script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${static})}"></script>
+    
+    <script th:src="@{{sp}/third/layer3/layer.js(sp=${static})}" type="text/javascript"></script>
+    <script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${static})}" type="text/javascript"></script>
+    
+    <script th:src="@{{sp}/jqui1114/jquery-ui.js(sp=${static})}" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-addon.js(sp=${static})}" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-zh-CN.js(sp=${static})}" type="text/javascript" charset="utf-8"></script>
+	
+</body>
+
+<script type="text/javascript">
+$(function() {
+	var post_err_msg = "[[${error_msg}]]";
+    if(post_err_msg){
+        layer.msg(post_err_msg, {icon: 2}); 
+    }
+    $(".add_new_market").on("click", function(){
+        location.href = "[[${contextPath}]]/market/judge?" + Date.parse(new Date());
+    });
+    
+});
+
+   $.ajax({
+        type: "POST",//请求方式
+        url:'[[${contextPath}]]/common/hierarchyCardList'
+        dataType: "json",
+　 		success: function(data){
+        
+    	var table = data.obj;
+		for (var i = 0; i < table.length; i++) {
+			var item = table[i];
+			$("#v_mc_l_ms").append("<option value=\""+item.acmid+"\">"+item.levelname+"--"+item.h_name+"+</option>");
+			}
+			$("#v_mc_l_ms").select2();
+			}
+    	});
+   $(".add_new_price_streg").on("click", function() {
+		var mc_price_streg = $(this).parent().parent().find("select[name='mc_price_streg']").val();
+		var mc_price_value = $(this).parent().parent().find("input[name='mc_price_value']").val();
+		var mc_price_return = $(this).parent().parent().find("input[name='mc_price_return']").val();
+		
+		var invalid = false;
+		$("input[name='mc_price_value']").each(function() {
+			var mc_price_value = $(this).val();
+			if(mc_price_value==null||mc_price_value.trim()==""||isNaN(mc_price_value)) {
+				$(this).parent().parent().find("input[name='mc_price_value']").val("");
+				invalid = true;
+				return;
+			}
+		});
+		$("input[name='mc_price_return']").each(function() {
+			var mc_price_return = $(this).val();
+			if(mc_price_return==null||mc_price_return.trim()==""||isNaN(mc_price_return)) {
+				$(this).parent().parent().find("input[name='mc_price_return']").val("");
+				invalid = true;
+				return;
+			}
+		});
+		if(invalid) {
+			layer.msg("请输入合法的充值与返现金额数值", {icon: 2});
+			return;
+		}
+		
+		var html = '<div class="row">';
+		html = html + '<div class="col-md-3 margin-bottom-15">';
+		html = html + '<label for="mc_price_streg">价格策略</label> ';
+		html = html + '<select name="mc_price_streg" class="form-control margin-bottom-15" id="mc_price_streg">';
+		html = html + '<option value="40">充值返现</option>';
+		html = html + '</select></div>';
+		
+		html = html + '<div class="col-md-3 margin-bottom-15">';
+		html = html + '<label for="mc_price_value">充值金额</label> ';
+		html = html + '<input name="mc_price_value" type="text" class="form-control" id="mc_price_value" placeholder="请输入数字，充值金额">';
+		html = html + '</div>';
+		
+		html = html + '<div class="col-md-3 margin-bottom-15">';
+		html = html + '<label for="mc_price_return">返还金额</label> ';
+		html = html + '<input name="mc_price_return" type="text" class="form-control" id="mc_price_return" placeholder="请输入数字，返还金额">';
+		html = html + '</div>';
+		
+		html = html + '<div class="col-md-2 margin-bottom-15">';
+		html = html + '<label for="coupon_app">&nbsp;</label>';
+		html = html + '<button type="button" class="btn btn-primary form-control del_price_streg">删除此项</button>';
+		html = html + '</div>';
+		
+		html = html + '</div>';
+		
+		$(this).parent().parent().after(html);
+		
+		$(".del_price_streg").on("click", function() {
+			$(this).parent().parent().fadeOut("fast", function() {
+				$(this).remove();
+			});
+		});
+	});
+	$("#mc_l_u_f").on("change", function() {
+		var v = $(this).val();
+		if(v=="w"||v=="m") {
+			$("#mc_l_u_v").removeAttr("disabled");
+		} else {
+			$("#mc_l_u_v").val("");
+			$("#mc_l_u_v").prop("disabled", true);
+		}
+	});
+	
+	$("#mc_l_f").change(function(){
+		var ched = $("#mc_l_f")[0].checked;
+		if(ched){
+			$("#mc_l_u_f").val(-1);
+			$("#mc_l_u_f").attr("disabled","disabled");
+			$("#mc_l_u_v").val("");
+			$("#mc_l_u_v").attr("disabled","disabled");
+		}else{
+			$("#mc_l_u_f").removeAttr("disabled");
+		}
+	});
+	
+	$("#mc_l_u").on("change", function() {
+		var v = $(this).val();
+		if(v==null||v.trim()=="") {
+			v = "0";
+		} else {
+			if(isNaN(v)) {
+				layer.msg("充值次数限制须为数字", {icon: 2});
+				$("#mc_l_u").val("");
+			} else {
+				if(parseInt(v)<0) {
+					layer.msg("充值次数限制须设置大于0的值", {icon: 2});
+					$("#mc_l_u").val("");
+				}
+			}
+		}
+	});
+   $(".save").on("click", function() {
+		var mc_name = $("#mc_name").val();
+		var mc_no = $("#mc_no").val();
+		var mc_info = $("#mc_info").val();
+		var mc_start_time = $("#mc_start_time").val();
+		var mc_end_time = $("#mc_end_time").val();
+		
+		var mc_l_ms = "";
+		var mc_l_ms_name = "";
+		$("#v_mc_l_ms option:selected").each(function(){
+			if(mc_l_ms_name){mc_l_ms_name += ",";}
+			if(mc_l_ms){mc_l_ms += ",";}
+			mc_l_ms += $(this).val();
+			mc_l_ms_name += $(this).html();
+		});
+		
+		var mc_l_f = $("#mc_l_f")[0].checked ? 1 : 0;
+		
+		var mc_l_u = $("#mc_l_u").val();
+		var mc_l_u_f = $("#mc_l_u_f").val();
+		var mc_l_u_v = $("#mc_l_u_v").val();
+		
+		var l_cal_t_n = $("#l_cal_t_n").val();
+		var l_cal_t_a = $("#l_cal_t_a").val();
+		
+		var mc_content = editor.html();
+		
+		//处理新增字段
+		var low_price_settle = $("#low_price_settle").val();
+		var settle_aim = $("#settle_aim").val();
+		
+		if(mc_name==null||mc_name.trim()=="") {
+			layer.msg("请输入营销活动名称", {icon: 2});
+			return;
+		}
+		if(mc_info==null||mc_info.trim()=="") {
+			layer.msg("请输入营销活动描述", {icon: 2});
+			return;
+		}
+		if(mc_start_time==null||mc_start_time==""||mc_end_time==null||mc_end_time=="") {
+			layer.msg("请设置活动进行的时间段", {icon: 2});
+			return;
+		}
+		//判断两次输入的时间
+		var sts = mc_start_time.split(":");
+		var st=sts[0].split("-");
+        var ets = mc_end_time.split(":");
+        var et=ets[0].split("-");
+        if(parseInt(st[0]+st[1]+st[2])>parseInt(et[0]+et[1]+et[2])) {
+            layer.msg("结束时间须大于开始时间", {icon: 2});
+            return;
+        } 
+        if(parseInt(st[0]+st[1]+st[2])==parseInt(et[0]+et[1]+et[2])) {
+            if(parseInt(sts[1])>=parseInt(ets[1])) {
+              layer.msg("结束时间须大于开始时间", {icon: 2});
+              return;
+            }
+        }
+        
+		var mc_p_streg = null;
+		$("select[name='mc_price_streg']").each(function() {
+			var t_v = $(this).val();
+			if(t_v!='40') {
+				layer.msg("请选择正确的营销价格策略", {icon: 2});
+				return;
+			} else {
+				var mc_price_value = $(this).parent().parent().find("input[name='mc_price_value']").val();
+				var mc_price_return = $(this).parent().parent().find("input[name='mc_price_return']").val();
+				if(mc_price_value==null||mc_price_value.trim()==""||isNaN(mc_price_value)) {
+					layer.msg("请输入正确的营销价格策略值", {icon: 2});
+					return;
+				}
+				if(mc_price_return==null||mc_price_return.trim()==""||isNaN(mc_price_return)) {
+					layer.msg("请输入正确的营销价格策略值", {icon: 2});
+					return;
+				}
+			}
+			var mc_p_s_v = $(this).parent().parent().find("input[name='mc_price_value']").val();
+			var mc_p_s_v_return = $(this).parent().parent().find("input[name='mc_price_return']").val();
+			var mc_p_s_v = t_v + "/" + mc_p_s_v + "/" + mc_p_s_v_return;
+			if(mc_p_streg==null) {
+				mc_p_streg = mc_p_s_v; 
+			} else {
+				mc_p_streg = mc_p_streg + ";" + mc_p_s_v;
+			}
+		});
+		
+		// begin to post
+		var index = layer.load();
+		var url = '[[${contextPath}]]/market/do_add_update_3000/?' + Date.parse(new Date());
+		$.post(url, {
+				mc_type:'3000',
+				mc_name:mc_name,//活动名称
+				mc_no:mc_no,//活动编号
+				mc_info:mc_info,//活动简介
+				mc_p_streg:mc_p_streg,//活动策略
+				mc_start_time:mc_start_time,//开始时间
+				mc_end_time:mc_end_time,//介绍时间
+				mc_l_ms:mc_l_ms,//会员卡级别限制
+				mc_l_f:mc_l_f,//限制首次优惠
+				mc_l_u:mc_l_u,//充值次数限制
+				mc_l_u_f:mc_l_u_f,//充值频率限制
+				mc_l_u_v:mc_l_u_v,//具体充值频率值
+				mc_content:mc_content,//详细信息
+				l_cal_t_n:l_cal_t_n,//充值总次数
+				l_cal_t_a:l_cal_t_a,//充值总金额
+				low_price_settle:low_price_settle,//是否第三方结算
+				settle_aim:settle_aim//结算对象
+				}, 
+		function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.href = '[[${contextPath}]]/market/index/?' + Date.parse(new Date());				    	
+			    });
+			} else {
+				var code = data.messages[0];
+				//var msg = "未知错误";
+				if(code=="input_param_error") {
+					msg = "输入参数错误";
+				} else if(code=="object_belong_error") {
+					msg = "活动归属错误";
+				}
+				layer.msg(code, {
+					shift : 6
+				});
+			}
+		});
+	});
+   
+
+   $("#l_cal_t_n").on("change", function() {
+       var v = $.trim($(this).val());
+       if(v!=null&&v!="") {
+           if(isNaN(v)) {
+               $(this).val("");
+               layer.msg("请输入合法的充值总次数限制", {icon: 2});
+           } else {
+               if(parseFloat(v)<=0) {
+                   $(this).val("");
+                   layer.msg("请输入合法的充值总次数限制", {icon: 2});
+               }
+           }
+       }
+   });
+   $("#l_cal_t_a").on("change", function() {
+       var v = $.trim($(this).val());
+       if(v!=null&&v!="") {
+           if(isNaN(v)) {
+               $(this).val("");
+               layer.msg("请输入合法的充值总金额限制", {icon: 2});
+           } else {
+               if(parseFloat(v)<=0) {
+                   $(this).val("");
+                   layer.msg("请输入合法的充值总金额限制", {icon: 2});
+               }
+           }
+       }
+   });
+    
+ </script>
+ <script>
+//开始时间
+$("#mc_start_time").datetimepicker({
+    showSecond: true,
+    timeFormat: 'hh:mm:ss',
+    stepHour: 1,
+    stepMinute: 1,
+    stepSecond: 1
+});
+//结束时间
+$("#mc_end_time").datetimepicker({
+    showSecond: true,
+    timeFormat: 'hh:mm:ss',
+    stepHour: 1,
+    stepMinute: 1,
+    stepSecond: 1
+});
+
+</script>
+
+</html>

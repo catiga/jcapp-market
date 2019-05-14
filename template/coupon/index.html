@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 卡劵管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-lg-10">
+					<h2>券管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><a href="javascript:;">券管理</a></li>
+						<li class="active"><strong>券批次列表</strong></li>
+					</ol>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+			
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>券批次列表</h5>
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs add_coupon" id="add_coupon">
+										<i class="fa fa-plus"></i>&nbsp创建卡券批次
+									</a>
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs print_set" id="print_set">
+										<i class="fa fa-plus"></i>&nbsp设置打印规则
+									</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="table-responsive">
+									<table class="table table-striped table-hover table-bordered">
+										<thead>
+											<tr>
+												<th>编号</th>
+												<th>名称</th>
+												<th>卡券应用类型</th>
+												<th>卡券类型</th>
+												<th>规则类型</th>
+												<th>总张数</th>
+												<th>可用数</th>
+												<th>领用失效</th>
+												<th>操作</th>
+												<th>打印</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="r:${page.result}">
+												<td>[[${r.coupon_no}]]</td>
+												<td><a href="#" th:attr="b_id=${r.id}" class="get_detail">[[${r.title}]]</a></td>
+												<td>
+													<div th:each="type : ${supp_types}">
+														<span th:if="${r.crapp== type.key}">[[${type.name}]]</span>
+													</div>
+												</td>
+												<td>
+													<span th:if="${r.coupon_type=='1000' }">代金券</span>
+													<span th:if="${r.coupon_type=='2000' }">兑换券</span>
+													<span th:if="${r.coupon_type=='3000' }">折扣券</span>
+													<span th:if="${r.coupon_type!='1000' && r.coupon_type!='2000' & r.coupon_type!='3000' }">[[r.coupon_type]]</span>
+												</td>
+												<td>
+													<div th:if="${r.is_outer==1}">外部</div>
+													<div th:if="${r.is_outer==0}">内部</div>
+												</td>
+												<td>[[${r.total }]]</td>
+												<td>[[${r.available }]]</td>
+												<td>
+													<div th:if="${r.validate_type=='0000'}">永久有效</div>
+													<div th:if="${r.validate_type=='0010'}">固定日期有效/[[${r.validate_period }]]</div>
+													<div th:if="${r.validate_type=='1001'}">领用后/[[${r.validate_period }]]天</div> 
+													<!--  <div th:if="${r.validate_type=='0002'}">领用后/ [[${r.validate_period }]]月</div>
+                                                	<div th:if="${r.validate_type=='0003'}">领用后/ [[${r.validate_period }]]年</div> -->
+												</td>
+												<td>
+													<a href="javascript:void(0)" class="btn btn-info btn-xs edit_view" th:value="${r.id }"><i class="fa fa-pencil"></i> 卡券详情</a> 
+													<a href="javascript:void(0)" class="btn btn-warning btn-xs switch_s" th:if="${r.cbstatus==null||r.cbstatus=='10'||r.cbstatus=='21' }" th:value="${r.id }">
+														<i class="fa fa-pencil"></i> 启用优惠券
+													</a>
+													<a href="javascript:void(0)" class="btn btn-danger btn-xs switch_s" th:if="${r.cbstatus=='20' }" th:value="${r.id }">
+														<i class="fa fa-pencil"></i>停用优惠
+													</a> 
+													<a href="javascript:void(0)" class="btn btn-success btn-xs incre_generate" th:value="${r.id }">
+														<i class="fa fa-pencil"></i>券生成
+													</a> 
+													<a href="javascript:void(0)" class="btn btn-primary btn-xs get_detail" th:attr="b_id=${r.id},value=${r.id},attr_total=${r.total},attr_available=${r.available}">
+														<i class="fa fa-pencil"></i>券发放详情
+													</a> 
+													<a href="javascript:void(0)" class="btn btn-dark btn-xs giv_coupon" th:attr="value=${r.id},attr_total=${r.total},attr_available=${r.available}">
+														<i class="fa fa-pencil"></i>卡券发放
+													</a>
+												</td>
+												<td>
+													<button class="btn btn-info btn-sm direct_print" type="button" th:attr_id="${r.id }"><i class="fa fa-paste"></i> 打印</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<div th:replace="../common/page"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+	<div id="templatemo-preferences-form-fast"
+		style="display: none; padding-left: 15px; padding-right: 15px">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="cb_title" class="control-label">卡券批次名称</label> <input
+					type="text" class="form-control" id="cb_title" value=""
+					placeholder="请输入卡券批次名称">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 margin-bottom-15">
+				<label for="cb_crapp" class="control-label">卡券应用类型</label> <select
+					name="cb_crapp" class="form-control margin-bottom-15" id="cb_crapp">
+					<option th:value="${type.key}" th:each="type : ${supp_types}">[[${type.name}]]</option>
+				</select>
+			</div>
+			<div class="col-md-6 margin-bottom-15">
+				<label for="cb_outer" class="control-label">规则类型</label> <select
+					name="cb_outer" class="form-control margin-bottom-15" id="cb_outer">
+					<option value="0">内部</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<!--  
+            <div class="col-md-6 margin-bottom-15">
+                <label for="cb_level" class="control-label">卡券层级</label>
+                <select name="mcr_level" class="form-control margin-bottom-15" id="cb_level">
+                    <option value="2">门店独立</option>
+                </select>
+            </div> -->
+			<div class="col-md-12 margin-bottom-15">
+				<label for="cb_mcflk" class="control-label">卡券类型</label> <select
+					name="cb_mcflk" class="form-control margin-bottom-15" id="cb_mcflk">
+					<option value="1000">代金券</option>
+					<option value="2000">兑换券</option>
+					<option value="3000">折扣券</option>
+				</select>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top: 20px;">
+			<div class="col-md-12 margin-bottom-15">
+				<button id="do_save_cb" class="btn btn-primary ">提交</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-12 col-sm-12" id="check_box_list"
+		style="display: none">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist" id="templatemo-tabs">
+			<li class="active"><a href="#home" role="tab" data-toggle="tab">门店列表</a></li>
+		</ul>
+		<!-- Tab panes -->
+		<div class="tab-content"></div>
+		<!-- tab-content -->
+	</div>
+
+	<div id="templatemo-preferences-form-use-count"
+		style="display: none; padding-left: 15px; padding-right: 15px; margin-bottom: 30px; max-width: 960px;">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="use_count_by">卡券用量方式</label> <select name="use_count_by"
+					class="form-control margin-bottom-15" id="use_count_by">
+					<option value="1000">每件</option>
+					<option value="2000">每类</option>
+					<option value="3000">每笔</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="use_count" class="control-label">卡券用量值</label> <input
+					type="text" class="form-control" id="use_count" value=""
+					placeholder="请输入大于零的整数">
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons">
+			<div class="col-md-12">
+				<button id="do_set_use_count" class="btn btn-primary">确认</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="lengthen_use_date"
+		style="display: none; padding-left: 15px; padding-right: 15px; margin-bottom: 30px; max-width: 960px;">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="lengthen_use_date_set">卡券失效日期</label> <input type="text"
+					class="form-control" id="lengthen_use_date_set" value=""
+					placeholder="">
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons">
+			<div class="col-md-12">
+				<button id="lengthen_use_date_btn" class="btn btn-primary">确认</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="templatemo-preferences-form"
+		class="templatemo-preferences-form-incre-generate"
+		style="display: none; padding-left: 15px; padding-right: 15px">
+		<div class="has-success has-feedback">
+			<div class="row">
+				<div class="col-md-12 margin-bottom-15">
+					<label for="incre_generate_num" class="control-label">增加数量</label>
+					<input type="text" class="form-control" id="incre_generate_num"
+						value=1>
+				</div>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons">
+			<div class="col-md-12">
+				<button id="do_incre_generate" class="btn btn-primary">生成</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="templatemo-preferences-form"
+		class="templatemo-preferences-form-give-coupon"
+		style="display: none; padding-left: 15px; padding-right: 15px">
+		<div class="has-success has-feedback">
+			<div class="row">
+				<div class="col-md-12 margin-bottom-15">
+					<label for="give_coupon_mobiles" class="control-label">手机号码列表(逗号","分隔)</label>
+					<textarea name="give_coupon_mobiles" class="form-control" rows="3"
+						id="give_coupon_mobiles"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons">
+			<div class="col-md-12">
+				<button id="do_give_coupon" class="btn btn-primary">发放</button>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div id="print_nodes" style="display:none;"><!-- display:none; -->
+	</div>
+	<textarea style="display:none" id="print_setup_json" th:utext="${print_setup==null?'':print_setup.setup_json}"></textarea>
+	<object style="display:none" id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA"> 
+		<embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" />
+	</object>
+</body>
+
+<!-- Mainly scripts -->
+<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+
+<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+<script src="http://ex.static.pdr365.com/_common/js/printer/LodopFuncs.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	var post_err_msg = "[[${error_msg}]]";
+	if (post_err_msg) {
+		layer.msg(post_err_msg, {
+			icon : 2
+		});
+	}
+
+	var b_id = 0;
+	$(".add_coupon").on("click", function() {
+		b_id = 0;
+		layer.open({
+			area : [ '500px', '550px' ],
+			type : 1,
+			content : $("#templatemo-preferences-form-fast")
+		});
+	});
+
+	$("#do_save_cb").on(
+			"click",
+			function() {
+				var cb_title = $.trim($("#cb_title").val()); //卡券批次类型
+				var cb_crapp = $("#cb_crapp").val();//卡卷应用类型
+				var cb_outer = $("#cb_outer").val();//卡券体系
+				var cb_mcflk = $("#cb_mcflk").val();//卡券类型
+				if (cb_title == null || cb_title == "") {
+					layer.msg("请输入卡券批次名称", {
+						icon : 2
+					});
+					return;
+				}
+
+				var url = "[[${contextPath}]]" + "/coupon/fast_add/?"
+						+ Date.parse(new Date());
+
+				var index = layer.load(0, {
+					shade : false
+				});
+
+				$.post(url, {
+					cb_title : cb_title,
+					cb_crapp : cb_crapp,
+					cb_outer : cb_outer,
+					cb_mcflk : cb_mcflk
+				}, function(data) {
+					layer.close(index);
+					if (data.available) {
+						if (cb_outer == "0") {
+							layer.alert('操作成功,编辑详细信息', {
+								skin : 'layui-layer-lan',
+								shift : 4
+							//动画类型
+							}, function() {
+
+							});
+							location.href = "[[${contextPath}]]"
+									+ "/coupon/batch/view_edit/?b_id="
+									+ data.obj + "&"
+									+ Date.parse(new Date());
+						} else {
+							layer.alert('操作成功', {
+								skin : 'layui-layer-lan',
+								shift : 4
+							//动画类型
+							}, function() {
+								location.reload();
+							});
+						}
+					} else {
+						var code = data.messages[0];
+						var msg = "未知错误";
+						if (code == "input_param_error") {
+							msg = "输入参数错误";
+						}
+						layer.msg(msg, {
+							icon : 2
+						});
+					}
+				});
+			});
+
+	$(".edit_view")
+			.on(
+					"click",
+					function() {
+						location.href = '[[${contextPath}]]/coupon/batch/view_edit?b_id='
+								+ $(this).attr("value")
+								+ '&'
+								+ Date.parse(new Date());
+					});
+
+	$(".incre_generate").on("click", function() {
+		b_id = $(this).attr("value");
+		layer.open({
+			area : [ '500px', '300px' ],
+			type : 1,
+			content : $(".templatemo-preferences-form-incre-generate")
+		});
+	});
+
+	$("#do_incre_generate").on("click", function() {
+		var url = '[[${contextPath}]]/coupon/incre_generate';
+		var incre_generate_num = $("#incre_generate_num").val();
+		var index = layer.load(0, {
+			shade : false
+		});
+		$.post(url, {
+			b_id : b_id,
+			incre_generate_num : incre_generate_num
+		}, function(data) {
+			layer.close(index)
+			if (data.available) {
+				layer.alert('操作成功', {
+					skin : 'layui-layer-lan',
+					shift : 4
+				//动画类型
+				}, function() {
+					location.reload();
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = "未知错误";
+				if (code == "input_param_error") {
+					msg = "输入参数错误";
+				} else if (code == "common_object_not_found") {
+					msg = "卡券未找到或已经被删除"
+				}
+				layer.msg(msg, {
+					icon : 2
+				});
+			}
+		});
+	});
+
+	$(".get_detail").on(
+			"click",
+			function() {
+				b_id = $(this).attr("b_id");
+				location.href = "[[${contextPath}]]/coupon/details?b_id="
+						+ b_id + "&" + Date.parse(new Date());
+			});
+
+	$(".giv_coupon").on("click", function() {
+		b_id = $(this).attr("value");
+		var total = $(this).attr("attr_total");
+		var available = $(this).attr("attr_available");
+		if (available <= 0) {
+			layer.msg("该卡券已经全部发放完，您可以选择增发后再试", {
+				icon : 2
+			});
+			return;
+		}
+		layer.open({
+			area : [ '500px', '300px' ],
+			type : 1,
+			content : $(".templatemo-preferences-form-give-coupon")
+		});
+	});
+
+	$("#do_give_coupon").on("click", function() {
+		var url = "[[${contextPath}]]/coupon/give_coupon/";
+		var give_coupon_mobiles = $("#give_coupon_mobiles").val();
+		if (b_id == 0) {
+			layer.msg("请选择要发放的卡券", {
+				icon : 2
+			});
+			return;
+		}
+		var index = layer.load(0, {
+			shade : false
+		});
+		$.post(url, {
+			b_id : b_id,
+			give_coupon_mobiles : give_coupon_mobiles
+		}, function(data) {
+			layer.close(index)
+			if (data.available) {
+				layer.alert('操作成功', {
+					skin : 'layui-layer-lan',
+					shift : 4
+				//动画类型
+				}, function() {
+					location.reload();
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = code;
+				if (code == "input_param_error") {
+					msg = "输入参数错误";
+				} else if (code == "common_object_not_found") {
+					msg = "卡券未找到或已经被删除"
+				}
+				layer.msg(msg, {
+					icon : 2
+				});
+			}
+		});
+	});
+	$(".switch_s").on("click", function() {
+		var b_id = $(this).attr("value");
+		var index = layer.load(0, {
+			shade : false
+		});
+		$.post("[[${contextPath}]]/coupon/switch_s", {
+			b_id : b_id
+		}, function(data) {
+			layer.close(index);
+			if (data.available) {
+				layer.alert('操作成功', {
+					skin : 'layui-layer-lan',
+					shift : 4
+				//动画类型
+				}, function() {
+					location.reload();
+				});
+			} else {
+				var code = data.messages[0];
+				var msg = code;
+				if (code == "input_param_error") {
+					msg = "输入参数错误";
+				} else if (code == "common_object_not_found") {
+					msg = "卡券未找到或已经被删除"
+				}
+				layer.msg(msg, {
+					icon : 2
+				});
+			}
+		});
+	});
+});
+</script>
+
+<script type="text/javascript">
+$(function() {
+	$(".print_set").on("click", function() {
+		location.href = "/market/coupon/printsetup/index?" + new Date().getTime();
+	});
+});
+</script>
+
+
+<script type="text/javascript">
+var sys_print_set = JSON.parse($("#print_setup_json").val());
+</script>
+<script type="text/javascript">
+for(var i=0,ic=sys_print_set.nodes.length;i<ic;i++){
+	var node = sys_print_set.nodes[i];
+	$("#print_nodes").append('<input font_size="'+node.font_size+'" value_prefix="'+node.value_prefix+'" top="'+node.top+'" left="'+node.left+'" name="'+node.node_name+'" height="'+node.height+'" width="'+node.width+'" rotate="'+node.rotate+'" />');
+}
+</script>
+<script type="text/javascript">
+	$(".direct_print").click(function(){
+		if(!sys_print_set){
+			layer.alert("请设置打印参数");
+			return;
+		}
+		var batch_id = $(this).attr("attr_id");
+		$.get("/market/coupon/batch/aj/get_batch_codes?batch_id="+batch_id+"&"+new Date().getTime(),{},function(data){
+			if(data.available){
+				ticket_print(data.data);
+			}else{
+				let code = data.messages[0];
+    			if(data.messages.length>1) {
+    				code = code + ":" + data.messages[1];
+    			}
+    			layer.alert(code, {icon : 2});
+			}
+		});
+	});
+	var running = 0;
+	function ticket_print(codes) {
+		//开始打印
+		//var LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM'));
+		var LODOP=getLodop();
+		
+		for(var i=0,ic=codes.length;i<ic;i++){
+			LODOP.PRINT_INIT("影票打印");
+			var code = codes[i];
+			//var rule = JSON.parse(code.batch.rule);
+			$("input[name=batch_name]").val(code.batch.title);
+			var type_name = "";
+			var code_amount = "";
+			if(code.batch.coupon_type == "1000"){
+				type_name = "代金券";
+				//code_amount = ((parseInt(rule.crval) / 100).toFixed(2))+"元";
+				code_amount = "--";
+			}else if(code.batch.coupon_type == "2000"){
+				type_name = "兑换券";
+				code_amount = "--";
+			}else if(code.batch.coupon_type == "3000"){
+				type_name = "折扣券";
+				//code_amount = rule.crval;
+				code_amount = "--";
+			}
+			$("input[name=batch_type]").val(type_name);
+			$("input[name=coupon_amount]").val(code_amount);
+			$("input[name=coupon_code]").val(code.code);
+			$("input[name=ticket_no_qrcode]").val(code.code);
+			
+			$("#print_nodes input").each(function(){
+				var _this = $(this);
+				var font_size = _this.attr("font_size");
+				var value_prefix = _this.attr("value_prefix");
+				var node_name = _this.attr("node_name");
+				var top = _this.attr("top")+"mm";
+				var left = _this.attr("left")+"mm";
+				var height = _this.attr("height");
+				height = height?height+"mm":"30mm";
+				var width = _this.attr("width");
+				width = width?width+"mm":"120mm";
+				var rotate = _this.attr("rotate");
+				rotate = rotate ? Math.abs(rotate-360) : 0;
+				console.log(_this);
+				if(_this.attr("name") == "ticket_no_qrcode"){
+					console.log('打印二维码：' + _this.val());
+					LODOP.ADD_PRINT_BARCODE(top,left,width,height,"QRCode",_this.val());
+					//console.log(top+"<==>"+left+"<==>"+width+"<==>"+height);
+				}else{
+					LODOP.SET_PRINT_STYLE("FontSize",font_size);
+					LODOP.SET_PRINT_STYLE("Angle",rotate);
+					LODOP.ADD_PRINT_TEXT(top,left,width,height,value_prefix+_this.val());
+					//console.log(rotate+"-----------"+top+"<==>"+left+"<==>"+width+"<==>"+height+"<==>"+value_prefix+_this.val())
+				}
+			});
+			LODOP.SET_PRINT_COPIES(1);
+			LODOP.PRINT();
+		}
+	}
+</script>
+</html>

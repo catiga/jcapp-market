@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 券发放信息管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/switchery/switchery.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/summernote/summernote.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/summernote/summernote-bs3.css|" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-lg-10">
+					<h2>[[${pub.title}]]</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><a href="javascript:;">营销工具</a></li>
+						<li class="active"><strong>手机号发券</strong></li>
+					</ol>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+			<div class="wrapper wrapper-content animated fadeInRight">
+				
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>基本信息</h5>
+								<div class="ibox-tools">
+									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
+									<a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#"> <i class="fa fa-wrench"></i></a>
+									<ul class="dropdown-menu dropdown-user">
+										<li><a href="javascript:;">暂无</a></li>
+									</ul>
+									<a class="close-link"> <i class="fa fa-times"></i></a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="row">
+									<div class="col-sm-12 b-r">
+										<form class="form-horizontal">
+											<div class="form-group">
+												<div class="col-lg-12">[[${pub.info}]]</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5><input type="text" placeholder="手机号码，多个号码查询用空格分开" class="input-sm mobiles"></h5>
+								<button data-style="zoom-in" class="ladda-button btn btn-primary  btn-xs query" type="button">查询</button>
+								<button data-style="zoom-in" class="ladda-button btn btn-danger btn-xs m-l-sm clear" type="button">清除</button>
+							</div>
+							<div class="ibox-content no-padding">
+								<table id="datatable-buttons" class="table table-striped table-bordered">
+									<thead>
+										<tr>
+											<th>手机号码</th>
+											<th>券批次</th>
+											<th>发券数量</th>
+											<th>状态</th>
+										</tr>
+									</thead>
+									<tbody id="tbale_item">
+										<tr th:each="pi:${pub_items}" th:attr_id="${pi.id}">
+											<th style="width:20%">[[${pi.mobile}]]</th>
+											<th style="width:40%">
+												<select class="item_cb form-control">
+													<option th:each="w:${available_cbs}" th:value="${w.id}" th:text="${w.title}" th:selected="${w.id==pi.cb}"></option>
+												</select>
+											</th>
+											<th style="width:10%">[[${pi.num}]]</th>
+											<th>
+												<a href="javascript:;" th:if="${pi.ccid==null}">未发放</a>
+												<a href="javascript:;" th:if="${pi.ccid!=null}">已发放</a><br/> 
+												<small th:if="${pi.ccid!=null}">发放时间 [[${#dates.format(pi.c_time, 'yyyy-MM-dd')}]]</small>
+											</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<table style="display:none">
+				<tbody class="template">
+				<tr>
+					<th style="width:20%">item_mob</th>
+					<th style="width:40%">item_cb</th>
+					<th style="width:10%">item_num</th>
+					<th>
+						<a href="javascript:;">item_ss</a>
+					</th>
+				</tr>
+				</tbody>
+			</table>
+			<select class="item_cb_bk form-control" style="display:none">
+				<option th:each="w:${available_cbs}" th:value="${w.id}" th:text="${w.title}"></option>
+			</select>
+			<div th:replace="../../../common/foot"></div>
+		</div>
+	</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/switchery/switchery.js(sp=${pub_bucket})}"></script>
+	<script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<!-- SUMMERNOTE -->
+    <script th:src="|${pub_bucket}/js/plugins/summernote/summernote.min.js|"></script>
+    
+    <!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    
+</body>
+
+<script type="text/javascript">
+$(function() {
+	let pubid = '[[${pubid}]]';
+	var l = $(".ladda-button").ladda();
+	$(".clear").on("click", function() {
+		location.href = '/market/util/coupon/bymob/view?pubid=' + pubid + '&' + new Date().getTime();
+	});
+	$(".query").on("click", function() {
+		var $this = $(this);
+		$this.ladda('start');
+		let mobiles = $.trim($(".mobiles").val());
+		let url = '/market/util/coupon/bymob/view?pubid=' + pubid + "&qk=" + mobiles;
+		$.post('/market/util/coupon/bymob/aj/query', {pubid:pubid,qk:mobiles}, function(data) {
+			$this.ladda('stop');
+			if(data.available) {
+				if(data.data) {
+					let html = '';
+					for(let i=0; i<data.data.length; i++) {
+						let template = $(".template").html();
+						template = template.replace(/item_mob/, data.data[i].mobile);
+						template = template.replace(/item_num/, data.data[i].num);
+						$(".item_cb_bk").find("option").each(function() {
+							if(data.data[i].cb==$(this).val()) {
+								template = template.replace(/item_cb/, $(this).text());
+							}
+						});
+						if(data.data[i].ccid!=null) {
+							template = template.replace(/item_ss/, '已发放');
+						} else {
+							template = template.replace(/item_ss/, '未发放');
+						}
+						html += template;
+					}
+					$("#tbale_item").html('');
+					$("#tbale_item").append(html);
+				} else {
+					swal("提示", '未查询到记录', "error");
+				}
+			} else {
+				swal("提示", data.messages[0] + ":" + data.messages[1], "error");
+			}
+		});
+	});
+});
+</script>
+
+</html>

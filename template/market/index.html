@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 营销管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>   <!-- 顶部 -->
+			<div class="row wrapper border-bottom white-bg page-heading">  <!-- tab栏目 -->
+				<div class="col-sm-4">
+					<h2>营销管理</h2>
+					<ol class="breadcrumb">
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+                        <div class="col-md-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2><button type="button" class="btn btn-warning add_new_market">创建营销活动</button></h2>
+                                    <select id="select_market" onchange="selectMarket()" style="padding: 6px;margin-top: 20px;">
+                                    <option value="">请选择筛选的状态</option>
+                                    <option value="10">未开始</option>
+                                    <option value="20">进行中</option>
+                                    <option value="21">暂停</option>
+                                    <option value="30">结束</option>
+                                    </select>
+                                </div>
+                                 <br>
+                                <div class="x_content">                                    
+                                    <!-- content here -->
+                                            <table class="table table-striped table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>活动名称</th>
+                                                        <th>类型</th>
+                                                        <th>活动规则</th>
+                                                        <th>状态</th>
+                                                        <th>开始时间</th>
+                                                        <th>结束时间</th>
+                                                        <th>选择模式</th>
+                                                        <th style="width:33%">操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                      <div class="text-c odd" role="row" th:each="r : ${page.result}">
+                                                        <tr>
+                                                             <td>[[${r.title}]]</td>
+                                                             <td><p th:if="${r.mtype=='2110'}">充值增礼类</p>
+                                                             	 <p th:if="${r.mtype=='2200'}">在线选座类</p>
+                                                                 <p th:if="${r.mtype=='3000'}">会员卡充值类</p>
+                                                             	<!--  <a th:if="${r.mtype=='2000'}">在线选座类</a> -->
+                                                             </td>
+                                                             <td>
+                                                       		<div class="text-c odd" role="row" >
+                                						 		<div class="text-c odd" role="row">
+                                						 			<p th:if="${r.rule == null || (r.rule.store_name==null||r.rule.store_name=='')}">限制门店:无</p>
+                                						 			<p th:if="${r.rule != null && r.rule.store_name!=null&&r.rule.store_name!=''}">限制门店:[[${r.rule.store_name}]]</p>
+                                						 			<p th:if="${r.rule == null || (r.rule.mc_l_ms_name==null||r.rule.mc_l_ms_name=='')}">会员卡级别限制:无</p>
+                                						 			<p th:if="${r.rule != null && r.rule.mc_l_ms_name!=null&&r.rule.mc_l_ms_name!=''}">会员卡级别限制:[[${r.rule.mc_l_ms_name}]]</p>
+                                						 		</div>
+                                						 		<div class="text-c odd1" role="row" th:each="t: ${r.resultList}">
+                                						 			 <div th:if="${t.mc_recharge!=null&&t.mc_recharge!=''}">
+                                						 			 充值金额:[[${t.mc_recharge}/100]]
+                                						 			<p th:if="${t.mc_recharge==null||t.mc_recharge==''}">充值金额:无<p>
+                                						 			<p th:if="${t.mc_recharge_mold}==1">赠品类型:卡券  赠品编码:[[${t.mc_recharge_number}]] 赠品数量:[[${t.mc_recharge_amount}]]
+                                						 			</div> 
+                                						 		</div>
+                                						 		
+                                                            </div> 
+                                                             </td>
+                                                             <td>
+                                                                <p th:if="${r.mstatus=='10' }">未开始</p>
+                                                                <p th:if="${r.mstatus=='20' }">进行中</p>
+                                                             	<p th:if="${r.mstatus=='21' }">暂停</p>
+                                                                <p th:if="${r.mstatus=='30' }">结束</p>
+                                                             </td>
+                                                             <td>[[${r.mc_start_time }]]</td>
+                                                             <td>[[${r.mc_end_time }]]</td>
+                                                             <td>
+                                                                <p th:if="${r.selectmode==0 }">系统自选 </p>
+                                                                <p th:if="${r.selectmode==1 }">用户选择 </p>
+                                                            </td>
+                                                            <td>
+                                                                <a href="javascript:void(0)" th:attr_mt="${r.mtype }" th:attr_ss="${r.mstatus }" th:attr_id="${r.id}" class="btn btn-primary btn-xs fash_edit"><i class="fa fa-edit"></i>编辑信息</a>
+                                                                <a th:if="${r.mstatus=='10' ||r.mstatus=='21'}"  href="javascript:void(0)" th:attr_id="${r.id}" class="btn btn-success btn-xs start_market">
+                                                                    <i class="fa fa-play"></i>启动活动
+                                                                </a>
+                                                               
+																<a th:if="${r.mstatus=='20' }" href="javascript:void(0)" th:attr_id="${r.id}" class="btn btn-warning btn-xs pause_market">
+																	<i class="fa fa-pause"></i>暂停活动</a>
+														
+                                                                <a th:if="${r.mstatus=='20'||r.mstatus=='21' }"  href="javascript:void(0)" th:attr_id="${r.id}" class="btn btn-danger btn-xs finish_market">
+                                                                    <i class="fa fa-stop"></i>结束活动
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                      </div> 
+                                                </tbody>
+                                            </table>
+                                            <div th:replace="../common/page"></div>
+                                    <!-- content here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+			<div th:replace="../common/foot"></div>  <!-- 页脚 -->
+		</div>
+	</div>
+	
+	   
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+
+	<script>
+	</script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	var post_err_msg = "[[${error_msg}]]";
+    if(post_err_msg){
+        layer.msg(post_err_msg, {icon: 2}); 
+    }
+    $(".add_new_market").on("click", function(){
+        location.href = "[[${contextPath}]]/market/judge?" + Date.parse(new Date());
+    });
+   
+});
+
+$(".start_market").on("click",function(){
+	var id=$(this).attr("attr_id");
+	var mstatus=20;
+	 var url="[[${contextPath}]]" + "/market/change_market_status";
+	 var index = layer.load(); 
+	 $.post(url, {id:id,mstatus:mstatus}, function(data){
+	    layer.close(index);
+	       if(data.available) {
+	           layer.alert('操作成功', {
+	                skin: 'layui-layer-lan',
+	                 shift: 4 //动画类型
+	               }, function(){
+	                    location.reload();
+	              });
+	       } else {
+	           var code = data.messages[0];
+	            layer.msg(code, {
+	              shift : 6
+	             });
+	         }
+	  });
+   });
+$(".pause_market").on("click",function(){
+	var id=$(this).attr("attr_id");
+	var mstatus=21;
+	 var url="[[${contextPath}]]" + "/market/change_market_status";
+	 var index = layer.load(); 
+	 $.post(url, {id:id,mstatus:mstatus}, function(data){
+	    layer.close(index);
+	       if(data.available) {
+	           layer.alert('操作成功', {
+	                skin: 'layui-layer-lan',
+	                 shift: 4 //动画类型
+	               }, function(){
+	                    location.reload();
+	              });
+	       } else {
+	           var code = data.messages[0];
+	            layer.msg(code, {
+	              shift : 6
+	             });
+	         }
+	  });
+   });
+$(".finish_market").on("click",function(){
+	var id=$(this).attr("attr_id");
+	var mstatus=30;
+	 var url="[[${contextPath}]]" + "/market/change_market_status";
+	 var index = layer.load(); 
+	 $.post(url, {id:id,mstatus:mstatus}, function(data){
+	    layer.close(index);
+	       if(data.available) {
+	           layer.alert('操作成功', {
+	                skin: 'layui-layer-lan',
+	                 shift: 4 //动画类型
+	               }, function(){
+	                    location.reload();
+	              });
+	       } else {
+	           var code = data.messages[0];
+	            layer.msg(code, {
+	              shift : 6
+	             });
+	         }
+	  });
+   });
+$(".fash_edit").on("click",function(){
+	var mtype=$(this).attr("attr_mt")
+	var id=$(this).attr("attr_id")
+	var mstatus=$(this).attr("attr_ss")
+	var url = "[[${contextPath}]]/market/edit_view?"+Date.parse(new Date())+"&"+ 
+		"id=" +id+ "&"+"mstatus="+mstatus+"&"+"mtype=" +mtype ;
+    location.href = url;
+
+});
+//活动筛选
+ function selectMarket(){
+	var status=$('#select_market option:selected').val();
+	location.href="[[${contextPath}]]/market/index/?"+Date.parse(new Date())+"&"+"status="+status;
+ }
+var mstatus='[[${mstatus}]]';
+if(mstatus!=''){
+	$('#select_market').val(mstatus);
+}  
+$('#select_market').select2();
+</script>
+
+</html>

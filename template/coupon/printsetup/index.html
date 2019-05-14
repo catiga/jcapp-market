@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 卡劵管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-lg-10">
+					<h2>券管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><a href="javascript:;">券管理</a></li>
+						<li class="active"><strong>券打印模版设置</strong></li>
+					</ol>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+			
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-title">
+								<h5>打印模版设置</h5>
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs print_save_btn" id="print_save_btn">
+										<i class="fa fa-plus"></i>&nbsp保存打印设置
+									</a>
+									<a href="javascript:void(0)" class="btn btn-danger btn-xs test_print" id="test_print">
+										<i class="fa fa-angellist"></i>&nbsp打印测试
+									</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="row">
+									<div class="col-lg-3 form-group">
+										券纸长:<input id="tic_height" type="text" placeholder="" class="form-control" value="200">
+									</div>
+									<div class="col-lg-3 form-group">
+										券纸宽:<input id="tic_width" type="text" placeholder="" class="form-control" value="80">
+									</div>
+									<div class="col-lg-3 form-group">
+										备用:<input type="text" placeholder="" class="form-control">
+									</div>
+									<div class="col-lg-3 form-group">
+										备用:<input type="text" placeholder="" class="form-control">
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-3">
+										<button class="btn btn-default print_node" name="batch_name" def="内部员工券">卡券批次名称</button><br/>
+										<button class="btn btn-default print_node" name="batch_type" def="代金券">卡券类型</button><br/>
+										<button class="btn btn-default print_node" name="coupon_amount" def="20/兑换券">代金券面值（兑换券显示'--'）</button><br/>
+										<button class="btn btn-default print_node" name="coupon_code" def="AdksSd">券码</button><br/>
+										<button class="btn btn-default print_node" name="ticket_no_qrcode" def="券码二维码">券码二维码</button><br/>
+										<button class="btn btn-default print_node" name="manual" def="-占位符-">自定义</button><br/>
+									</div>
+									<div class="col-lg-9">
+										<div class="row">
+											<div class="col-lg-1 form-group">
+												操作：<br/><button type="button" class="btn btn-danger" id="del_btn">删除</button>
+											</div>
+											<div class="col-lg-2 form-group">
+												字体大小:<input id="font_size" type="text" placeholder="" class="form-control node_set">
+											</div>
+											<div class="col-lg-2 form-group">
+												旋转角度:<input id="rotate_num" type="text" placeholder="" class="form-control node_set">
+											</div>
+											<div class="col-lg-2 form-group">
+												宽:<input id="node_width" type="text" placeholder="" class="form-control node_set">
+											</div>
+											<div class="col-lg-2 form-group">
+												高:<input id="node_height" type="text" placeholder="" class="form-control node_set">
+											</div>
+											<div class="col-lg-2 form-group">
+												前补偿:<input id="val_prefix" type="text" placeholder="" class="form-control node_set">
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-12">
+												<div id="ticket_body">
+													<div style="position: relative;width: 100%;height: 100%;">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../../common/foot"></div>
+		</div>
+	</div>
+	<textarea style="display:none" id="print_setup_json" th:text="${print_setup==null?'':print_setup.setup_json}"></textarea>
+</body>
+
+<!-- Mainly scripts -->
+<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+
+<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+<script src="http://ex.static.pdr365.com/_common/js/printer/LodopFuncs.js"></script>
+
+<script type="text/javascript">;(function($, window, document,undefined) {
+    //定义的构造函数
+    var Drag = function(ele, opt) {
+        this.$ele = ele,
+				this.x = 0,
+				this.y = 0,
+        this.defaults = {
+					parent:'parent',
+					randomPosition:true,
+					direction:'all',
+					handler:false,
+					dragStart:function(x,y){},
+					dragEnd:function(x,y){},
+					dragMove:function(x,y){}
+				},
+				this.options = $.extend({}, this.defaults, opt)
+    }
+    //定义方法
+    Drag.prototype = {
+        run: function() {
+					var $this = this;
+					var element = this.$ele;
+					var randomPosition  = this.options.randomPosition; //位置
+					var direction = this.options.direction; //方向
+					var handler = this.options.handler;
+					var parent = this.options.parent;
+					var isDown = false; //记录鼠标是否按下
+					var fun = this.options; //使用外部函数
+					var X = 0,
+							Y = 0,
+							moveX,
+							moveY;
+					// 阻止冒泡
+					element.find('*').not('img').mousedown(function(e) {
+						e.stopPropagation();
+					});
+					//初始化判断
+					if(parent == 'parent'){
+						parent = element.parent();
+					}else{
+						parent = element.parents(parent);
+					}
+					if(!handler){
+						handler = element; 
+					}else{
+						handler = element.find(handler);
+					}
+					//初始化
+					parent.css({position:'relative'});
+					element.css({position:'absolute'});
+					var boxWidth=0,boxHeight=0,sonWidth=0,sonHeight=0;
+					//盒子 和 元素大小初始化
+					initSize();
+					if(randomPosition){randomPlace();}
+					$(window).resize(function(){
+						initSize();
+						if(randomPosition){randomPlace();}
+					});
+					//盒子 和 元素大小初始化函数
+					function initSize(){
+						boxWidth = parent.outerWidth();
+						boxHeight = parent.outerHeight();
+						sonWidth = element.outerWidth();
+						sonHeight = element.outerHeight();
+					}
+					//位置随机函数
+					function randomPlace(){
+						if(randomPosition){
+							var randX = parseInt(Math.random()*(boxWidth-sonWidth));
+							var randY = parseInt(Math.random()*(boxHeight-sonHeight));
+							if(direction.toLowerCase() == 'x'){
+								element.css({left:randX});
+							}else if(direction.toLowerCase() == 'y'){
+								element.css({top:randY});
+							}else{
+								element.css({left:randX,top:randY});
+							}
+						}
+					}
+					handler.css({cursor:'move'}).mousedown(function(e){
+						isDown = true;
+						X = e.pageX;
+						Y = e.pageY;
+						$this.x = element.position().left;
+						$this.y = element.position().top;
+						element.addClass('on');
+						fun.dragStart(parseInt(element.css('left')),parseInt(element.css('top')));
+						return false;
+					});
+					$(document).mouseup(function(e){fun.dragEnd(parseInt(element.css('left')),parseInt(element.css('top')));element.removeClass('on');isDown = false;});
+					$(document).mousemove(function(e){
+						moveX = $this.x+e.pageX-X;
+						moveY = $this.y+e.pageY-Y;
+						function thisXMove(){ //x轴移动
+							if(isDown == true){
+								element.css({left:moveX});
+							}else{
+								return;
+							}
+							if(moveX < 0){
+								element.css({left:0});
+							}
+							if(moveX > (boxWidth-sonWidth)){
+								element.css({left:boxWidth-sonWidth});
+							}
+							return moveX;
+						}
+						function thisYMove(){ //y轴移动
+							if(isDown == true){
+								element.css({top:moveY});
+							}else{
+								return;
+							}
+							if(moveY < 0){
+								element.css({top:0});
+							}
+							if(moveY > (boxHeight-sonHeight)){
+								element.css({top:boxHeight-sonHeight});
+							}
+							return moveY;
+						}
+						function thisAllMove(){ //全部移动
+							if(isDown == true){
+								element.css({left:moveX,top:moveY});
+							}else{
+								return;
+							}
+							//if(moveX < 0){
+								//element.css({left:0});
+							//}
+							//if(moveX > (boxWidth-sonWidth)){
+								//element.css({left:boxWidth-sonWidth});
+							//}
+							//if(moveY < 0){
+								//element.css({top:0});
+							//}
+							//if(moveY > (boxHeight-sonHeight)){
+								//element.css({top:boxHeight-sonHeight});
+							//}
+						}
+						if(isDown){
+					  	fun.dragMove(parseInt(element.css('left')),parseInt(element.css('top')));
+						}else{
+							return false;
+						}
+						if(direction.toLowerCase() == "x"){
+							thisXMove();
+						}else if(direction.toLowerCase() == "y"){
+							thisYMove();
+						}else{
+							thisAllMove();
+						}
+					});
+        }
+    }
+
+    //插件
+    $.fn.myDrag = function(options) {
+        //创建实体
+        var drag = new Drag(this, options);
+        //调用方法
+        drag.run();
+		return this;
+    }
+})(jQuery, window, document);
+</script>
+<script type="text/javascript">
+var offset = 4;
+</script>
+
+<script type="text/javascript">
+var sys_print_setup = JSON.parse($("#print_setup_json").val());
+
+if(sys_print_setup) {
+	$("#tic_height").val(sys_print_setup.height);
+	$("#tic_width").val(sys_print_setup.width);
+
+	for(var i=0,ic=sys_print_setup.nodes.length;i<ic;i++){
+		var node = sys_print_setup.nodes[i];
+		var def = $(".print_node[name="+node.node_name+"]").attr("def");
+		$("#ticket_body div").eq(0).append('<div class="drag" style="left: '+(node.left*offset)+'px; top: '+(node.top*offset)+'px;font-size:'+node.font_size+'px;width:'+(node.width ? (node.width * offset) + 'px' : 'auto')+';height:'+(node.height ? (node.height * offset) + 'px' : 'auto')+';'+(node.rotate ? 'transform: rotate('+node.rotate+'deg);' : '')+'" name="'+node.node_name+'" def="'+def+'" hit="'+node.height+'" wth="'+node.width+'" val_prefix="'+node.value_prefix+'">'+node.value_prefix+def+'</div>');
+	}
+}
+</script> 
+
+<script type="text/javascript">
+
+   function getmatrix(a,b,c,d,e,f){  
+       var aa=Math.round(180*Math.asin(a)/ Math.PI);  
+       var bb=Math.round(180*Math.acos(b)/ Math.PI);  
+       var cc=Math.round(180*Math.asin(c)/ Math.PI);  
+       var dd=Math.round(180*Math.acos(d)/ Math.PI);  
+       var deg=0;  
+       if(aa==bb||-aa==bb){  
+           deg=dd;  
+       }else if(-aa+bb==180){  
+           deg=180+cc;  
+       }else if(aa+bb==180){  
+           deg=360-cc||360-dd;  
+       }  
+       return deg>=360?0:deg;  
+   }  
+
+var init_node_param = function(){
+	$(".node_set").val("");
+	if(window.cur_drag){
+		$(".drag").css("border-color","");
+		window.cur_drag.css("border-color","red");
+		
+		$("#font_size").val(parseInt(window.cur_drag.css("font-size")));
+		$("#val_prefix").val(window.cur_drag.attr("val_prefix"));
+		var hit = window.cur_drag.attr("hit");
+		if(hit){
+			$("#node_height").val(hit);
+		}
+		var wth = window.cur_drag.attr("wth");
+		if(wth){
+			$("#node_width").val(wth);
+		}
+		var transform = window.cur_drag.css("transform");
+		if(transform != "none"){
+			var rotate = eval("get"+transform);
+			$("#rotate_num").val(rotate);
+		}else{
+			$("#rotate_num").val("");
+		}
+	}
+}
+$("#font_size").keyup(function(){
+	if(window.cur_drag){
+		window.cur_drag.css("font-size",parseInt($("#font_size").val())+"px");
+	}
+})
+$("#val_prefix").keyup(function(){
+	if(window.cur_drag){
+		window.cur_drag.attr("val_prefix",$("#val_prefix").val());
+		window.cur_drag.html(window.cur_drag.attr("val_prefix")+window.cur_drag.attr("def"));
+	}
+})
+$("#rotate_num").keyup(function(){
+	if(window.cur_drag){
+		var rotate = parseInt($("#rotate_num").val());
+		if(rotate){
+			window.cur_drag.css("transform","rotate("+rotate+"deg)");
+		}else{
+			window.cur_drag.css("transform","none")
+		}
+	}
+})
+$("#del_btn").click(function(){
+	if(window.cur_drag){
+		window.cur_drag.remove();
+	}
+})
+$("#node_height").keyup(function(){
+	if(window.cur_drag){
+		if($("#node_height").val()){
+			var heigth = parseInt($("#node_height").val()) * offset;
+			window.cur_drag.css("height",heigth+"px");
+			window.cur_drag.attr("hit",$("#node_height").val());
+		}else{
+			window.cur_drag.css("height","auto");
+			window.cur_drag.attr("hit","");
+		}
+	}
+})
+$("#node_width").keyup(function(){
+	if(window.cur_drag){
+		if($("#node_width").val()){
+			var width = parseInt($("#node_width").val()) * offset;
+			window.cur_drag.css("width",width+"px");
+			window.cur_drag.attr("wth",$("#node_width").val());
+		}else{
+			window.cur_drag.css("width","auto");
+			window.cur_drag.attr("wth","");
+		}
+	}
+})
+
+//<div class="drag" style="left: 20px; top: 20px;font-size:12px;">我不好</div>
+//transform: rotate(90deg);
+
+var reset_drag = function(){
+	$('.drag').each(function(index){
+		$(this).myDrag({
+			randomPosition:false,
+			direction:'all',
+			handler:false
+		});
+	});
+	$('.drag').click(function(){
+		window.cur_drag = $(this);
+		init_node_param();
+	});
+}
+
+var init_ticket_body = function(){
+	var width = $("#tic_height").val() * offset;
+	var height = $("#tic_width").val() * offset;
+	$("#ticket_body").css({"width":width+"px","height":height+"px","background-color":"#d8d8d8","font-size":"12px"});
+	reset_drag();
+}
+$("#tic_height,#tic_width").keyup(function(){
+	init_ticket_body();
+});
+init_ticket_body();
+
+$(".print_node").click(function(){
+	var name = $(this).attr("name");
+	var def = $(this).attr("def");
+	$("#ticket_body div").eq(0).append('<div class="drag" style="left: 20px; top: 20px;font-size:12px;" name="'+name+'" def="'+def+'">'+def+'</div>');
+	reset_drag();
+});
+
+var get_nodes = function(){
+	var nodes = [];
+	$(".drag").each(function(){
+		var node = {};
+		
+		var fs = parseInt($(this).css("font-size"));
+		var name = $(this).attr("name");
+		var vp = $(this).attr("val_prefix");
+		var hit = $(this).attr("hit");
+		var wth = $(this).attr("wth");
+		var top = Math.round($(this).position().top / offset);
+		var left = Math.round($(this).position().left / offset);
+		
+		node["font_size"] = fs ? fs : "12";
+		node["value_prefix"] = vp ? vp : "";
+		node["top"] = top ? top : "0";
+		node["left"] = left ? left : "0";
+		node["node_name"] = name ? name : "0";
+		node["height"] = hit ? hit : "";
+		node["width"] = wth ? wth : "";
+		var transform = $(this).css("transform");
+		if(transform != "none"){
+			var rotate = eval("get"+transform);
+			node["rotate"] = rotate;
+			if(rotate == 270){
+				node["top"] = node["top"] + Math.round($(this).width() / offset);
+				node["left"] = node["left"] + Math.round($(this).height() / offset);
+			}
+		}else{
+			node["rotate"] = "";
+		}
+		nodes.push(node);
+	});
+	return nodes;
+}
+
+$("#print_save_btn").click(function(){
+	var height = $("#tic_height").val();
+	var width = $("#tic_width").val();
+	
+	var print_set = {
+		"height":height
+		,width:width,
+		nodes:get_nodes()
+	};
+	
+	var url = "/market/coupon/printsetup/aj/save_print_setup?"+new Date().getTime();
+	$.post(url,{"setup":JSON.stringify(print_set)},function(msg){
+		if(msg.available){
+			layer.alert("操作成功");
+		}else{
+			layer.alert("操作失败");
+		}
+	});
+});
+</script>
+	
+<script type="text/javascript">
+var sys_print_set;
+var init_html_nodes = function(){
+	$("#print_nodes").html("");
+	for(var i=0,ic=sys_print_set.nodes.length;i<ic;i++){
+		var node = sys_print_set.nodes[i];
+		$("#print_nodes").append('<input font_size="'+node.font_size+'" value_prefix="'+node.value_prefix+'" top="'+node.top+'" left="'+node.left+'" name="'+node.node_name+'" height="'+node.height+'" width="'+node.width+'" rotate="'+node.rotate+'" />');
+	}
+}
+
+var running = 0;
+function ticket_print(codes) {
+	//开始打印
+	//var LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM'));
+	var LODOP=getLodop();
+	
+	for(var i=0,ic=codes.length;i<ic;i++){
+		LODOP.PRINT_INIT("影票打印");
+		var code = codes[i];
+		var rule = JSON.parse(code.batch.rule);
+		$("input[name=batch_name]").val(code.batch.title);
+		var type_name = "";
+		var code_amount = "";
+		if(code.batch.couponType == "1000"){
+			type_name = "代金券";
+			code_amount = ((parseInt(rule.crval) / 100).toFixed(2))+"元";
+		}else if(code.batch.couponType == "2000"){
+			type_name = "兑换券";
+			code_amount = "--";
+		}else if(code.batch.couponType == "3000"){
+			type_name = "折扣券";
+			code_amount = rule.crval;
+		}
+		$("input[name=batch_type]").val(type_name);
+		$("input[name=coupon_amount]").val(code_amount);
+		$("input[name=coupon_code]").val(code.code);
+		$("input[name=ticket_no_qrcode]").val(code.mobile);
+		
+		$("#print_nodes input").each(function(){
+			var _this = $(this);
+			var font_size = _this.attr("font_size");
+			var value_prefix = _this.attr("value_prefix");
+			var node_name = _this.attr("node_name");
+			var top = _this.attr("top")+"mm";
+			var left = _this.attr("left")+"mm";
+			var height = _this.attr("height");
+			height = height?height+"mm":"120mm";
+			var width = _this.attr("width");
+			width = width?width+"mm":"120mm";
+			var rotate = _this.attr("rotate");
+			rotate = rotate ? Math.abs(rotate-360) : 0;
+			
+			if(_this.attr("name") == "ticket_no_qrcode"){
+				LODOP.ADD_PRINT_BARCODE(top,left,width,height,"QRCode",_this.val());
+				//console.log(top+"<==>"+left+"<==>"+width+"<==>"+height);
+			}else{
+				LODOP.SET_PRINT_STYLE("FontSize",font_size);
+				LODOP.SET_PRINT_STYLE("Angle",rotate);
+				LODOP.ADD_PRINT_TEXT(top,left,width,height,value_prefix+_this.val());
+				//console.log(rotate+"-----------"+top+"<==>"+left+"<==>"+width+"<==>"+height+"<==>"+value_prefix+_this.val())
+			}
+		});
+		LODOP.SET_PRINT_COPIES(1);
+		LODOP.PRINT();
+	}
+	layer.alert("提示");
+}
+$(".test_print").click(function(){
+	var height = $("#tic_height").val();
+	var width = $("#tic_width").val();
+	
+	var print_set = {
+		"height":height
+		,width:width,
+		nodes:get_nodes()
+	};
+	
+	sys_print_set = print_set;
+	init_html_nodes();
+	ticket_print([{"id":14496,"batch":{"id":60,"mobile":"123123","couponNo":"sp120170906786","couponType":"1000","title":"测试卡券200张","info":"测试卡券200张","content":"","img":"","aTime":1504684825000,"rule":"{\"crval\":\"100\",\"crapp\":null,\"cmr\":null,\"cgr\":{\"cucg\":\"-1000\",\"cuvg\":\"3\"},\"csr\":{\"cucs\":\"3000\",\"cuvs\":\"0\"},\"ftr\":null,\"ticsum\":null,\"poucut\":null,\"wxCardId\":null,\"ypt\":\"\",\"ytt\":\"\",\"xyc\":\"\",\"xyp\":\"\",\"version\":\"1000\",\"ruleMap\":{\"p_lowest\":\"2\",\"rule_map_map\":{\"1000\":{\"kims_money\":\"2000\"},\"type\":\"1000\"},\"time_map\":{\"0\":\"null\",\"100\":\"null\",\"type\":\"0\"},\"quantitys_map\":{\"type\":\"100\"}}}","total":200,"available":199,"cTime":1504747435000,"flag":0,"validateType":"0000","validatePeriod":"0","outer":false,"outerType":"10010","outerUri":"","outerPcNum":"","outerPcKey":"","cbLevel":1,"store":null,"useCount":null,"useCountBy":null,"useCon":"10","cbstatus":"20","crapp":"2000","cr":{"crval":"100","crapp":"2000","cmr":null,"cgr":{"cucg":"-1000","cuvg":"3"},"csr":{"cucs":"3000","cuvs":"0"},"ftr":null,"ticsum":null,"poucut":null,"wxCardId":null,"ypt":"","ytt":"","xyc":"","xyp":"","version":"1000","ruleMap":{"p_lowest":"2","rule_map_map":{"1000":{"kims_money":"2000"},"type":"1000"},"time_map":{"0":"null","100":"null","type":"0"},"quantitys_map":{"type":"100"}}}},"code":"uEBBFj","status":"10","mobile":"15010072493","source":"10","takeby":"15010072493","accountProjectId":null,"getTime":1505101383000,"useTime":null,"cTime":1504684837000,"flag":0}]);
+});
+</script>
+
+</html>

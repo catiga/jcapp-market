@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>编辑卡券批次规则 </title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/jqui1114/jquery-ui.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<script th:src="@{{sp}/kindeditor/kindeditor-min.js(sp=${pub_bucket})}"> </script>
+</head>
+<script>
+    var editor;
+    KindEditor.ready(function(K) {
+        editor = K.create('textarea[name="coupon_content"]', {
+            allowFileManager : true
+        });
+        K('input[name=getHtml]').click(function(e) {
+            alert(editor.html());
+        });
+        K('input[name=isEmpty]').click(function(e) {
+            alert(editor.isEmpty());
+        });
+        K('input[name=getText]').click(function(e) {
+            alert(editor.text());
+        });
+        K('input[name=selectedHtml]').click(function(e) {
+            alert(editor.selectedHtml());
+        });
+        K('input[name=setHtml]').click(function(e) {
+            editor.html('<h3>Hello KindEditor</h3>');
+        });
+        K('input[name=setText]').click(function(e) {
+            editor.text('<h3>Hello KindEditor</h3>');
+        });
+        K('input[name=insertHtml]').click(function(e) {
+            editor.insertHtml('<strong>插入HTML</strong>');
+        });
+        K('input[name=appendHtml]').click(function(e) {
+            editor.appendHtml('<strong>添加HTML</strong>');
+        });
+        K('input[name=clear]').click(function(e) {
+            editor.html('');
+        });
+        editor.html('[[${batch.content}]]');
+    });
+</script>
+<body>
+<div id="wrapper">
+	<div th:replace="../../common/nav"></div>
+	<div id="page-wrapper" class="gray-bg">
+		<div th:replace="../../common/top"></div>
+		<div class="row wrapper border-bottom white-bg page-heading">
+			<div class="page-title">
+                 <div class="title_left">
+                     <h3>编辑卡券批次
+                      <small th:each="type : ${supp_types}">
+                        <a th:if="${batch.crapp == type.key}">[[${type.name}]] </a>
+                     </small>
+                     </h3>
+                 </div>
+             </div>
+             <div class="col-md-12">
+                 <div class="x_panel">
+	                 <div class="has-success has-feedback" style="margin-top:30px;font-size:15px;">
+	                     <div class="row">
+	                         <div class="col-md-6 margin-bottom-15">
+	                             <label class="control-label" for="coupon_no" style="float:left;width: 20%;"> 批次编号</label> 
+	                             <input name="coupon_no" type="text" class="form-control" id="coupon_no" th:value="${batch.coupon_no }" placeholder="可手动输入编号，为空则自动生成" style="float:left;width: 50%;" readonly> 
+	                         </div>
+	                         <div class="col-md-6 margin-bottom-15">
+	                             <label class="control-label" for="coupon_title" style="float:left;width: 20%;">卡券名称</label> 
+	                             <input name="coupon_title" type="text" class="form-control" id="coupon_title" th:value="${batch.title }" placeholder="输入卡券名称" style="float:left;width: 50%;">  
+	                         </div>
+	                     </div>
+	                 </div>
+	
+	                 <div class="has-success has-feedback" style="margin-top:30px;font-size:15px;">
+	                     <div class="row">
+	                         
+	                         <div class="col-md-6 margin-bottom-15">
+	                             <label class="control-label" for="coupon_info" style="float:left;width: 20%;">卡券描述</label>
+	                             <input name="coupon_info" type="text" class="form-control" id="coupon_info" th:value="${batch.info }" placeholder="请输入卡券描述"  style="float:left;width: 50%;">
+	                         </div>
+	                     </div>
+	                 </div>
+	                 <hr> 
+                     <div class="has-success has-feedback" style="margin-top:30px;font-size:15px;">
+                        <div class="row">
+                             <div class="col-md-6 margin-bottom-15">
+                                <label class="control-label" for="coupon_validate_type" style="float:left;width: 20%;">指定服务</label> 
+                                 <select name="coupon_use_service " class="form-control margin-bottom-15" id="coupon_use_service" style="float:left;width: 50%;" multiple data-placeholder="请选择服务，可多选">
+                                 		<option th:value="${se.id}" th:each="se:${serviceList}">[[${se.spname}]]</option>
+                                 </select>
+                             </div>
+                             <div class="col-md-6 margin-bottom-15">
+                                <label class="control-label" for="coupon_validate_type" style="float:left;width: 20%;">指定门店</label> 
+                                <select name="coupon_use_store " class="form-control margin-bottom-15" id="coupon_use_store" style="float:left;width: 50%;" multiple data-placeholder="请选择门店，可多选">
+                                </select>
+                             </div>
+                         </div>
+                     </div>
+	                  
+	                 <hr>                                                                            
+	                 <div class="has-success has-feedback"  style="font-size:15px;">
+	                 	 <label class="control-label" style="float:left;">卡券类型</label>                                        
+	                     <div class="row"   style="margin-top:30px;margin-left:120px;"> 
+	                         <input type="radio" checked="checked" name="Sex" value="1000" id="dj" style="width: 20px;height:20px;margin-left:20px;"  />代金&nbsp;&nbsp;&nbsp;可抵值&nbsp;&nbsp;<input   id="kims_money" style="width: 200px;"  placeholder="请输入两位小数，例如：0.00" />元                                                                                                                                                                  
+	                     </div>
+	                     <div class="row"  style="margin-top:30px;margin-left:120px;">
+	                         <input type="radio"  name="Sex" value="3000"  id="zk" style="width: 20px;height:20px;margin-left:20px;"  />折扣&nbsp;&nbsp;&nbsp;
+	                         <select  >
+	                             <option value="w"  >网售价格折扣</option>
+	                         </select>
+	                         <input type="text"  style="width: 200px;"    id="discount" placeholder="请输入大于0的整数，例如10"/> <a>%&nbsp;&nbsp;最高可折扣&nbsp;&nbsp;&nbsp</a>      
+	                         <input type="text"  style="width: 200px;"    placeholder="请输入两位小数，例如：0.00" id="discount_money"/> 元                                                                          
+	                     </div>
+	                     <div class="row"  style="margin-top:30px;margin-left:120px;">
+	                         <input type="radio" name="Sex" value="2000"  id="dh" style="width: 20px;height:20px;margin-left:20px;" />兑换&nbsp;&nbsp;&nbsp;
+	                         <input type="text"   style="width: 200px;" id="exchange_coupons" placeholder="请输入大于0的整数，例如：1"/>  <a>张劵兑换</a>       
+	                         <input type="text"   style="width: 200px;" id="exchange_movie" placeholder="请输入大于0的整数，例如：1"/>  <a>张影票  补</a>  
+	                         <input type="text"  style="width: 200px;" id = "exchange_money" placeholder="请输入两位小数，例如：0.00"/>  <a>元</a>                                                                           
+	                     </div>
+	                     <div class="row"  style="margin-top:30px; margin-left:1.5px;">
+	                         <label class="control-label" for="quantitys_type" style="float:left;">数量策略</label>
+	                         <select  id="quantitys_type" style="margin-left:85px;">
+	                             <option value="100"  >无</option>
+	                             <option value="101"  >满</option>
+	                             <option value="102"  >每满</option>
+	                             <option value="103"  >每笔</option>
+	                            <!--  <option value="104"  >每张</option> -->
+	                         </select>
+	                         <input type="text"   style="width: 200px;"   id="money_quantitys" placeholder="请输入两位小数，例如：0.00"/><a id="description">张电影票</a><input type="text"  id="coupons_quantitys" style="width: 200px;"   placeholder="请输入大于0的整数，例如：1" />张卡劵                                                                       
+	                     </div>                                              
+	                  </div> 
+	                 <hr>
+                    <div class="has-success has-feedback" style="margin-top:30px;">                                                                                                                                                                                                             
+                         <div class="row" style="margin-top:30px;">                                          
+                             <div class="col-md-6 margin-bottom-15">
+                                 <label for="time_policy" class="control-label" style="float:left;width: 20%;font-size:15px;">券使用时间</label>
+                                 <select class="form-control margin-bottom-15" id="time_policy" style="float:left;width: 50%;">
+                                     <option value="0">全部时间有效</option>
+                                     <option value="w">按周分时设置</option>
+                                     <option value="d">按天分时设置</option>
+                                     
+                                 </select>
+                             </div>
+                             <div class="col-md-6 margin-bottom-15">
+                                 <label for="add_time_stregy" style="float:left;width: 20%;">&nbsp;</label> 
+                                 <button type="button" class="btn btn-primary form-control add_time_stregy" style="float:left;width: 50%;">添加一条</button>
+                             </div>
+                         </div>
+                     </div>  
+                     <div class="has-success has-feedback"  id = "weeks"  style="margin-top:30px;">
+                           <div class="row" >
+                               <label class="checkbox-inline">
+                                   <input type="checkbox" id="inlineCheckbox1" class="week_day" dis_name="周一" value="1" style="width: 20px;height:20px;"  checked > <a >周一</a>
+                               </label>
+                               <label class="checkbox-inline">
+                                   <input type="checkbox" id="inlineCheckbox2" class="week_day" dis_name="周二" value="2" style="width: 20px;height:20px;" checked> 周二
+                               </label>
+                               <label class="checkbox-inline">
+                                   <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周三" value="3" style="width: 20px;height:20px;"checked> 周三
+                               </label>
+                               <label class="checkbox-inline">
+                                   <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周四" value="4" style="width: 20px;height:20px;" checked> 周四
+                               </label>
+                                   <label class="checkbox-inline">
+                                   <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周五" value="5" style="width: 20px;height:20px;" checked> 周五
+                               </label>
+                               <label class="checkbox-inline">
+                                   <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周六" value="6" style="width: 20px;height:20px;" checked> 周六
+                               </label>
+                               <label class="checkbox-inline">
+                                   <input type="checkbox" id="inlineCheckbox3" class="week_day" dis_name="周日" value="7" style="width: 20px;height:20px;" checked> 周日
+                               </label>                                            
+                           </div>                                                                                                                                                                                                                                                                                          
+                      </div>   
+                     <div class="has-success has-feedback"  id="date">                                         
+                         <div class="row" style="margin-top:30px;" >                                                 
+                             <div class="col-md-6 margin-bottom-15">
+                                 <label for="q_sd" style="float:left;width: 20%;" >开始日期：</label>
+                                 <input name="q_sd" type="text" class="form-control" id="q_sd" placeholder="开始日期" style="float:left;width: 50%;">
+                             </div>
+                             <div class="col-md-6 margin-bottom-15">
+                                 <label for="q_ed" style="float:left;width: 20%;" >结束日期：</label>
+                                 <input name="q_ed" type="text" class="form-control" id="q_ed" placeholder="结束日期" style="float:left;width: 50%;">
+                             </div>
+                         </div>
+                     </div>                                      
+    
+    
+                     <div class="has-success has-feedback"  id="time1" style="margin-top:30px;">                                         
+                         <div class="row">
+                             <div class="col-md-6 margin-bottom-15" >
+                                 <label class="control-label"for="start_time" style="float:left;width: 20%;" >开始时间</label>
+                                 <input type="text" class="form-control" id="start_time" placeholder="选择开始时间" style="float:left;width: 50%;"> 
+                             </div>
+                             <div class="col-md-6 margin-bottom-15" >
+                                 <label class="control-label" for="end_time" style="float:left;width: 20%;">结束时间</label>
+                                 <input type="text" class="form-control" id="end_time" placeholder="选择结束时间" style="float:left;width: 50%;">
+                             </div>                                                  
+                         </div>                                              
+                     </div>
+                     <div class="has-success has-feedback" style="margin-top:30px;" id="rule_content">                                         
+                          <div class="row" id="rule_content1">
+                          </div>
+                      </div>
+                      <hr>                                             
+	                  <div class="has-success has-feedback" style="font-size:15px;">
+	                      <div class="row">
+	                          <div class="col-md-6 margin-bottom-15">
+	                              <label class="control-label" for="coupon_validate_type">券有效期</label> 
+	                              <select name="coupon_validate_type" class="form-control margin-bottom-15" id="coupon_validate_type">
+	                                  <option value="0000">永久有效</option>
+	                                  <option value="0010">统一时间失效</option>
+	                                  <option value="1001">按领用天失效</option>
+	                              </select>
+	                          </div>  
+	                          <div class="col-md-6 margin-bottom-15">
+	                              <label class="control-label" for="coupon_validate_period">设置有效期</label> 
+	                              <input name="coupon_validate_period" type="text" class="form-control" id="coupon_validate_period" th:value="${batch.validate_period }" placeholder="输入卡券领用后失效阈值"> 
+	                          </div>
+	                      </div>
+	                  </div>
+	                  <div class="has-success has-feedback" style="font-size:15px;">
+	                   <div class="row">
+                           <div class="col-md-12 margin-bottom-15">
+                               <label class="control-label" for="coupon_content">详细信息</label>
+                               <textarea name="coupon_content" class="form-control" rows="3" id="coupon_content" ></textarea>
+                           </div>
+                       </div>
+                      </div>
+                      
+                      <div th:if="${batch.cbstatus == '10' }">
+                           <div class="row templatemo-form-buttons">
+                               <div class="col-md-12">
+                                   <button type="button" class="btn btn-primary save">保存</button>
+                               </div> 
+                           </div> 
+                       </div>
+                 </div>
+             </div>
+		</div> 
+		<!-- <div th:replace="../../common/foot"></div> -->
+	</div>
+</div>
+	
+	  
+    
+    <!-- Mainly scripts -->
+    <script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+    
+    <script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+    <script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}" type="text/javascript"></script>
+    
+    <script th:src="@{{sp}/jqui1114/jquery-ui.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-addon.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-zh-CN.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		    var coupon_id = '[[${batch.id }]]';
+	      	$(".save").on("click", function(){
+	            var id = coupon_id || null;//  batch主键
+	            var coupon_title = $("#coupon_title").val().trim();//卡券名称
+	            var coupon_info = $("#coupon_info").val().trim(); //描述          
+	            var coupon_crapp ='[[${batch.crapp}]]';  //应用范围    5000  服务类
+	      
+	            var coupon_use_service = ""; //服务
+	            $("#coupon_use_service").each(function(){
+                    if(coupon_use_service){coupon_use_service += ",";}
+                    coupon_use_service += $(this).val();
+	            })
+	            
+	           	var coupon_use_store = ""; //门店
+	            $("#coupon_use_store").each(function(){
+                    if(coupon_use_store){coupon_use_store += ",";}
+                    coupon_use_store += $(this).val();
+	            })
+	            
+	                var coupon_no = $("#coupon_no").val();//卡券编号
+	                var coupon_content = editor.html();  //卡券内容
+	                //处理参数
+	                if(coupon_title==null||coupon_title=="") {
+	                    layer.msg("请输入卡券名称", {icon: 2});
+	                    return;
+	                }
+	                	                        
+	                if(coupon_info==null||coupon_info=="") {
+	                    layer.msg("请输入卡券描述", {icon: 2});
+	                    return;
+	                }
+	                	                
+	                if(coupon_use_service == null||coupon_use_service == ""){
+	                	 layer.msg("请选择服务", {icon: 2});
+		                    return;
+	                }
+	                
+	                if(coupon_use_store==null||coupon_use_store==""){
+	                	 layer.msg("请选择门店", {icon: 2});
+		                    return;
+	                }
+	                
+	                // 根据兑换类型拼接数据
+	                var rulse_map = "";
+	                var reg = new RegExp("^([1-9][0-9]*\.[0-9][0-9])$");
+	                var reg1 = new RegExp("^([1-9][0-9]*)$");
+	                
+	                var  exchange_tpye = "";  //卡劵兑换类型
+	                var val_radio = $('input:radio[name="Sex"]:checked').val();
+	                 if(val_radio == "1000"){
+	                     var kims_money = $("#kims_money").val();           
+	                     if(!reg.test(kims_money)){
+	                            layer.msg("请输入正确的折扣金额", {icon: 2});
+	                            return;
+	                     }
+	                     rulse_map = kims_money;
+	                     exchange_tpye = "1000";
+	                 }else if(val_radio == "3000"){
+	                    var  reg2 = new RegExp("^([0-9][0-9]*\.[0-9][0-9])$");
+	                    var discount = $("#discount").val();
+	                     
+	                    var discount_money = $("#discount_money").val();
+	                     
+	                    //折扣的处理
+	                    if(!reg1.test(discount)){
+	                            layer.msg("请输入正确的折扣", {icon: 2});
+	                            return;
+	                     }
+	                     
+	                     if( discount_money != null  && discount_money != ""  &&  !reg2.test(discount_money)){
+	                            layer.msg("请输入正确的折扣金额", {icon: 2});
+	                            return;
+	                     }  
+	                     
+	                     if(discount_money == null ||  discount_money == ""){
+	                         discount_money == "";
+	                     }
+	                     rulse_map = discount+"/"+discount_money;   
+	                     exchange_tpye = "3000";
+	                 }else if(val_radio == "2000"){ //兑换
+	                     var  reg2 = new RegExp("^([0-9][0-9]*\.[0-9][0-9])$");
+	                     var exchange_coupons = $("#exchange_coupons").val();  //卡券数量
+	                     var exchange_movie = $("#exchange_movie").val();//影票数量
+	                     var exchange_money = $("#exchange_money").val(); //补偿金额              
+	                     if(!reg1.test(exchange_coupons)){// 整数
+	                            layer.msg("请输入正确的兑换卡劵数量"+exchange_coupons, {icon: 2});
+	                            return;
+	                     }
+	                     if(!reg1.test(exchange_movie)){ // 整数
+	                            layer.msg("请输入正确的兑换电影票数量"+exchange_movie, {icon: 2});
+	                            return;
+	                     }
+	                     if( exchange_money != null  && exchange_money != ""  &&  !reg2.test(exchange_money)){
+	                    	 layer.msg("请输入正确的兑换补差金额", {icon: 2});
+	                         return;
+	                     }  
+	                  
+	                     if(exchange_money == null ||  exchange_money == ""){
+	                	     exchange_money == "";
+	                     }
+	                     rulse_map =exchange_coupons+"/"+exchange_movie+"/"+exchange_money;
+	                     exchange_tpye = "2000";
+	                 }else{
+	                     layer.msg("代折、扣合、兑换、请至少选择一种方式", {icon: 2});
+	                     return ; 
+	                 }
+	                 
+		                //兑换的数量策略
+		               var quantitys_type = $("#quantitys_type").val();//类型  哪种类型兑换
+		               var  money_quantitys   = null;//满多少元兑换
+		               var  coupons_quantitys = null;//兑换多少张
+		                //return;
+		                //var reg2 = new RegExp("^([0-9][0-9]*\.[0-9][0-9])$");
+		                //reg 是浮点数   re1是整数
+		                if(val_radio != "2000"){ //选择兑换的话，就没有这个了，已经兑换为影票
+		                    if(quantitys_type == "103"){
+		                        coupons_quantitys =  $("#coupons_quantitys").val();//卡劵数量
+		                        money_quantitys =  $("#money_quantitys").val();//金额
+		                        if(!reg1.test(coupons_quantitys) ){
+		                            layer.msg("请输入正确的数量策略卡劵数量", {icon: 2});
+		                            return ; 
+		                        }
+		                     }else if(quantitys_type == "101" || quantitys_type == "102" ){
+		                        coupons_quantitys =  $("#coupons_quantitys").val();
+		                        money_quantitys =  $("#money_quantitys").val();
+		                        if( !reg.test(money_quantitys)){
+		                            layer.msg("请输入正确的数量策略金额", {icon: 2});
+		                            return ; 
+		                        }
+		                        if(!reg1.test(coupons_quantitys) ){
+		                            layer.msg("请输入正确的数量策略卡劵数量", {icon: 2});
+		                            return ; 
+		                        }
+		                    }else if(quantitys_type == "104" ){
+		                        coupons_quantitys =  $("#coupons_quantitys").val();
+		                        money_quantitys =  $("#money_quantitys").val();
+		                        money_quantitys = "1";
+		                        if(!reg1.test(coupons_quantitys)){
+		                            layer.msg("请输入正确的数量策略卡劵数量", {icon: 2});
+		                            return ; 
+		                        }
+		                    }else{
+		                        quantitys_type = "100"
+		                    }
+		                }
+		                if(val_radio == "2000"){
+		                     quantitys_type = "100";
+		                }
+		                
+			               //设置时间策略
+			               var spru_time_spec =undefined;
+			               var spru_time_type  = $("#time_policy").val();//时间策略类型
+				                $(".time_spec_rule").each(function() {
+				                    var week_days = $(this).find("strong").text();//获取星期日期
+				                    var start = $(this).find(".time_spec_value").attr("attr_start");
+				                    var end = $(this).find(".time_spec_value").attr("attr_end");
+				                
+				                    var  times = week_days+"|" + start +"-"+ end;
+				                    spru_time_spec = spru_time_spec==null?times:spru_time_spec + "/" + times;         
+				                });
+			               
+			               if (spru_time_type != "0"  && (spru_time_spec == null || spru_time_spec == "" )) {
+			                    layer.msg("请设置时间策略", {icon: 2});
+			                    return;
+			                }
+             
+	                //使用时间限制
+	                var coupon_validate_type = $("#coupon_validate_type").val();//设置失效类型
+	                var coupon_validate_period = $("#coupon_validate_period").val().trim();//失效时间
+	                if(coupon_validate_type=="0010") {
+	                    var DATE_FORMAT = /^[0-9]{4}-[0-1]?[0-9]{1}-[0-3]?[0-9]{1} [0-2]?[0-9]{1}:[0-5]?[0-9]{1}:[0-5]?[0-9]{1}$/;
+	                    if(!DATE_FORMAT.test(coupon_validate_period)){
+	                        layer.msg("请设置失效日期", {icon: 2});
+	                        return;
+	                    }
+	                } else if(coupon_validate_type=="1001") {
+	                    if(coupon_validate_period==null||coupon_validate_period.trim()==""||isNaN(coupon_validate_period)||parseInt(coupon_validate_period)<=0) {
+	                        layer.msg("请设置领用后失效天数", {icon: 2});
+	                        return;
+	                    }
+	                } else if(coupon_validate_type=="0000") {
+	                    coupon_validate_period = "0";
+	                }
+	                if(coupon_validate_type=="0000") {
+	                    $("#coupon_validate_period").val("0");
+	                }
+	                if(coupon_validate_type=="0000"&&coupon_validate_period!="0") {
+	                    layer.msg("永久有效类卡券卡券领用后阈值应为0", {icon: 2});
+	                    return;
+	                }
+	                if(coupon_validate_type=="1001"||coupon_validate_type=="1002"||coupon_validate_type=="1003") {
+	                    if(coupon_validate_period==""||isNaN(coupon_validate_period)) {
+	                        layer.msg("领用天数失效类卡券卡券领用后阈值应为大于0的有效数字", {icon: 2});
+	                        return;
+	                    } else {
+	                        coupon_validate_period = parseInt(coupon_validate_period);
+	                        if(coupon_validate_period<=0) {
+	                            layer.msg("领用天数失效类类卡券卡券领用后阈值应为大于0的有效数字", {icon: 2});
+	                            return;
+	                        }
+	                    }
+	                } else if(coupon_validate_type=="0010") {
+	                    //为统一时间，则应该输入日期
+	                    if(coupon_validate_period==""||!isNaN(coupon_validate_period)) {
+	                        layer.msg("统一时间失效类卡券卡券领用后阈值应为有效的日期", {icon: 2});
+	                        return;
+	                    }
+	                }
+	                  
+	                //是否保护最低价
+	                var p_lowest = "1";// 保护
+
+	                var p_lowess = $("#p_lowest").is(':checked')
+	                if(!p_lowess){
+	                    p_lowest = "2";
+	                }
+	                 
+	                
+	                var index = layer.load(0, {shade: false});
+	                  
+	                
+	                var coupon_img = undefined;
+	                //发送请求
+	                var url = '[[${contextPath}]]/coupon/batch/do_add_service/?' + Date.parse(new Date());
+	                $.post(url, {
+	                            id:id,//主键
+	                            coupon_no:coupon_no,  // 批次编号
+	                            coupon_title:coupon_title, //卡劵名称
+	                            coupon_info:coupon_info,  //卡劵描述
+	                            coupon_use_service:coupon_use_service,//服务
+	                            coupon_use_store:coupon_use_store,//门店
+	                            coupon_crapp:coupon_crapp,//应用范围
+	                            exchange_tpye:exchange_tpye,// 卡劵兑换类型   兑换 折扣 代金 
+	                            rule_map:rulse_map,  //  兑换参数{"":"","":"",}
+	                            quantitys_type:quantitys_type,//兑换的数量策略
+	                            money_quantitys:money_quantitys,//数量金额
+	                            coupons_quantitys:coupons_quantitys,//卡劵数量
+	                            spru_time_type:spru_time_type,//时间策略类型
+	                            spru_time_spec:spru_time_spec,// 时间策略参数
+	                            coupon_validate_type:coupon_validate_type,//时间设置类型
+	                            coupon_validate_period:coupon_validate_period,//限制时间
+	                            coupon_content:coupon_content,//卡券内容  
+	                            coupon_img:coupon_img,//数据需要                                
+	                            p_lowest:p_lowest,  //是否保护最低价  
+	                            }, 
+	                    function(data){
+	                        layer.close(index);
+	                        if(data.available) {
+	                            layer.alert('操作成功', {
+	                                skin: 'layui-layer-lan',
+	                                shift: 4 //动画类型
+	                            }, function(){
+	                                location.href = "[[${contextPath}]]/coupon/index?" + Date.parse(new Date());
+	                            });
+	                        } else {
+	                            var code = data.messages[0];
+	                            layer.msg(code, {
+	            					shift : 6
+	            				});
+	                        }
+	                });
+	            });
+		});
+	</script>
+ <script>
+        $(document).ready(function() {
+        	//预加载门店信息
+        	var url = "[[${contextPath}]]/common/storeInfoList";
+        	$.get(url,function(data){
+        		for(var i=0;i<data.obj.length;i++){
+        			var o = data.obj[i];
+        			$("#coupon_use_store").append("<option value=\""+o.id+"\">"+o.store_name+"</option>");
+        		}
+        		if('[[${scRule.stores}]]'!=""){
+            		var stores = '[[${scRule.stores}]]'.split(',');
+            		for(var i=0;i<stores.length;i++){
+            			$('#coupon_use_store option[value='+stores[i]+']').attr("selected","selected");
+            		}
+        		}
+          		$("#coupon_use_store").select2();
+          		$("#coupon_use_service").select2();
+        	});
+        	
+        	if('[[${batch.cbstatus}]]'=='20'){
+        		$(".save").hide();
+            }
+        	
+            // 预加载信息
+            $("#coupon_validate_type").change(function(){
+                $("#coupon_validate_period").datepicker("destroy");
+                if($(this).val()=="0000") {
+                    $("#coupon_validate_period").val("0");
+                } else if($(this).val()=="0010") {
+                	$("#coupon_validate_period").val("");
+                    $("#coupon_validate_period").datetimepicker({  
+                        dateFormat: "yy-mm-dd",  
+                        showSecond: true,  
+                        timeFormat: 'hh:mm:ss',  
+                        stepHour: 1,  
+                        stepMinute: 1,  
+                        stepSecond: 1  
+                    })
+                } else {
+                    $("#coupon_validate_period").val("");
+                }
+            });  
+            
+            //开始日前
+            $("#q_sd").datepicker();
+            $("#q_sd").datepicker("option", "showAnim", "slideDown");
+            $("#q_sd").datepicker("option", "dateFormat", "yy-mm-dd");
+            $("#q_ed").datepicker();
+            $("#q_ed").datepicker("option", "showAnim", "slideDown");
+            $("#q_ed").datepicker("option", "dateFormat", "yy-mm-dd");
+            // 初始化为不显示
+            $("#date").hide();
+            $("#weeks").hide();
+            $("#time1").hide();
+            $("#rule_content").hide();
+            var v = $("#time_policy").val();
+            timeStrategy(v)
+           });
+        $("#coupon_app").on("change", function() {
+            var tv = $(this).val();
+            //cstriger_coupon_app(tv);
+        });          
+         $(document).ready(function () {
+             var tv= $("#coupon_app").val();
+             //triger_coupon_app(tv);
+         });         
+        $("#coupon_app").val([[${batch.crapp}]]);
+        //triger_coupon_app(${batch.crapp});            
+        
+        // 输入框的初始化
+        initialCoupons();
+        // 代换类型选择
+        $("input[name=Sex]").on("change", function() {
+            var v = $(this).val();      
+            if(v == "1000"){    
+                //layer.msg($("#kims_money").attr("style")+"asdasd", {icon: 2});
+                $("#kims_money").attr("disabled",false);
+                $("#discount").attr("disabled",true);
+                $("#discount_money").attr("disabled",true);
+                $("#exchange_coupons").attr("disabled",true);
+                $("#exchange_movie").attr("disabled",true);             
+                $("#exchange_money").attr("disabled",true);         
+            }else if(v == "3000"){
+                $("#kims_money").attr("disabled",true);
+                $("#discount").attr("disabled",false);
+                $("#discount_money").attr("disabled",false);
+                $("#exchange_coupons").attr("disabled",true);
+                $("#exchange_movie").attr("disabled",true);             
+                $("#exchange_money").attr("disabled",true);     
+            }else if(v == "2000"){      
+                $("#kims_money").attr("disabled",true);
+                $("#discount").attr("disabled",true);
+                $("#discount_money").attr("disabled",true);
+                $("#exchange_coupons").attr("disabled",false);
+                $("#exchange_movie").attr("disabled",false);                
+                $("#exchange_money").attr("disabled",false);        
+            }
+            emptiedCoupons();
+        });
+      //添加一条时间策略的判断
+        $(".add_time_stregy").on("click", function() {
+            var time_policy = $("#time_policy").val();
+            if(time_policy=="0") {
+                layer.msg("该时间策略不可添加具体限制值", {icon: 2});
+                return;
+            }
+            var choose_week = null;
+            var choose_week_dis_name = null;
+            if(time_policy=="w") {
+                $(".week_day").each(function() {
+                    if($(this).is(':checked')) {
+                        choose_week = choose_week==null?$(this).val():choose_week + "," + $(this).val();
+                        choose_week_dis_name = choose_week_dis_name==null?$(this).attr("dis_name"):choose_week_dis_name + "," + $(this).attr("dis_name");
+                    }
+                });
+            } else if(time_policy=="d") {
+                //选择日期类型，获取开始日期，结束日期
+                var q_sd = $("#q_sd").val();
+                var q_ed = $("#q_ed").val();
+                if(q_sd==null||q_sd==""||q_ed==null||q_ed=="") {
+                    layer.msg("请设置开始日期和结束日期", {icon: 2});
+                    return;
+                }
+                choose_week = q_sd + "," + q_ed;
+                choose_week_dis_name = q_sd + "——" + q_ed;
+            }
+            
+            var start_time = $.trim($("#start_time").val());
+            var end_time = $.trim($("#end_time").val());
+            if(choose_week==null) {
+                layer.msg("请勾选价格策略执行的星期值", {icon: 2});
+                return;
+            }
+            if(start_time==null||start_time=="") {
+                start_time = null;
+            }
+            if(end_time==null||end_time=="") {
+                end_time = null;
+            }
+            
+            if((start_time==null&&end_time!=null)||(start_time!=null&&end_time==null)) {
+                layer.msg("请选择开始时间结束时间", {icon: 2});
+                return;
+            }
+            if(start_time==null||end_time==null) {
+                layer.msg("请选择开始时间结束时间", {icon: 2});
+                return;
+            }
+            var sts = start_time.split(":");
+            var ets = end_time.split(":");
+            if(parseInt(sts[0])>parseInt(ets[0])) {
+                layer.msg("结束时间须大于开始时间", {icon: 2});
+                return;
+            } else if(parseInt(sts[0])==parseInt(ets[0])) {
+                if(parseInt(sts[1])>=parseInt(ets[1])) {
+                    layer.msg("结束时间须大于开始时间", {icon: 2});
+                    return;
+                }
+            }
+            
+            var html = '<div class="alert alert-success alert-dismissible time_spec_rule" style="float:left;width: 40%; margin-left:30px;">';
+            html = html + '<button type="button" class="close" data-dismiss="alert">';
+            if(start_time!=null) {
+                html = html + '<span aria-hidden="true" class="time_spec_value" attr_start="' + start_time + '" attr_end="' + end_time + '">' + start_time + '-' + end_time + '</span>';
+            } else {
+                html = html + '<span aria-hidden="true">&times;</span>';
+            }
+            html = html + '<span class="sr-only">Close</span>';
+            html = html + '</button>';
+            html = html + '<strong attr_v="' + choose_week + '">' + choose_week_dis_name + '</strong>';
+            html = html + '</div>';
+            
+        
+            $("#rule_content1").append(html);
+            $("#start_time").val("");
+            $("#end_time").val("");
+            $("#q_sd").val("");
+            $("#q_ed").val("");
+            $("#rule_content").show();
+        });
+        
+       /*  init();  */
+   function emptiedCoupons(){
+	        $("#kims_money").val("");
+	        $("#kims_money").val("");
+	        $("#discount").val("");
+	        $("#discount_money").val("");
+	        $("#exchange_coupons").val("");
+	        $("#exchange_movie").val("");       
+	        $("#exchange_money").val("");
+	    }
+	    
+	    // 输入框的初始化
+	    function initialCoupons(){
+	        /* var mc_l_ht_list = "${available_tags }";
+	        //layer.msg(mc_l_ht_list.length, {icon: 2});
+	        var itemList = JSON.parse(mc_l_ht_list);
+	        $.each(itemList,function(key,vara){
+	            $("#v_mc_l_cs_v").append("<option value=\""+vara.key+"\">"+vara.map+"</option>");
+	        }); */
+	        
+	        $("#kims_money").attr("checked","checked");
+	        $("#discount").attr("checked","");
+	        $("#discount_money").attr("checked","");
+	        $("#exchange_coupons").attr("checked","");
+	        $("#exchange_movie").attr("checked","");                
+	        $("#exchange_money").attr("checked","");    
+	        var val = $('input:radio[name="Sex"]:checked').val();
+	        
+	        if(val == "3000"){
+	            $("#kims_money").attr("disabled",true);
+	            $("#discount").attr("disabled",false);
+	            $("#discount_money").attr("disabled",false);
+	            $("#exchange_coupons").attr("disabled",true);
+	            $("#exchange_movie").attr("disabled",true);             
+	            $("#exchange_money").attr("disabled",true); 
+	            
+	        }else if(val == "2000"){
+	            $("#kims_money").attr("disabled",true);
+	            $("#discount").attr("disabled",true);
+	            $("#discount_money").attr("disabled",true);
+	            $("#exchange_coupons").attr("disabled",false);
+	            $("#exchange_movie").attr("disabled",false);                
+	            $("#exchange_money").attr("disabled",false);    
+	        }else{
+	            $("#kims_money").attr("disabled",false);
+	            $("#discount").attr("disabled",true);
+	            $("#discount_money").attr("disabled",true);
+	            $("#exchange_coupons").attr("disabled",true);
+	            $("#exchange_movie").attr("disabled",true);             
+	            $("#exchange_money").attr("disabled",true); 
+	        }
+	        if(val == '2000'){
+	             //alert("3--00");
+	            $("#coupons_quantitys").attr("disabled",true);
+	            $("#money_quantitys").attr("disabled",true);
+	            return;
+	        }
+	        var v  = '[[${scRule.quantitys_key}]]';
+	        if(v==''){
+	        	v=100;
+	        }
+	        showQuantitys(v);
+	    }
+	    
+
+	    $("#quantitys_type").on("change", function() {
+	        var v = $(this).val();
+	        var type  = $('input:radio[name="Sex"]:checked').val();
+	        if(type == "2000"){
+	            $("#coupons_quantitys").attr("disabled",true);
+	            $("#money_quantitys").attr("disabled",true);
+	            return ;
+	        }
+	        showQuantitys(v);
+	    });
+	    
+	    
+	    function showQuantitys(v){
+	        /*100 : 无
+	        *101 : 满
+	        *102 : 每满
+	        *103 : 每笔
+	        *104 : 每张
+	        */
+	        //alert($("#description").attr("id"))
+	        if(v == "100" ){
+	            $("#coupons_quantitys").attr("disabled",true);
+	            $("#money_quantitys").show();
+	            $("#money_quantitys").attr("disabled",true);
+	            $("#description").html("最多可用");
+	        }else if(v == "103"){
+	            $("#coupons_quantitys").attr("disabled",false);
+	            $("#money_quantitys").hide();
+	            $("#description").html("交易最多可用");
+	        }else if(v == "104" ){
+	            $("#coupons_quantitys").attr("disabled",false);
+	            $("#money_quantitys").hide();
+	            $("#description").html("张电影票最多可用");
+	        }else{
+	            $("#coupons_quantitys").attr("disabled",false);
+	            $("#money_quantitys").show();
+	            $("#money_quantitys").attr("disabled",false);
+	            $("#description").html("元最多可用");
+	        }
+	        //alert(v)
+	        
+	        if(v == "101" || v == "102" ){
+	            $("#money_quantitys").val("");
+	            $("#money_quantitys").attr("placeholder","请输入两位小数，例如：0.00");
+	            $("#coupons_quantitys").val("");
+	            $("#coupons_quantitys").attr("placeholder","请输入大于0的整数，例如：1");
+	        }else if(v == "104"||v=="103"){
+	            $("#money_quantitys").val("");
+	            $("#money_quantitys").attr("placeholder","");
+	            $("#coupons_quantitys").val("");
+	            $("#coupons_quantitys").attr("placeholder","请输入大于0的整数，例如：1");
+	        }else{
+	            $("#money_quantitys").val("");
+	            $("#money_quantitys").attr("placeholder","");
+	            $("#coupons_quantitys").val("");
+	            $("#coupons_quantitys").attr("placeholder","");
+	        } 
+	    }
+	    
+	    $(":radio").click(function(){
+	        var type = $(this).val();
+	        var v = $("#quantitys_type").val();
+	        if(type == '2000'){
+	             //alert("3--00");
+	            $("#coupons_quantitys").attr("disabled",true);
+	            $("#money_quantitys").attr("disabled",true);
+	        }else{          
+	            $("#coupons_quantitys").attr("disabled",true);
+	            $("#money_quantitys").attr("disabled",true);            
+	        }
+	     });
+	    function initYplx(item){
+	         $("#mc_l_htt").val(item.ypt);
+	        $("#mc_l_htt").attr("disabled","disabled")
+	    }
+	    // 加载影厅类型
+	    function initYptt(item){
+	        var arr = item.ytt.split(',');
+	        var id = [];
+	        $.each(arr,function(index,item){
+	            id.push(item);
+	        });
+	        $("#mc_l_ht").val(id).trigger('change');
+	        $("#mc_l_ht").attr("disabled","disabled")
+	    }
+	    
+	    function timeStrategy(v){
+	        if(v=="w") {     //按周分时设置 
+	            $("#date").hide();
+	            $("#weeks").show();
+	            $("#time1").show();
+	            
+	        } else if(v=="d") {   //  按日分时设置
+	            $("#date").show();
+	            $("#weeks").hide();
+	            $("#time1").show();
+	            
+	        }else{  // 全天有效
+	            $("#date").hide();
+	            $("#weeks").hide();
+	            $("#time1").hide();
+	            $("#rule_content").hide();
+	        }
+	        $("#rule_content1").html("");
+	        $("#rule_content").hide();
+	    } 
+    </script>
+    <script>
+            //开始时间
+            $("#start_time").datetimepicker({
+                timeOnly:true,
+                datepicker:false,
+                step:5,
+                format:'H:i',
+                onShow:function( currentDateTime ){
+                this.setOptions({
+                maxTime:$(".enddatepicker").val()?$(".enddatepicker").val():false
+                });
+                },
+                onChangeDateTime:function( currentDateTime ){
+                this.setOptions({
+                maxTime:$(".enddatepicker").val()?$(".enddatepicker").val():false
+                });
+                }
+            });
+            
+            // 结束时间
+            $("#end_time").datetimepicker({
+                timeOnly:true,
+                datepicker:false,
+                step:5,
+                format:'H:i',
+                onShow:function( currentDateTime ){
+                this.setOptions({
+                maxTime:$(".enddatepicker").val()?$(".enddatepicker").val():false
+                });
+                },
+                onChangeDateTime:function( currentDateTime ){
+                this.setOptions({
+                maxTime:$(".enddatepicker").val()?$(".enddatepicker").val():false
+                });
+                }
+            });
+            
+            // 时间段的选择方式
+            $("#time_policy").on("change", function() {
+                var v = $(this).val();
+                //xslayer.msg("该时间策略不可添加具体限制值", {icon: 2});
+                timeStrategy(v);
+            });
+
+            function timeStrategy(v){
+                if(v=="w") {     //按周分时设置 
+                    $("#date").hide();
+                    $("#weeks").show();
+                    $("#time1").show();
+                    
+                } else if(v=="d") {   //  按日分时设置
+                    $("#date").show();
+                    $("#weeks").hide();
+                    $("#time1").show();
+                    
+                }else{  // 全天有效
+                    $("#date").hide();
+                    $("#weeks").hide();
+                    $("#time1").hide();
+                    $("#rule_content").hide();
+                }
+                $("#rule_content1").html("");
+                $("#rule_content").hide();
+            } 
+            
+    </script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+    		$('#coupon_validate_type option[value="[[${batch.validate_type}]]"]').attr("selected","selected");
+    		if('[[${scRule.server}]]'!=""){
+        		var server = '[[${scRule.server}]]'.split(',');
+        		for(var i=0;i<server.length;i++){
+        			$('#coupon_use_service option[value='+server[i]+']').attr("selected","selected");
+        		}
+    		}
+    		if('[[${batch.cbstatus}]]'=='20'){
+            	$(".save").attr("disabled",true);
+            }
+    		var rule_value = '[[${scRule.rule_value}]]'.split("/");
+    		var exchange_type = '[[${batch.coupon_type}]]';
+    		if(exchange_type==1000){
+    			$('input[name=Sex][value=1000]').attr("checked","checked");
+    			$('#kims_money').val(rule_value[0]);
+    		} else if(exchange_type==3000){
+    			$('input[name=Sex][value=3000]').attr("checked","checked");
+    			$("#discount").val(rule_value[0]);
+    			$("#discount_money").val(rule_value[1]);
+    		}else if(exchange_type==2000){
+    			$('input[name=Sex][value=2000]').attr("checked","checked");
+    			$('#exchange_coupons').val(rule_value[0]);
+    			$('#exchange_movie').val(rule_value[1]);
+    			$('#exchange_money').val(rule_value[2]);
+    		}
+    		
+    		var quantitys_type = '[[${scRule.quantitys_key}]]';
+    		var quantitys = '[[${scRule.quantitys_value}]]'.split("/");	
+    		if(quantitys_type==101 || quantitys_type==102){
+	    		$('#quantitys_type').val(quantitys_type);
+	    		$('#money_quantitys').val(quantitys[0]);
+	    		$('#coupons_quantitys').val(quantitys[1]);
+    		}else if (quantitys_type==103){
+    			$('#quantitys_type').val(quantitys_type);
+    			$('#coupons_quantitys').val(quantitys[0]);
+    		}
+    		
+    		//添加时间显示
+    		var time_type = '[[${scRule.time_type}]]';
+    		var time_value = '[[${scRule.time_value}]]'.split("/");
+    		if(time_type=="0"){	
+    		}
+    		if(time_type=="w"){
+    			$('#time_policy').val(time_type);
+    			
+    			$('#time_policy').val(time_type);
+    			for(var i =0;i<time_value.length;i++){
+    				var time_real_value = time_value[i];
+    				var time_real_value1 =  time_real_value.split("|");
+    				var weekdays = time_real_value1[0].replace(',','--');
+    			    var start_time = time_real_value1[1];
+    			    var end_time = time_real_value1[2];
+
+    				var html = '<div class="alert alert-success alert-dismissible time_spec_rule" style="float:left;width: 40%; margin-left:30px;">';
+    			        html = html + '<button type="button" class="close" data-dismiss="alert">';
+    			        if(start_time!=null) {
+    			               html = html + '<span aria-hidden="true" class="time_spec_value" attr_start="' + start_time + '" attr_end="' + end_time + '">' + time_real_value1[1] + '</span>';
+    			          } else{
+    			                 html = html + '<span aria-hidden="true">&times;</span>';
+    			          }
+    			          html = html + '<span class="sr-only">Close</span>';
+    			          html = html + '</button>';
+    			          html = html + '<strong attr_v="' + weekdays + '">' + weekdays + '</strong>';
+    			          html = html + '</div>';
+    			          $("#rule_content1").append(html);
+    			          $("#rule_content").show();
+    			}
+    		}
+    		if(time_type=="d"){
+    			
+    			$('#time_policy').val(time_type);
+    			for(var i =0;i<time_value.length;i++){
+    				var time_real_value = time_value[i];
+    				var time_real_value1 =  time_real_value.split("|");
+    				var weekdays = time_real_value1[0].replace(',','--');
+    			    var start_time = time_real_value1[1];
+    			    var end_time = time_real_value1[2];
+
+    				var html = '<div class="alert alert-success alert-dismissible time_spec_rule" style="float:left;width: 40%; margin-left:30px;">';
+    			        html = html + '<button type="button" class="close" data-dismiss="alert">';
+    			        if(start_time!=null) {
+    			               html = html + '<span aria-hidden="true" class="time_spec_value" attr_start="' + start_time + '" attr_end="' + end_time + '">' + time_real_value1[1] + '</span>';
+    			          } else{
+    			                 html = html + '<span aria-hidden="true">&times;</span>';
+    			          }
+    			          html = html + '<span class="sr-only">Close</span>';
+    			          html = html + '</button>';
+    			          html = html + '<strong attr_v="' + weekdays + '">' + weekdays + '</strong>';
+    			          html = html + '</div>';
+    			          $("#rule_content1").append(html);
+    			          $("#rule_content").show();
+    			}
+    		}
+    	});
+    </script>
+</html>

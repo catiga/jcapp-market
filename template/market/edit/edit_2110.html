@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 营销管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/jqui1114/jquery-ui.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/plugins/select2/select2.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<script th:src="@{{sp}/kindeditor/kindeditor-min.js(sp=${pub_bucket})}"> </script>
+</head>
+<script>
+
+var editor;
+KindEditor.ready(function(K) {
+    editor = K.create('textarea[name="mc_content"]', {
+        allowFileManager : true
+    });
+    K('input[name=getHtml]').click(function(e) {
+        alert(editor.html());
+    });
+    K('input[name=isEmpty]').click(function(e) {
+        alert(editor.isEmpty());
+    });
+    K('input[name=getText]').click(function(e) {
+        alert(editor.text());
+    });
+    K('input[name=selectedHtml]').click(function(e) {
+        alert(editor.selectedHtml());
+    });
+    K('input[name=setHtml]').click(function(e) {
+        editor.html('<h3>Hello KindEditor</h3>');
+    });
+    K('input[name=setText]').click(function(e) {
+        editor.text('<h3>Hello KindEditor</h3>');
+    });
+    K('input[name=insertHtml]').click(function(e) {
+        editor.insertHtml('<strong>插入HTML</strong>');
+    });
+    K('input[name=appendHtml]').click(function(e) {
+        editor.appendHtml('<strong>添加HTML</strong>');
+    });
+    K('input[name=clear]').click(function(e) {
+        editor.html('');
+    });
+    editor.html('[[${mInfo.content}]]');
+});
+</script>
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>   <!-- 顶部 -->
+			<div class="page-title"> <!-- tab栏目 -->
+				<div class="">
+                    <div class="page-title">
+                        <div class="title_left"><h3>编辑充值增礼类</h3></div>
+                    </div>
+                </div>
+			</div>
+			<div class="row">
+                 <div class="col-md-12">
+                     <div class="col-md-12">
+                         <form class="goodsinfo_form" role="form" id="templatemo-preferences-form" method="post">
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label class="control-label" for="mc_name">活动名称</label> 
+                                         <input name="mc_name" type="text" class="form-control" id="mc_name" placeholder="输入活动名称"> 
+                                     </div>
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label class="control-label" for="mc_no">活动编号</label> 
+                                         <input name="mc_no" type="text" class="form-control" id="mc_no" placeholder="可手动输入编号，为空则自动生成"> 
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label class="control-label" for="mc_info">活动简介</label>
+                                         <input name="mc_info" type="text" class="form-control" id="mc_info" placeholder="请输入活动简介">
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-6 margin-bottom-15">
+                                     <label class="control-label" for="mc_start_time">活动开始时间</label>
+                                     <input name="mc_start_time" type="text" class="form-control" id="mc_start_time" placeholder="请输入活动开始时间" readonly>
+                                 </div>
+                                 <div class="col-md-6 margin-bottom-15">
+                                     <label class="control-label" for="mc_end_time">活动结束时间</label> 
+                                     <input name="mc_end_time" type="text" class="form-control" id="mc_end_time" placeholder="请输入活动结束时间" readonly>
+                                 </div>
+                             </div>
+                             <hr/>
+                             <!-- 
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-12 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">优惠总量与结算信息设置</label><br/>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div style="background:#BC8F8F;padding:15px;">
+                                 <div class="has-feedback">
+                                     <div class="row">
+                                         <div class="col-md-6 margin-bottom-15">
+                                             <label for="l_cal_t_n" class="">充值总次数（次）：</label>
+                                             <input type="text" class="form-control" id="l_cal_t_n" placeholder="不限">
+                                         </div>
+                                         <div class="col-md-6 margin-bottom-15">
+                                             <label for="l_cal_t_a" class="">充值总金额（元）：</label>
+                                             <input type="text" class="form-control" id="l_cal_t_a" placeholder="不限">
+                                         </div>
+                                     </div>
+                                     <div class="row">
+                                         <div class="col-md-6 margin-bottom-15">
+                                             新增字段
+                                             <label for="low_price_settle" class="">第三方参与结算：</label>
+                                             <select id="low_price_settle" class="form-control">
+                                                 <option value="0">否</option>
+                                                 <option value="1">是</option>
+                                             </select>
+                                         </div>
+                                         <div class="col-md-6 margin-bottom-15">
+                                             新增字段
+                                             <label for="settle_aim" class="">结算对象：</label>
+                                             <input type="text" class="form-control" id="settle_aim" placeholder="记录结算对象，如建设银行">
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <hr/> -->
+                             
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-12 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">设置活动策略</label><br/>
+                                         <label for="proj_config" class="">充值满足多个条件则同时执行</label><br/>
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- div class="row">
+                                 <div class="col-md-3 margin-bottom-15">
+                                     <label for="mc_price_streg">价格策略</label> 
+                                     <select name="mc_price_streg" class="form-control margin-bottom-15" id="mc_price_streg">
+                                         <option value="40">充值返现</option>
+                                     </select>
+                                 </div>
+                                 <div class="col-md-3 margin-bottom-15">
+                                     <label for="mc_price_value">充值金额</label> 
+                                     <input name="mc_price_value" type="text" class="form-control" id="mc_price_value" placeholder="请输入数字，充值金额">
+                                 </div>
+                                 <div class="col-md-3 margin-bottom-15">
+                                     <label for="mc_price_return">请输入赠品编码</label> 
+                                     <input name="mc_price_return" type="text" class="form-control" id="mc_price_return" placeholder="请输入数字，返还金额">
+                                 </div>
+                                 <div class="col-md-2 margin-bottom-15">
+                                     <label for="coupon_app">&nbsp;</label>
+                                     <button type="button" class="btn btn-primary form-control add_new_price_streg">再添加一条</button>
+                                 </div>
+                             </div>
+                             <hr/> -->
+                              <div class="row">
+								<div class="col-md-4 margin-bottom-15">
+									<label for="tb_num">最低充值金额</label> 
+									<input name="tb_num" type="text" class="form-control" id="tb_num" placeholder="请输入数字">
+								</div>
+								<div class="col-md-1 margin-bottom-15" >
+									<label for="tb_price_type">赠品类型</label> 
+									<select name="tb_price_type" class="form-control margin-bottom-15" id="tb_price_type">
+										<option value="1">卡券</option>
+										</select>
+									</div>
+								<div class="col-md-3 margin-bottom-15">
+									<label for="tb_gift">赠品设置</label> 
+									<input name="tb_gift" type="text" class="form-control" id="tb_gift"  placeholder="请输入券编号">
+								</div>
+								<div class="col-md-3 margin-bottom-15">
+									<label for="tb_gift1">数量</label> 
+									<input name="tb_gift1" type="text" class="form-control" id="tb_gift1"  placeholder="输入数字">
+								</div>
+								<div class="col-md-1 margin-bottom-15">
+									<label for="add_new_price_streg">&nbsp;</label> 
+									<button type="button" class="btn btn-primary form-control add_new_price_streg"   id="add_new_price_streg">保存策略</button>
+								</div>
+                   			</div>
+                   			<div class="row">
+                   				<div class="has-success has-feedback" style="margin-top:30px;" id="times_value">                                         
+                         			<div class="row" id="times_value1">
+                        		</div>
+								</div>
+							</div>
+							<hr/>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">会员卡级别限制</label><br/>
+                                     </div>
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">会员卡门店限制</label><br/>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                   <div class="col-md-6 margin-bottom-15">
+                                         <label for="mc_l_ms">选择参与活动的会员卡等级（为空则所有）</label> 
+                                         <select id="v_mc_l_ms" class="js-example-basic-multiple" multiple="multiple" style="width:100%;">
+                                         </select>
+                                     </div>
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label for="m_mc_l_ms">选择参与活动的门店（为空则所有）</label> 
+                                         <select id="m_mc_l_ms" class="js-example-basic-multiple" multiple="multiple" style="width:100%;">
+                                         </select>
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-3 margin-bottom-15">
+                                         <label for="mc_l_f">限制首次优惠</label> 
+                                         <input name="mc_l_f" type="checkbox" id="mc_l_f">
+                                     </div>
+                                 </div>
+                             </div>
+                             
+                             <hr/>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-12 margin-bottom-15">
+                                         <label for="proj_config" class="control-label">请设置购票具体约束条件</label><br/>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="has-success has-feedback">
+                                 <div class="row">
+                                     <div class="col-md-2 margin-bottom-15">
+                                         <label for="mc_l_u">充值次数限制</label> 
+                                         <input name="mc_l_u" type="text" class="form-control" id="mc_l_u" placeholder="0则不限次数">
+                                     </div>
+                                     <div class="col-md-3 margin-bottom-15">
+                                         <label for="mc_l_u_f">充值频率限制</label> 
+                                         <select name="mc_l_u_f" class="form-control margin-bottom-15" id="mc_l_u_f">
+                                             <option value="-1">不限制</option>
+                                             <option value="d">每天</option>
+                                             <option value="w">每周</option>
+                                             <option value="m">每月</option>
+                                         </select>
+                                     </div>
+                                     <div class="col-md-6 margin-bottom-15">
+                                         <label for="mc_l_u_v">具体充值频率值</label> 
+                                         <input name="mc_l_u_v" type="text" class="form-control" id="mc_l_u_v" placeholder="如周一三五，则写1,3,5" disabled>
+                                     </div>
+                                 </div>
+                             </div>
+                              -->
+                             <div class="row">
+                                 <div class="col-md-12 margin-bottom-15">
+                                     <label for="mc_content">详细信息</label>
+                                     <textarea name="mc_content" class="form-control" rows="3" id="mc_content"></textarea>
+                                 </div>
+                             </div>
+                             <div class="row templatemo-form-buttons">
+                                 <div class="col-md-12">
+                                     <button th:if="${mInfo.mstatus=='10'}" type="button" class="btn btn-primary save">保存</button>
+                                     <!-- 
+                                     <button type="reset" class="btn btn-default">重置</button>
+                                      -->
+                                 </div>
+                             </div>
+                         </form>
+                     </div>
+                 </div>
+             </div>
+		</div>
+	</div>
+	
+	   
+	<!-- Mainly scripts -->
+    <script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+    
+    <script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+    <script th:src="@{{sp}/js/plugins/select2/select2.full.min.js(sp=${pub_bucket})}" type="text/javascript"></script>
+    
+    <script th:src="@{{sp}/jqui1114/jquery-ui.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-addon.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>
+    <script th:src="@{{sp}/jqui1114/jquery-ui-timepicker-zh-CN.js(sp=${pub_bucket})}" type="text/javascript" charset="utf-8"></script>	
+</body>
+
+<script type="text/javascript">
+$(function() {
+	var post_err_msg = "[[${error_msg}]]";
+    if(post_err_msg){
+        layer.msg(post_err_msg, {icon: 2}); 
+    }
+    $(".add_new_market").on("click", function(){
+        location.href = "[[${contextPath}]]/market/judge?" + Date.parse(new Date());
+    });
+    var url='[[${contextPath}]]/common/hierarchyCardList'
+	$.post(url,{},function(data){
+		if(!data.available) {
+            $("#v_mc_l_ms").select2();
+            return;
+        }
+    	var table = data.obj;
+		for (var i = 0; i < table.length; i++) {
+			var item = table[i];
+			$("#v_mc_l_ms").append("<option value=\""+item.label+"\">"+item.value+"</option>");
+		}
+		 var mc_ms='[[${detail.mc_l_ms}]]';
+		 if(mc_ms!=""){
+			var smovie = mc_ms.split(',');
+			for(var i=0;i<smovie.length;i++){
+			$('#v_mc_l_ms option[value='+smovie[i]+']').attr("selected","selected");
+				}				
+			}  
+		    $("#v_mc_l_ms").select2();
+    });
+    var url1='[[${contextPath}]]/common/storeInfoList'
+    $.post(url1,{},function(data){
+    	if(!data.available) {
+            $("#m_mc_l_ms").select2();
+            return;
+        }
+        var table = data.obj;
+    	for (var i = 0; i < table.length; i++) {
+    		var item = table[i];
+    		$("#m_mc_l_ms").append("<option value=\""+item.id+"\">"+item.store_name+"</option>");
+    	}
+    	var mc_ms='[[${detail.store}]]';
+    	if(mc_ms!=""){
+    		var store = mc_ms.split(',');
+    		for(var i=0;i<store.length;i++){
+    			  $('#m_mc_l_ms option[value='+store[i]+']').attr("selected","selected");
+    		}				
+    	}  
+    	$("#m_mc_l_ms").select2();
+    });
+});
+
+	$(".add_new_price_streg").on("click", function() {
+		var tb_num = $.trim($(this).parent().parent().find("input[name='tb_num']").val());
+		var aee = $.trim($(this).parent().parent().find("option:selected").val());
+		var tb_gift = $.trim($(this).parent().parent().find("input[name='tb_gift']").val());
+		var tb_gift1 = $.trim($(this).parent().parent().find("input[name='tb_gift1']").val());
+		
+		var invalid = false;
+		$("input[name='tb_num']").each(function() {
+			var mc_price_value = $(this).val();
+			if(mc_price_value==null||mc_price_value.trim()==""||isNaN(mc_price_value)) {
+				$(this).val('');
+				invalid = true;
+				return;
+			}
+		});
+		$("input[name='tb_gift']").each(function() {
+			var mc_price_value = $(this).val();
+			if(mc_price_value==null||mc_price_value.trim()=="") {
+				$(this).val('');
+				invalid = true;
+				return;
+			}
+		});
+		$("input[name='tb_gift1']").each(function() {
+			var mc_price_value = $(this).val();
+			if(mc_price_value==null||mc_price_value.trim()==""||isNaN(mc_price_value)) {
+				$(this).val('');
+				invalid = true;
+				return;
+			}
+		});
+		
+		if(invalid) {
+			layer.msg("请输入合法的充值金额和赠品数量条件", {icon: 2});
+			return;
+		}
+		var htmls = '<div class="alert alert-success alert-dismissible time_spec_rule"  style="float:left;width: 40%; margin-left:15px;">';
+        htmls += '<button type="button"  class="close btn" data-dismiss="alert" style = "float:right;">';
+     	htmls += '<span aria-hidden="true" class="time_spec_value">'+"删除"+'</span>';
+        htmls += '</button>';
+        htmls += '<button type="button"  class="close btn" data-dismiss="" style = "float:right;margin-right:20px;">';
+        htmls += '<span aria-hidden="true" class="time_spec_edit"  tb_num="' +tb_num+ '"aee="'+aee+'" tb_gift="'+tb_gift+'" tb_gift1="'+tb_gift1+'">'+"编辑"+'</span>';
+        htmls += '<span class="sr-only">Close</span>';
+        htmls += '</button>';
+        htmls += '<strong>' +'充值金额:'+ tb_num+'</strong>';
+        htmls += '<strong th:if='+aee+'==1">' +'赠品类型:卡券'+ '</strong>';
+        htmls += '<strong>' +'赠品编码:'+ tb_gift+ '</strong>';
+        htmls += '<strong>' +'赠品数量:'+ tb_gift1+'</strong>';
+        htmls += '</div>';
+		$("#times_value").after(htmls);
+	    $("#times_value1").show();
+	});
+	
+	/* 编辑策略*/
+	$(document).on("click",'.time_spec_edit',function(){
+		$("#tb_num").val($(this).attr("tb_num"));
+		$("#tb_price_type").val($(this).attr("aee"));
+		$("#tb_gift").val($(this).attr("tb_gift"));
+		$("#tb_gift1").val($(this).attr("tb_gift1"));
+		$(this).parent().parent().remove();
+	});
+	
+	$("#mc_no").val('[[${mInfo.dnum}]]')
+	$("#mc_name").val('[[${mInfo.title}]]')
+	$("#mc_info").val('[[${mInfo.info}]]')
+	$("#mc_start_time").val('[[${start_time}]]')
+	$("#mc_end_time").val('[[${end_time}]]')
+	
+
+  		var itemList = '[[${detail.mc_p_streg}]]'
+        if(itemList!=""){
+    	var s=itemList.split('/');
+    	var html = '';
+        for(var i=0;i<s.length;i++){
+        var time = s[i].split(',');
+        var m_time=time[0]/100;
+        var  htmls=  '<div class="alert alert-success alert-dismissible time_spec_rule"  style="float:left;width: 40%; margin-left:15px;">';
+	        htmls += '<button type="button"  class="close btn" data-dismiss="alert" style = "float:right;">';
+	     	htmls += '<span aria-hidden="true" class="time_spec_value"  tb_num="' +m_time+ '"aee="'+time[1]+'" tb_gift="'+time[2]+'" tb_gift1="'+time[3]+'">'+"删除"+'</span>';
+	        htmls += '</button>';
+	        htmls += '<button type="button"  class="close btn" data-dismiss="" style = "float:right;margin-right:20px;">';
+	        htmls += '<span aria-hidden="true" class="time_spec_edit" tb_num="' +m_time+ '"aee="'+time[1]+'" tb_gift="'+time[2]+'" tb_gift1="'+time[3]+'">'+"编辑"+'</span>';
+	        htmls += '<span class="sr-only">Close</span>';
+	        htmls += '</button>';
+	        htmls += '<strong>' +'充值金额:'+ m_time+'</strong>';
+	        htmls += '<strong th:if="${r.mc_recharge_mold}==1">' +'赠品类型:卡券'+ '</strong>';
+	        htmls += '<strong>' +'赠品编码:'+ time[2]+ '</strong>';
+	        htmls += '<strong>' +'赠品数量:'+ time[3]+'</strong>';
+	        htmls += '</div>';
+			html=htmls+html;
+        } 
+        $("#times_value").after(html);
+	    $("#times_value1").show();
+       }
+
+    $(".save").on("click", function() {
+		var mc_name = $("#mc_name").val();
+		var mc_no = $("#mc_no").val();
+		var mc_info = $("#mc_info").val();
+		var mc_start_time = $("#mc_start_time").val();
+		var mc_end_time = $("#mc_end_time").val();
+		
+		var mc_l_ms = "";
+		var mc_l_ms_name = "";
+		var mc_store="";
+		var mc_store_name="";
+		$("#v_mc_l_ms option:selected").each(function(){
+			if(mc_l_ms_name){mc_l_ms_name += ",";}
+			if(mc_l_ms){mc_l_ms += ",";}
+			mc_l_ms += $(this).val();
+			mc_l_ms_name += $(this).html();
+		});
+		$("#m_mc_l_ms option:selected").each(function(){
+			if(mc_store_name){mc_store_name += ",";}
+			if(mc_store){mc_store += ",";}
+			mc_store += $(this).val();
+			mc_store_name += $(this).html();
+		});
+
+		var mc_content = editor.html();
+		if(mc_name==null||mc_name.trim()=="") {
+			layer.msg("请输入营销活动名称", {icon: 2});
+			return;
+		}
+		if(mc_info==null||mc_info.trim()=="") {
+			layer.msg("请输入营销活动描述", {icon: 2});
+			return;
+		}
+		if(mc_start_time==null||mc_start_time==""||mc_end_time==null||mc_end_time=="") {
+			layer.msg("请设置活动进行的时间段", {icon: 2});
+			return;
+		}
+		//判断两次输入的时间
+		var sts = mc_start_time.split(":");
+		var st=sts[0].split("-");
+        var ets = mc_end_time.split(":");
+        var et=ets[0].split("-");
+        if(parseInt(st[0]+st[1]+st[2])>parseInt(et[0]+et[1]+et[2])) {
+            layer.msg("结束时间须大于开始时间", {icon: 2});
+            return;
+        } 
+        if(parseInt(st[0]+st[1]+st[2])==parseInt(et[0]+et[1]+et[2])) {
+            if(parseInt(st[3])>=parseInt(et[3])) {
+              layer.msg("结束时间须大于开始时间", {icon: 2});
+              return;
+            }
+        }
+			 var mc_p_streg = null;
+			 $(".time_spec_rule").each(function() {
+		         var tb_num = $(this).find(".time_spec_edit").attr("tb_num");
+		         var tb_gift = $(this).find(".time_spec_edit").attr("tb_gift");
+		         var aee=$(this).find(".time_spec_edit").attr("aee");
+		         var tb_gift1= $(this).find(".time_spec_edit").attr("tb_gift1");
+		         var times =  tb_num*100 + "," +aee+","+ tb_gift + "," + tb_gift1 ;
+		         mc_p_streg = mc_p_streg==null?times:times+ "/" +mc_p_streg ;
+		       });
+		var id='[[${mInfo.id}]]'
+		var mstatus='[[${mstatus}]]'
+		var index = layer.load();
+		var url = '[[${contextPath}]]/market/do_add_update_2110/?' + Date.parse(new Date());
+		$.post(url, {
+				id:id,
+				mc_type:'2110',
+				mc_name:mc_name,//活动名称
+				mstatus:mstatus,
+				mc_no:mc_no,//活动编号
+				mc_store:mc_store,//限制门店
+				mc_store_name:mc_store_name,
+				mc_info:mc_info,//活动简介
+				mc_p_streg:mc_p_streg,//活动策略
+				mc_start_time:mc_start_time,//开始时间
+				mc_end_time:mc_end_time,//介绍时间
+				mc_content:mc_content,//详细信息
+				mc_l_ms:mc_l_ms,//会员卡级别限制
+				mc_l_ms_name:mc_l_ms_name,
+				}, 
+		function(data){
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.href = '[[${contextPath}]]/market/index/?' + Date.parse(new Date());				    	
+			    });
+			} else {
+				var code = data.messages[0];
+				//var msg = "未知错误";
+				layer.msg(code, {
+					shift : 6
+				});
+			}
+		});
+	}); 
+//开始时间
+$("#mc_start_time").datetimepicker({
+    showSecond: true,
+    timeFormat: 'hh:mm:ss',
+    stepHour: 1,
+    stepMinute: 1,
+    stepSecond: 1
+});
+//结束时间
+$("#mc_end_time").datetimepicker({
+    showSecond: true,
+    timeFormat: 'hh:mm:ss',
+    stepHour: 1,
+    stepMinute: 1,
+    stepSecond: 1
+});
+</script>
+</html>

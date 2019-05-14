@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 卡劵管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+</head>
+
+<body>
+<div id="wrapper">
+	<div th:replace="../../common/nav"></div>
+	<div id="page-wrapper" class="gray-bg">
+		<div th:replace="../../common/top"></div>
+		<div class="row wrapper border-bottom white-bg page-heading">
+			<div class="page-title">
+                 <div class="title_left"><h3>卡核销</h3></div>
+
+                 <div class="title_right hide">
+                     <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                         <div class="input-group">
+                             <input type="text" class="form-control"
+                                 placeholder="Search for..."> <span
+                                 class="input-group-btn">
+                                 <button class="btn btn-default" type="button">Go!</button>
+                             </span>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>
+                                        券验证 <small>券码／手机号码</small>
+                                    </h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <br />
+                                    <form class="form-horizontal form-label-left input_mask">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">券码<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                                <input type="text" class="form-control" id="pub_code" placeholder="请输入券码" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">手机号码<span class="required">*</span></label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                                <input type="text" class="form-control" id="validate_code" placeholder="请输入手机号码" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="ln_solid"></div>
+                                        <div class="form-group">
+                                            <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                                <button type="button" class="btn btn-success" id="do_coupon_validate">立即验证</button>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>
+                                        <i class="fa fa-align-left"></i> 券详情 <small>信息</small>
+                                    </h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                    <!-- start accordion -->
+                                    <div class="accordion" id="accordion" role="tablist"
+                                        aria-multiselectable="true">
+                                        <div class="panel">
+                                            <a class="panel-heading" role="tab" id="headingOne"
+                                                data-toggle="collapse" data-parent="#accordion"
+                                                href="#collapseOne" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                <h4 class="panel-title order_detail">券详情</h4>
+                                            </a>
+                                            <div id="collapseOne" class="panel-collapse collapse in"
+                                                role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>批次</th>
+                                                                <th>券码</th>
+                                                                <th>领取时间</th>
+                                                                <th>券状态</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="info">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ln_solid"></div>
+                                    <div class="form-group">
+                                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                            <button type="submit" class="btn btn-danger do_pub_all">确认验证</button>
+                                        </div>
+                                    </div>
+                                    <!-- end of accordion -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+             </div>
+		</div> 
+		<div th:replace="../../common/foot"></div>
+	</div>
+</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+</body>
+<script type="text/javascript">
+	$(function(){
+		
+		var post_err_msg = "[[${error_msg}]]";
+	    if(post_err_msg){
+	        layer.msg(post_err_msg, {icon: 2}); 
+	    }
+	    var total_id = 0;
+	    var pub_code = "";
+	    var validate_code ="";
+	    $("#do_coupon_validate").on("click", function() {
+	        pub_code = $.trim($("#pub_code").val());
+	        validate_code = $.trim($("#validate_code").val());
+	        if(pub_code==null||pub_code==""||validate_code==null||validate_code=="") {
+	            layer.msg("请输入券码和手机号码", {icon: 2});
+	            return;
+	        }
+			layer.msg('验证中', {
+	            icon: 16,
+	            shade: 0.01,
+	            time:500
+	        });
+	        createValiHtml(pub_code,validate_code);
+	    });
+	    
+	    $(".do_pub_all").on("click", function() {
+	        if(total_id==null||total_id==""||total_id==0) {
+	            layer.msg("请选择要验证的券", {icon: 2});
+	            return;
+	        }
+	        layer.msg('验证中', {
+	            icon: 16,
+	            shade: 0.01,
+	            time:1000
+	        });
+	        var url = "[[${contextPath}]]/coupon/destroy/pub/?" + Date.parse(new Date());
+	        $.get(url, {code:total_id}, function(data) {
+	            if(data.available) {
+	                createValiHtml(pub_code,validate_code);
+	            } else {
+	                var code = data.messages[0];
+	                var msg = "系统服务暂不可用";
+	                if(code=="result_set_empty") {
+	                    msg = "找不到要验证的券信息";
+	                }
+	                layer.open({
+	                    title: '提示',
+	                    content: msg
+	                });
+	            }
+	        });
+	    });
+	    
+		function createValiHtml(pub_code,validate_code){
+			total_id=0;
+	        $.get("[[${contextPath}]]/coupon/destroy/validate/?" + Date.parse(new Date()), {pub_code:pub_code,phone_code:validate_code}, function(data) {
+	            if(data.available) {
+	                if(data.obj.length>0) {
+	                    var html = null;
+	                    for(var i=0; i<data.obj.length; i++) {
+	                        var obj = data.obj[i];
+	                        total_id==0?total_id=obj.id:total_id=total_id+","+obj.id;
+	                        if(html==null) {
+	                            html = "<tr><td>" + obj.batch.title + "<br/>" + obj.batch.info + "</td>";
+	                        } else {
+	                            html = html+"<tr><td>" + obj.batch.title + "<br/>" + obj.batch.info + "</td>";
+	                        }
+	                        html = html + "<td>" + obj.code + "</td>";
+	                        
+	                        var newDate = new Date();
+	                        newDate.setTime(obj.get_time);
+	                        var hours = newDate.getHours()<10?"0"+newDate.getHours():newDate.getHours();
+	                        var minutes = newDate.getMinutes()<10?"0"+newDate.getMinutes():newDate.getMinutes();
+	                        var seconds = newDate.getSeconds()<10?"0"+newDate.getSeconds():newDate.getSeconds();
+	                        html = html +"<td>" + newDate.toLocaleDateString()+"<br/>"+hours+":"+minutes+":"+seconds+"</td>";
+	                        var ss_name = "不可用" + obj.status;
+	                        if(obj.status=="10") {
+	                            ss_name = "未使用";
+	                            $(".do_pub_all").prop("disabled",false).html("确认验证");
+	                        } else if(obj.status=="20") {
+	                            newDate.setTime(obj.use_time);
+		                         hours = newDate.getHours()<10?"0"+newDate.getHours():newDate.getHours();
+		                         minutes = newDate.getMinutes()<10?"0"+newDate.getMinutes():newDate.getMinutes();
+		                         seconds = newDate.getSeconds()<10?"0"+newDate.getSeconds():newDate.getSeconds();
+	                            ss_name = "已使用<br/>使用时间：" + newDate.toLocaleDateString() + " " + hours+":"+minutes+":"+seconds;
+	                            $(".do_pub_all").prop("disabled",true).html("券已使用");
+	                        } else if(obj.status=="30") {
+	                            ss_name = "已失效";
+	                        } else if(obj.status=="40") {
+	                            ss_name = "已锁定，不可用";
+	                        }
+	                        html = html + "<td>" + ss_name + "</td></tr>";
+	                    }
+	                    $(".info").html(html);
+	                    $(".do_pub_").on("click", function() {
+	                        layer.msg("暂不支持单件验证", {icon: 2});
+	                    });
+	                }
+	            } else {
+	                var code = data.messages[0];
+	                layer.open({
+	                    title: '提示',
+	                    content: code
+	                });
+	            }
+	        });
+		}
+	});
+</script>
+
+</html>

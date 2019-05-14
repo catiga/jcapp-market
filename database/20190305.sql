@@ -1,0 +1,1 @@
+alter table `ma_coupon_batch` modify column `wxcard_id` VARCHAR(255)
