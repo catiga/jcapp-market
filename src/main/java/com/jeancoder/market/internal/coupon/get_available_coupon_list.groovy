@@ -58,6 +58,7 @@ try {
 			batch = CouponBatchService.INSTANSE.getById(couponCode.batch_id);
 			couponBatch.put(couponCode.batch_id.toString(), batch);
 		}
+		Logger.info('batch=' + couponCode.batch_id + ', batch==null:' + (batch==null));
 		if (batch == null) {
 			continue;
 		}
