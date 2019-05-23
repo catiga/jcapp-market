@@ -236,7 +236,7 @@
                        </div>
                       </div>
                       
-                      <div th:if="${batch.cbstatus == '10' }">
+                      <div th:if="${batch.cbstatus == '10' or batch.cbstatus == '21' }">
                            <div class="row templatemo-form-buttons">
                                <div class="col-md-12">
                                    <button type="button" class="btn btn-primary save">保存</button>
