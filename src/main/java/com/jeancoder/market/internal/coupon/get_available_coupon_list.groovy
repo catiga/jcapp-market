@@ -75,6 +75,7 @@ try {
 		if (CouponConstants._coupon_online_server_.equals(batch.crapp)) {
 			couponCodeRule = OnlineServerCouponRuleService.INSTANSE.getRule_ByBathId(batch.id);
 		}
+		Logger.info('couponCodeRule===' + (couponCodeRule==null));
 		if (couponCodeRule == null) {
 			continue;
 		}
