@@ -5,13 +5,14 @@ import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.result.Result
 import com.jeancoder.market.ready.common.AvailabilityStatus
-import com.jeancoder.market.ready.dto.sys.StoreInfoDto;
 import com.jeancoder.market.ready.util.GlobalHolder
+import com.jeancoder.market.ready.util.JackSonBeanMapper
 
 JCLogger Logger = LoggerSource.getLogger(this.getClass().getName());
 Result result = new Result();
 try {
-	List<StoreInfoDto> list = JC.internal.call(StoreInfoDto, 'project', '/incall/mystore', [pid:GlobalHolder.proj.id]);
+	def list = JC.internal.call('project', '/incall/mystore', [pid:GlobalHolder.proj.id]);
+	list = JackSonBeanMapper.jsonToList(list);
 	final def dtoList = list;
 	result.setData(AvailabilityStatus.available(dtoList));
 } catch (Exception e) {
