@@ -49,6 +49,9 @@ try {
 	} else {
 		list = CouponService.INSTANSE.get_available_codes_by_mobile(mobile, new BigInteger(pid));
 	}
+	
+	Logger.info(JackSonBeanMapper.listToJson(list));
+	
 	Map<String,CouponBatch> couponBatch = new HashMap<String, CouponBatch>();
 	List<CouponCodeDto> avacps= new ArrayList<CouponCodeDto>();
 	for (CouponCode couponCode : list) {
