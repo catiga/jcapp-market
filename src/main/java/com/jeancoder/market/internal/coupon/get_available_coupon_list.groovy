@@ -50,8 +50,6 @@ try {
 		list = CouponService.INSTANSE.get_available_codes_by_mobile(mobile, new BigInteger(pid));
 	}
 	
-	Logger.info(JackSonBeanMapper.listToJson(list));
-	
 	Map<String,CouponBatch> couponBatch = new HashMap<String, CouponBatch>();
 	List<CouponCodeDto> avacps= new ArrayList<CouponCodeDto>();
 	for (CouponCode couponCode : list) {
@@ -82,13 +80,13 @@ try {
 		
 		def util =  CouponFactoryUtil.getCouponUtil(batch.crapp);
 		if (util == null) {
-			println  "util os unll crapp=" + batch.crapp;
+			Logger.info("util os unll crapp=" + batch.crapp);
 			continue;
 		}
 		if (util.isAvailable(batch, couponCode, couponCodeRule)) {
 			def dto =  util.getCouponDto(batch, couponCode, couponCodeRule);
 			if (dto == null) {
-				println  "CouponCodeDto os unll crapp=" + batch.crapp;
+				Logger.info("CouponCodeDto os unll crapp=" + batch.crapp);
 				continue;
 			}
 			avacps.add(dto);
