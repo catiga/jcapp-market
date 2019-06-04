@@ -36,7 +36,7 @@ if(code==null) {
 	return GeneralPub.comfail(doo);
 }
 
-SimpleAjax ticket_wrpper = JC.internal.call(SimpleAjax, 'ticketingsys', '/ticketing/take_by_code_for_direct_check', [get_code:code]);
+SimpleAjax ticket_wrpper = JC.internal.call(SimpleAjax, 'ticketingsys', '/ticketing/take_by_code_for_direct_check', [get_code:code, modify_status:'not_modify']);
 if(ticket_wrpper==null) {
 	doo.code = "401001";
 	doo.msg = "请检查网络情况，验票失败";
@@ -86,7 +86,7 @@ e.printStackTrace();
 	return GeneralPub.comfail(doo);
 }
 def serial_obj = [:];
-serial_obj['serial'] = System.currentTimeMillis() + '';
+serial_obj['serial'] = ticket['id'] + ',' + seat['id'];		//返回[订单id_座位id]作为流水号给闸机
 doo.detail = serial_obj;
 
 return GeneralPub.success(doo);
