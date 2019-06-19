@@ -5,11 +5,13 @@ import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.result.Result
+import com.jeancoder.jdbc.JcPage
+import com.jeancoder.jdbc.JcTemplate
+import com.jeancoder.market.ready.constant.PrintSetupConstants
 import com.jeancoder.market.ready.dto.CouponDic
 import com.jeancoder.market.ready.dto.SelectModel
-import com.jeancoder.jdbc.JcPage
-import com.jeancoder.market.ready.common.AvailabilityStatus
 import com.jeancoder.market.ready.entity.CouponBatch
+import com.jeancoder.market.ready.entity.PrintSetup
 import com.jeancoder.market.ready.service.CouponBatchService
 import com.jeancoder.market.ready.util.RemoteUtil
 import com.jeancoder.market.ready.util.StringUtil
@@ -53,6 +55,10 @@ try{
 	supp_types.add(CouponDic.COUPON_TICKETS.toSlectModel());
 	supp_types.add(CouponDic.COUPON_ONLINE_SERVER.toSlectModel());
 	result.addObject("supp_types", supp_types);
+	
+	//获取打印模版
+	PrintSetup print_setup = JcTemplate.INSTANCE().get(PrintSetup, 'select * from PrintSetup where flag!=? and proj_id=? and setup_type=? order by id asc', -1, pid, PrintSetupConstants.PSTYPE_COUNPN);
+	result.addObject('print_setup', print_setup);
 	
 	return result;
 }catch(Exception e){
