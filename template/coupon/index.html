@@ -557,7 +557,7 @@ for(var i=0,ic=sys_print_set.nodes.length;i<ic;i++){
 		//开始打印
 		//var LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM'));
 		var LODOP=getLodop();
-		
+		console.log('codes length='+ codes.length);
 		for(var i=0,ic=codes.length;i<ic;i++){
 			LODOP.PRINT_INIT("影票打印");
 			var code = codes[i];
