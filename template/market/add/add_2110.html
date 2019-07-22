@@ -165,25 +165,26 @@
 	                             <div class="row">
 									<div class="col-md-4 margin-bottom-15">
 									<label for="tb_num">充值金额大约等于</label> 
-									<input name="tb_num" type="text" class="form-control" id="tb_num" placeholder="请输入数字">
+									<input name="tb_num" type="text" class="form-control" id="tb_num" placeholder="请输入充值金额（元）">
 									</div>
 								<div class="col-md-1 margin-bottom-15" >
 										<label for="tb_price_type">赠品类型</label> 
 										<select name="tb_price_type" class="form-control margin-bottom-15" id="tb_price_type">
 											<option value="1">卡券</option>
-											</select>
-										</div>
+											<option value="2">余额</option>
+										</select>
+									</div>
 									<div class="col-md-3 margin-bottom-15">
 										<label for="tb_gift">赠品设置</label> 
 										<input name="tb_gift" type="text" class="form-control" id="tb_gift"  placeholder="请输入券编号">
 									</div>
 									<div class="col-md-3 margin-bottom-15">
 										<label for="tb_gift1">数量</label> 
-										<input name="tb_gift1" type="text" class="form-control" id="tb_gift1"  placeholder="输入数字">
+										<input name="tb_gift1" type="text" class="form-control" id="tb_gift1"  placeholder="输入赠券数量">
 									</div>
 									<div class="col-md-1 margin-bottom-15">
 										<label for="add_new_price_streg">&nbsp;</label> 
-										<button type="button" class="btn btn-primary form-control add_new_price_streg"   id="add_new_price_streg">保存策略</button>
+										<button type="button" class="btn btn-primary form-control add_new_price_streg" id="add_new_price_streg">添加</button>
 									</div>
 								</div>
 									<div class="row">
@@ -306,6 +307,17 @@
 	    if(post_err_msg){
 	        layer.msg(post_err_msg, {icon: 2}); 
 	    }
+	    $("#tb_price_type").on("change", function() {
+	    	let v = $(this).val();
+	    	if(v==1) {
+	    		$("#tb_gift").attr('placeholder', '输入券编号');
+	    		$("#tb_gift1").attr('placeholder', '输入赠券数量');
+	    	} else if(v==2) {
+	    		$("#tb_gift").attr('placeholder', '赠送余额此处不需要输入信息');
+	    		$("#tb_gift1").attr('placeholder', '输入赠送金额（元）');
+	    	}
+	    });
+	    
 	    $(".add_new_market").on("click", function(){
 	        location.href = "[[${contextPath}]]/market/judge?" + Date.parse(new Date());
 	    });
@@ -353,14 +365,17 @@
 				return;
 			}
 		});
-		$("input[name='tb_gift']").each(function() {
-			var mc_price_value = $(this).val();
-			if(mc_price_value==null||mc_price_value.trim()=="") {
-				$(this).val('');
-				invalid = true;
-				return;
-			}
-		});
+		if(aee==1) {
+			//赠券时检查
+			$("input[name='tb_gift']").each(function() {
+				var mc_price_value = $(this).val();
+				if(mc_price_value==null||mc_price_value.trim()=="") {
+					$(this).val('');
+					invalid = true;
+					return;
+				}
+			});
+		}
 		$("input[name='tb_gift1']").each(function() {
 			var mc_price_value = $(this).val();
 			if(mc_price_value==null||mc_price_value.trim()==""||isNaN(mc_price_value)) {
@@ -373,6 +388,10 @@
 			layer.msg("请输入合法的充值金额和赠品数量条件", {icon: 2});
 			return;
 		}
+		let gift_type_name = '卡券';
+		if(aee==2) {
+			gift_type_name = '余额';
+		}
 		var htmls = '<div class="alert alert-success alert-dismissible time_spec_rule"  style="float:left;width: 40%; margin-left:15px;">';
         htmls += '<button type="button"  class="close btn" data-dismiss="alert" style = "float:right;">';
      	htmls += '<span aria-hidden="true" class="time_spec_value">'+"删除"+'</span>';
@@ -382,12 +401,15 @@
         htmls += '<span class="sr-only">Close</span>';
         htmls += '</button>';
         htmls += '<strong>' +'充值金额:'+ tb_num+'</strong>';
-        htmls += '<strong th:if='+aee+'==1">' +'赠品类型:卡券'+ '</strong>';
+        htmls += '<strong>' +'赠品类型:' + gift_type_name + '</strong>';
         htmls += '<strong>' +'赠品编码:'+ tb_gift+ '</strong>';
         htmls += '<strong>' +'赠品数量:'+ tb_gift1+'</strong>';
         htmls += '</div>';
 		$("#times_value").after(htmls);
 	    $("#times_value1").show();
+	    $("#tb_num").val('');
+	    $("#tb_gift").val('');
+	    $("#tb_gift1").val('');
 	});
 	
 	/* 编辑策略*/
