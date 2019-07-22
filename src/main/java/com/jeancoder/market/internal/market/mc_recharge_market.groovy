@@ -1,5 +1,6 @@
 package com.jeancoder.market.internal.market
 
+import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.CommunicationSource
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.app.sdk.source.RequestSource
@@ -46,6 +47,7 @@ try{
 	}
 //	return  AvailabilityStatus.available(list);
 	def coupon = [];
+	def gift_balance = 0;
 	for (MarketInfo item : list) {
 		MarketRuleRecharge mcrRule = MarketRuleRechargeService.INSTANSE.getItem(new BigInteger(pid), item.mru_id);
 		if (mcrRule == null) {
@@ -98,12 +100,24 @@ try{
 				continue;
 			}
 			if("1".equals(mc_p_streg[1])) {
+				//充值赠券
 				coupon.add([mc_p_streg[2],Integer.valueOf(mc_p_streg[3] )]);
+			} else if('2'.equals(mc_p_streg[1])) {
+				//充值赠余额
+				if(gift_balance<=0) {
+					gift_balance = mc_p_streg[3];	//回传赠送金额，并且只匹配一个
+				}
 			}
 		}
 	}
-	CouponService.INSTANSE.give_out_coupons(coupon, mobile, new BigInteger(pid));
-	availabilityStatus = AvailabilityStatus.available();
+	if(coupon) {
+		CouponService.INSTANSE.give_out_coupons(coupon, mobile, new BigInteger(pid));
+	}
+	if(gift_balance) {
+		availabilityStatus = AvailabilityStatus.available(gift_balance);
+	} else {
+		availabilityStatus = AvailabilityStatus.available();
+	}
 	return availabilityStatus;
 } catch(Exception e){
 	logger.error("赠劵失败", e);
