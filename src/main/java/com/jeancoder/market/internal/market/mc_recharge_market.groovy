@@ -47,7 +47,7 @@ try{
 	}
 //	return  AvailabilityStatus.available(list);
 	def coupon = [];
-	def gift_balance = 0;
+	def gift_balance = new BigDecimal(0);
 	for (MarketInfo item : list) {
 		MarketRuleRecharge mcrRule = MarketRuleRechargeService.INSTANSE.getItem(new BigInteger(pid), item.mru_id);
 		if (mcrRule == null) {
@@ -103,10 +103,9 @@ try{
 				//充值赠券
 				coupon.add([mc_p_streg[2],Integer.valueOf(mc_p_streg[3] )]);
 			} else if('2'.equals(mc_p_streg[1])) {
+				def tmp_p_streg = new BigDecimal(mc_p_streg[3]);
 				//充值赠余额
-				if(gift_balance<=0) {
-					gift_balance = mc_p_streg[3];	//回传赠送金额，并且只匹配一个
-				}
+				gift_balance = tmp_p_streg;	//回传赠送金额，并且只匹配一个
 			}
 		}
 	}
