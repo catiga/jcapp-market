@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 调查问卷</title>
+<link th:href="|${pub_bucket}/css/bootstrap.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/font-awesome/css/font-awesome.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/animate.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/style.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/iCheck/custom.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/jsTree/style.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/select2/select2.min.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>调查问卷</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><strong>问卷</strong></li>
+						<li class="active"><strong>问题</strong></li>
+					</ol>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12 goods_area">
+					<div class="wrapper wrapper-content animated fadeInUp" style="padding-top:0px;">
+						<div class="ibox">
+							<div class="ibox-title">
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs add_questionnaire_item">添加问题</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="table-responsive">
+                                	<table class="table table-striped">
+										<thead>
+		                                    <tr>
+												<th>编号</th>
+												<th style="width:50%">问题</th>
+												<th>副标题</th>
+												<th>类型</th>
+	  											<th>操作</th>
+		                                    </tr>
+	                                    </thead>
+										<tbody>
+											<tr th:each="st:${items}" th:attr_id="${st.id }">
+												<td>
+													<span th:if="${st.itemno}">[[${st.itemno}]]</span>
+													<span th:if="not ${st.itemno}">未设置</span>
+												</td>
+												<td>[[${st.question}]]</td>
+												<td>[[${st.subhead}]]</td>
+												<td>
+													<block th:switch="${st.qt}">
+														<span th:case="'10'">文本输入</span>
+														<span th:case="'21'">单项选择</span>
+														<span th:case="'22'">多项选择</span>
+														<span th:case="*">[[${st.qt}]]</span>
+													</block>
+													
+													<br th:if="${st.qt!='10'}"/>
+													<a th:if="${st.qt!='10'}" href="javascript:void(0)" class="btn btn-primary btn-xs btn-success add_choise" th:attr_id="${st.id }"><i class="fa fa-folder"></i> 添加选项 </a>
+												</td>
+												
+												<td>
+													<a href="javascript:void(0)" class="btn btn-primary btn-xs do_edit" th:attr_id="${st.id }"><i class="fa fa-folder"></i> 编辑问题 </a><br/>
+													<a href="javascript:void(0)" class="btn btn-danger btn-xs do_remove" th:attr_id="${st.id }"><i class="fa fa-pencil"></i> 删除问题 </a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../../common/foot"></div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form-fast" style="display:none;padding-left:15px;padding-right:15px">
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="qpi_name" class="control-label">问题</label>
+				<input type="text" class="form-control" id="qpi_name" value="" placeholder="输入问卷问题">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="qpi_no" class="control-label">编号</label>
+				<input type="text" class="form-control" id="qpi_no" value="" placeholder="输入问卷编号">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="qpi_subhead" class="control-label">副标题</label>
+				<input type="text" class="form-control" id="qpi_subhead" value="" placeholder="提示性信息">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 margin-bottom-15">
+				<label for="qpi_qt">问题类型</label> 
+				<select name="qpi_qt" class="form-control margin-bottom-15" id="qpi_qt">
+					<option value="-1">请选择</option>
+					<option value="10">文本输入项</option>
+					<option value="21">单项选择项</option>
+					<option value="22">多项选择项</option>
+				</select>
+			</div>
+		</div>
+		<div class="row templatemo-form-buttons" style="margin-top:15px">
+			<div class="col-md-12">
+				<button id="do_save_qp" class="btn btn-primary" style="width:100%">保存 </button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="templatemo-preferences-form-3" style="display:none;padding-left:15px;padding-right:15px; margin-bottom: 30px; max-width: 960px;">
+		<div class="has-success has-feedback">
+			<div class="row">
+				<div class="col-md-6">
+					<label for="pp_btn">&nbsp;</label>
+					<div class="btn-toolbar" id="pp_btn">
+						<div class="btn-group">
+							<button id="save_close" class="btn btn-primary">保存</button>
+						</div>
+						<div class="btn-group">
+							<button class="btn btn-warning add_pbr">增加问题选项</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ln_solid"></div>
+		
+		<div class="has-success has-feedback pr_list">
+			<div class="row">
+				<div class="col-md-4 margin-bottom-15">
+					<label for="cho_name" class="control-label">选项名称</label>
+					<input type="text" class="form-control cho_name" id="cho_name" placeholder="选项答案">
+				</div>
+				<div class="col-md-4 margin-bottom-15">
+					<label for="cho_vise" class="control-label">选项说明</label>
+					<input type="text" class="form-control cho_vise" id="cho_vise" placeholder="选项说明">
+				</div>
+				
+				<div class="col-md-4 margin-bottom-15">
+					<label for="pp_btn" class="control-label">操作</label>
+					<div class="btn-toolbar form-control" id="pp_btn">
+						<div class="btn-group">
+							<button class="btn btn-success btn-xs save_pbr">保存</button>
+							<button class="btn btn-danger btn-xs remove_pbr">删除</button>
+						</div>
+						<div class="btn-group">
+							<button class="btn btn-warning btn-xs">增加</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Mainly scripts -->
+	<script th:src="|${pub_bucket}/js/jquery-2.1.1.js|"></script>
+	<script th:src="|${pub_bucket}/js/bootstrap.min.js|"></script>
+	<script th:src="|${pub_bucket}/js/plugins/metisMenu/jquery.metisMenu.js|"></script>
+	<script th:src="|${pub_bucket}/js/plugins/slimscroll/jquery.slimscroll.min.js|"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="|${pub_bucket}/js/inspinia.js|"></script>
+	<script th:src="|${pub_bucket}/js/plugins/pace/pace.min.js|"></script>
+	<script th:src="|${pub_bucket}/js/plugins/jsTree/jstree.min.js|"></script>	
+	<script th:src="|${pub_bucket}/third/layer3/layer.js|" type="text/javascript"></script>
+	<script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+	<!-- iCheck -->
+    <script th:src="|${pub_bucket}/js/plugins/iCheck/icheck.min.js|"></script>
+    
+    <!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    
+    <script th:src="|${pub_bucket}/js/plugins/select2/select2.full.min.js|"></script>
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" 分组管理");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+var flag = 0;
+
+var add_pbr = function() {
+	flag += 1 ;
+	var html = '<div class="row">';
+	
+	html = html + '<div class="col-md-3 margin-bottom-15">';
+	html = html + '<label for="cho_name" class="control-label">选项名称</label>';
+	html = html + '<input type="text" class="form-control cho_name" id="cho_name" placeholder="选项答案">';
+	html = html + '</div>';
+	
+	html = html + '<div class="col-md-2 margin-bottom-15">';
+	html = html + '<label for="cho_no" class="control-label">选项编号</label>';
+	html = html + '<input type="text" class="form-control cho_no" id="cho_no" placeholder="选项编号">';
+	html = html + '</div>';
+	
+	html = html + '<div class="col-md-2 margin-bottom-15">';
+	html = html + '<label for="cho_vise" class="control-label">选项说明</label>';
+	html = html + '<input type="text" class="form-control cho_vise" id="cho_vise" placeholder="选项说明">';
+	html = html + '</div>';
+	
+	html = html + '<div class="col-md-2 margin-bottom-15">';
+	html = html + '<label for="cho_vise" class="control-label">是否需要文本框</label>';
+	html = html + '<div class="form-control cho_test" id="cho_test">';
+	html = html + '<input type="radio"  name="need_test_'+flag+'" value="1">是';
+	html = html + '<input type="radio"  name="need_test_'+flag+'" value="0">否';
+	html = html + '</div>';
+	html = html + '</div>';
+		
+	html = html + '<div class="col-md-3 margin-bottom-15">';
+	html = html + '<label for="pp_btn" class="control-label">操作</label>';
+	html = html + '<div class="btn-toolbar form-control" id="pp_btn">';
+	html = html + '<div class="btn-group">';
+	html = html + '<button class="btn btn-success btn-xs save_pbr">保存</button><button class="btn btn-danger btn-xs remove_pbr">删除</button>';
+	html = html + '</div>';
+	html = html + '<div class="btn-group" style="display:none">';
+	html = html + '<button class="btn btn-warning btn-xs init_pbr">增加</button>';
+	html = html + '</div></div></div>';
+	
+	html = html + '</div>';
+	
+	$(".pr_list").append(html);
+	
+	$(".save_pbr").unbind("click").on("click", function() {
+		save_pbr(this);
+	});
+	$(".remove_pbr").unbind("click").on("click", function() {
+		remove_pbr(this);
+	});
+};
+
+var remove_pbr = function(btn_obj) {
+	var obj = $(btn_obj).parent().parent().parent().parent();
+	var pb_id = $(obj).attr("attr_id");
+	
+	var index = layer.confirm('确定删除该选项吗？', {
+	    btn: ['确定','取消'], //按钮
+	    shade: [0.8, '#393D49'] //显示遮罩
+	}, function(){
+		$.get("/market/util/questionnaire/aj/remove_choise/?" + new Date().getTime(), {cho_id:pb_id}, function(data) {
+			if(data.available) {
+				var obj = $(btn_obj).parent().parent().parent().parent();
+				$(obj).remove();
+				layer.close(index);
+			} else {
+				let code = data.messages[0];
+				let msg = code;
+				if(data.messages.length>1) {
+					msg = code + data.messages[1];
+				}
+				layer.alert(msg, {icon : 6});
+			}
+		});
+	}, function(){
+	    layer.msg('操作取消', {shift: 6});
+	});
+};
+
+var save_pbr = function(btn_obj) {
+	let obj = $(btn_obj).parent().parent().parent().parent();
+	let pb_id = $(obj).attr("attr_id");
+	let need_text = $("input[type='radio']:checked").val();
+	let attr_name = $(obj).find(".cho_name").val();
+	let attr_vise = $(obj).find(".cho_vise").val();
+	let attr_no = $(obj).find(".cho_no").val();
+	
+	var url = "/market/util/questionnaire/aj/save_choise/?" + new Date().getTime();
+	let index = layer.msg('处理中', {icon: 16 ,shade: 0.01});
+	$.post(url, {item_id:item_id,cho_id:pb_id,cho_name:attr_name,cho_no:attr_no,need_text:need_text,cho_vise:attr_vise}, function(data) {
+		layer.close(index);
+		if(data.available) {
+			$(obj).attr("attr_id", data.data);
+			layer.alert('操作成功', {icon: 6});
+		} else {
+			let code = data.messages[0];
+			let msg = code;
+			if(data.messages.length>1) {
+				msg = code + data.messages[1];
+			}
+			layer.alert(msg, {icon : 6});
+		}
+	});
+};
+
+var init_pbr = function() {
+	$(".arrange_pb").each(function() {
+		var pb_id = $(this).attr("attr_id");
+		var attr_name = $(this).attr("attr_name");		
+		var attr_vise = $(this).attr("attr_vise");
+		var attr_no = $(this).attr("attr_no");
+		$(this).find(".cho_name").val(attr_name);
+		$(this).find(".cho_vise").val(attr_vise);
+		$(this).find(".cho_no").val(attr_no);
+	});
+};
+
+$(".add_pbr").on("click", function() {
+	add_pbr();
+});
+
+
+var item_id = 0;
+$(function(){
+	var qp_id = "[[${pack.id}]]";
+	$(".add_questionnaire_item").on("click", function() {
+		item_id = 0;
+		$("#qpi_name").val("");
+		$("#qpi_subhead").val("");
+		$("#qpi_qt").val("-1");
+		$("#qpi_no").val("");
+		layer.open({
+			area : [ '450px', '450px' ],
+			type : 1,
+			content : $("#templatemo-preferences-form-fast")
+		});
+	});
+	
+	$(".do_edit").on("click", function() {
+		let obj = this;
+		let index = layer.msg('加载中', {icon: 16 ,shade: 0.01});
+		$.get("/market/util/questionnaire/aj/view_item/?" + Date.parse(new Date()), {item_id:$(this).attr("attr_id")}, function(data) {
+			layer.close(index);
+			if(data.available) {
+				item_id = $(obj).attr("attr_id");
+				$("#qpi_name").val(data.data.question);
+				$("#qpi_subhead").val(data.data.subhead);
+				$("#qpi_qt").val(data.data.qt);
+				$("#qpi_no").val(data.data.itemno);
+				layer.open({
+					area : [ '450px', '450px' ],
+					type : 1,
+					content : $("#templatemo-preferences-form-fast")
+				});
+			} else {
+				let code = data.messages[0];
+				let msg = code;
+				if(data.messages.length>1) {
+					msg = code + data.messages[1];
+				}
+				layer.alert(msg, {icon : 6});
+			}
+		});
+		
+	});
+	
+	$("#do_save_qp").on("click", function() {
+		let item_name = $("#qpi_name").val();
+		let item_subhead = $("#qpi_subhead").val();
+		let item_qt = $("#qpi_qt").val();
+		let item_no = $("#qpi_no").val();
+		
+		let url = "/market/util/questionnaire/aj/save_item";
+		let index = layer.msg('加载中', {icon: 16 ,shade: 0.01});
+		$.post(url, {qp_id:qp_id,item_id:item_id,item_name:item_name,item_no:item_no,item_subhead:item_subhead,item_qt:item_qt}, function(data) {
+			layer.close(index);
+			if(data.available) {
+				layer.alert('操作成功', {
+			        skin: 'layui-layer-lan',
+			        shift: 4 //动画类型
+			    }, function(){
+			    	location.reload();
+			    });
+			} else {
+				let code = data.messages[0];
+				let msg = code;
+				if(data.messages.length>1) {
+					msg = code + data.messages[1];
+				}
+				layer.alert(msg, {icon : 6});
+			}
+		});
+	});
+	
+	$(".do_remove").on("click", function() {
+		var id = $(this).attr("attr_id");
+		layer.confirm('确定删除问题吗？', {
+		    btn: ['确定','取消'], //按钮
+		    shade: [0.8, '#393D49'] //显示遮罩
+		}, function(){
+			let index = layer.msg('处理中', {icon: 16 ,shade: 0.01});
+			var url = "/market/util/questionnaire/aj/remove_item/?" + new Date().getTime();
+			$.get(url, {item_id:id}, function(data){
+				layer.close(index);
+				if(data.available) {
+					layer.alert('操作成功', {
+				        skin: 'layui-layer-lan',
+				        shift: 4 //动画类型
+				    }, function(){
+				    	location.reload();
+				    });
+				} else {
+					let code = data.messages[0];
+					let msg = code;
+					if(data.messages.length>1) {
+						msg = code + data.messages[1];
+					}
+					layer.alert(msg, {icon : 6});
+				}
+			});
+		}, function(){
+		    layer.msg('操作取消', {shift: 6});
+		});
+	});
+	
+	$(".add_choise").on("click", function() {
+		layer.closeAll();
+		item_id = $(this).attr("attr_id");
+		let url = "/market/util/questionnaire/aj/item_choises/?" + new Date().getTime();
+		let index = layer.msg('加载中', {icon: 16 ,shade: 0.01});
+		$.get(url, {item_id:item_id}, function(data) {
+			layer.close(index);
+			if(data.available) {
+				$(".pr_list").html('');
+				//开始将规则全部列出来
+				if(data.data!=null&&data.data.length>0) {
+					var shtml = null;
+					for(var i=0; i<data.data.length; i++) {
+						var tmp_obj = data.data[i];
+						var need_test = tmp_obj.input_falg; let awvise = tmp_obj.awvise; if(!awvise) awvise = '';
+						var html = '<div class="row arrange_pb" attr_id="' + tmp_obj.id + '" attr_name="' + tmp_obj.awname  + '" attr_vise="' + awvise + '" attr_no="' + tmp_obj.awno + '">';
+						html = html + '<div class="col-md-3 margin-bottom-15">';
+						html = html + '<label for="cho_name" class="control-label">选项名称</label>';
+						html = html + '<input type="text" class="form-control cho_name" id="cho_name" placeholder="选项答案">';
+						html = html + '</div>';
+						
+						html = html + '<div class="col-md-2 margin-bottom-15">';
+						html = html + '<label for="cho_no" class="control-label">选项编号</label>';
+						html = html + '<input type="text" class="form-control cho_no" id="cho_no" placeholder="选项编号">';
+						html = html + '</div>';
+						
+						html = html + '<div class="col-md-2 margin-bottom-15">';
+						html = html + '<label for="cho_vise" class="control-label">选项说明</label>';
+						html = html + '<input type="text" class="form-control cho_vise" id="cho_vise" placeholder="选项说明">';
+						html = html + '</div>';
+						
+						html = html + '<div class="col-md-2 margin-bottom-15">';
+						html = html + '<label for="cho_vise" class="control-label">是否需要文本框</label>';
+						html = html + '<div class="form-control cho_test" id="cho_test">';
+						if(need_test==1){
+							html = html + '<input type="radio"  name="need_test_'+tmp_obj.id+'" checked value="1">是';
+							html = html + '<input type="radio"  name="need_test_'+tmp_obj.id+'" value="0">否';
+						}
+						if(need_test==0){
+							html = html + '<input type="radio"  name="need_test_'+tmp_obj.id+'"  value="1">是';
+							html = html + '<input type="radio"  name="need_test_'+tmp_obj.id+'" checked value="0">否';
+						}
+						html = html + '</div>';
+						html = html + '</div>';
+						
+						html = html + '<div class="col-md-3 margin-bottom-15">';
+						html = html + '<label for="pp_btn" class="control-label">操作</label>';
+						html = html + '<div class="btn-toolbar form-control" id="pp_btn">';
+						html = html + '<div class="btn-group">';
+						html = html + '<button class="btn btn-success btn-xs save_pbr">保存</button><button class="btn btn-danger btn-xs remove_pbr">删除</button>';
+						html = html + '</div>';
+						html = html + '<div class="btn-group" style="display:none">';
+						html = html + '<button class="btn btn-warning btn-xs init_pbr">增加</button>';
+						html = html + '</div></div></div>';
+						
+						html = html + '</div>';
+						
+						shtml==null?shtml=html:shtml=shtml+html;
+					}
+					$(".pr_list").html(shtml);
+					$(".save_pbr").on("click", function() {
+						save_pbr(this);
+					});
+					$(".remove_pbr").on("click", function() {
+						remove_pbr(this);
+					});
+					init_pbr();
+				}
+				
+				layer.open({
+					area : [ '80%', '80%' ],
+					type : 1,
+					content : $("#templatemo-preferences-form-3")
+				});
+			} else {
+				let code = data.messages[0];
+				let msg = code;
+				if(data.messages.length>1) {
+					msg = code + data.messages[1];
+				}
+				layer.alert(msg, {icon : 6});
+			}
+		});
+	});
+	
+	$("#save_close").on("click", function() {
+		layer.closeAll();
+	});
+});
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+$(document).ready(function() {
+	var handleDataTableButtons = function() {
+		if ($("#datatable-buttons").length) {
+        	$("#datatable-buttons").DataTable({
+        		iDisplayLength: 200,
+        		autoWidth: true,
+          		dom: "Bfrtip",
+          		
+          		buttons: [
+            		{extend: "copy", className: "btn-sm"},
+            		{extend: "csv", className: "btn-sm"},
+            		{extend: "excel", className: "btn-sm"},
+            		{extend: "pdfHtml5", className: "btn-sm"},
+            		{extend: "print", className: "btn-sm"},
+          		]
+        	});
+      	}
+    };
+
+    TableManageButtons = function() {
+		"use strict";
+      	return {
+        	init: function() {
+          		handleDataTableButtons();
+			}
+		};
+    }();
+
+    TableManageButtons.init();
+});
+</script>
+</html>

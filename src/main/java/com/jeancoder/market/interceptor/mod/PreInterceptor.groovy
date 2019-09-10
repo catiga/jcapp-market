@@ -23,6 +23,7 @@ def mod_g_2 = FuncUtil.build(2, '营销管理', null, 'market/index', 'fa-shoppi
 def mod_g_3 = FuncUtil.build(3, '营销工具', null, '', 'fa-header');
 def mod_g_3_1 = FuncUtil.build(301, '手机号发券', 3, 'util/coupon/bymob/index', 'fa-header',2);
 def mod_g_3_2 = FuncUtil.build(302, '智能规则发券', 3, 'util/coupon/byrule/index', 'fa-header',2);
+def mod_g_3_3 = FuncUtil.build(303, '调查问卷', 3, 'util/questionnaire/index', 'fa-header',2);
  
 def mod_g_4 = FuncUtil.build(4, '订单列表', null, null, 'fa-shopping-cart');
 def mod_g_4_1 = FuncUtil.build(401, '卡劵使用订单',4, 'order/use_order_list', 'fa-shopping-cart',2);
@@ -31,7 +32,7 @@ def mod_g_5 = FuncUtil.build(5, '轮播图设置', null, 'figure/index','fa-shop
 
 List<AppFunction> result = [mod_g_1,mod_g_1_1,mod_g_1_2,mod_g_1_3,mod_g_4,mod_g_4_1];
 result.addAll([mod_g_2]);
-result.addAll(mod_g_3, mod_g_3_1, mod_g_3_2);
+result.addAll([mod_g_3, mod_g_3_1, mod_g_3_2, mod_g_3_3]);
 result.addAll(mod_g_5);
 
 AppFunction mod_g_main = new AppFunction();
