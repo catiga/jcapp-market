@@ -95,9 +95,9 @@
 													<span th:if="${st.sgutimes==null || st.sgutimes<0}">不限制</span>
 													<span th:if="${st.sgutimes>=0}">[[${st.sgutimes}]]次</span>
 												</td>
-												<td>
-													<span th:if="${st.useflag==0}">停用</span>
-													<span th:if="${st.useflag==1}">启用</span>
+												<td class="switch_use" th:attr_id="${st.id}">
+													<span th:if="${st.useflag==0}" class="btn btn-danger btn-xs">停用</span>
+													<span th:if="${st.useflag==1}" class="btn btn-success btn-xs">启用</span>
 												</td>
 												<td>
 													<span th:if="${st.tplname==null or st.tplname==''}">默认</span>
@@ -274,7 +274,7 @@ $(function(){
 	});
 	
 	$(".preview").on("click", function() {
-		window.open("${ctx}/admin/toolpack/questionnaire/preview/?qp_id=" + $(this).attr("attr_id") + "&" + Date.parse(new Date()));
+		window.open("/market/util/questionnaire/preview/?qp_id=" + $(this).attr("attr_id") + "&" + new Date().getTime());
 	});
 	
 	$(".switch_use").on("click", function() {
@@ -283,7 +283,7 @@ $(function(){
 		    btn: ['确定','取消'], //按钮
 		    shade: [0.8, '#393D49'] //显示遮罩
 		}, function(){
-			var url = "${ctx}/admin/toolpack/questionnaire/switch_use/?" + Date.parse(new Date());
+			var url = "/market/util/questionnaire/aj/switch_use/?" + Date.parse(new Date());
 			$.post(url, {qp_id:qp_id}, function(data){
 				if(data.available) {
 					layer.alert('操作成功', {
@@ -293,14 +293,12 @@ $(function(){
 				    	location.reload();
 				    });
 				} else {
-					var code = data.messages[0];
-					var msg = "操作失败：" + code;
-					if(code=="common_object_not_found") {
-						msg = "问卷不存在或已经被删除";
+					let code = data.messages[0];
+					let msg = code;
+					if(data.messages.length>1) {
+						msg = code + data.messages[1];
 					}
-					layer.msg(msg, {
-						icon : 2
-					});
+					layer.alert(msg, {icon : 6});
 				}
 			});
 		}, function(){

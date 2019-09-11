@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 调查预览</title>
+<link th:href="|${pub_bucket}/css/bootstrap.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/font-awesome/css/font-awesome.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/animate.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/style.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/iCheck/custom.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/jsTree/style.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/select2/select2.min.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>调查问卷</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li><strong>问卷</strong></li>
+						<li class="active"><strong>预览</strong></li>
+					</ol>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12 goods_area">
+					<div class="wrapper wrapper-content animated fadeInUp" style="padding-top:0px;">
+						<div class="ibox">
+							<div class="ibox-title">
+								<div class="ibox-tools">
+									<a href="javascript:void(0)" class="btn btn-primary btn-xs add_questionnaire">创建问卷</a>
+								</div>
+							</div>
+							<div class="ibox-content">
+								<div class="table-responsive">
+                                	<table class="table table-striped">
+										<thead>
+		                                    <tr>
+												<th>#</th>
+												<th width="5%">编号</th>
+												<th width="30%">问题</th>
+												<th width="10%">副标题</th>
+												<th>问题选项</th>
+		                                    </tr>
+	                                    </thead>
+										<tbody>
+											<tr th:each="st:${qp_items}" th:attr_id="${st.id }">
+												<td>
+													<span th:if="${st.itemno}">[[${st.itemno}]]</span>
+													<span th:if="not ${st.itemno}">未设置</span>
+												</td>
+												<td>[[${st.question}]]</td>
+												<td>[[${st.subhead}]]</td>
+												<td>
+													<block th:switch="${st.qt}">
+														<span th:case="'10'">文本输入</span>
+														<span th:case="'21'">单项选择</span>
+														<span th:case="'22'">多项选择</span>
+														<span th:case="*">[[${st.qt}]]</span>
+													</block>
+													
+													<br th:if="${st.qt!='10'}"/>
+													<a th:if="${st.qt!='10'}" href="javascript:void(0)" class="btn btn-primary btn-xs btn-success add_choise" th:attr_id="${st.id }"><i class="fa fa-folder"></i> 添加选项 </a>
+												</td>
+												
+												<td>
+													<a href="javascript:void(0)" class="btn btn-primary btn-xs do_edit" th:attr_id="${st.id }"><i class="fa fa-folder"></i> 编辑问题 </a><br/>
+													<a href="javascript:void(0)" class="btn btn-danger btn-xs do_remove" th:attr_id="${st.id }"><i class="fa fa-pencil"></i> 删除问题 </a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../../common/foot"></div>
+		</div>
+	</div>
+	
+	<!-- Mainly scripts -->
+	<script th:src="|${pub_bucket}/js/jquery-2.1.1.js|"></script>
+	<script th:src="|${pub_bucket}/js/bootstrap.min.js|"></script>
+	<script th:src="|${pub_bucket}/js/plugins/metisMenu/jquery.metisMenu.js|"></script>
+	<script th:src="|${pub_bucket}/js/plugins/slimscroll/jquery.slimscroll.min.js|"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="|${pub_bucket}/js/inspinia.js|"></script>
+	<script th:src="|${pub_bucket}/js/plugins/pace/pace.min.js|"></script>
+	<script th:src="|${pub_bucket}/js/plugins/jsTree/jstree.min.js|"></script>	
+	<script th:src="|${pub_bucket}/third/layer3/layer.js|" type="text/javascript"></script>
+	<script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+	<!-- iCheck -->
+    <script th:src="|${pub_bucket}/js/plugins/iCheck/icheck.min.js|"></script>
+    
+    <!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    
+    <script th:src="|${pub_bucket}/js/plugins/select2/select2.full.min.js|"></script>
+</body>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	var handleDataTableButtons = function() {
+		if ($("#datatable-buttons").length) {
+        	$("#datatable-buttons").DataTable({
+        		iDisplayLength: 200,
+        		autoWidth: true,
+          		dom: "Bfrtip",
+          		
+          		buttons: [
+            		{extend: "copy", className: "btn-sm"},
+            		{extend: "csv", className: "btn-sm"},
+            		{extend: "excel", className: "btn-sm"},
+            		{extend: "pdfHtml5", className: "btn-sm"},
+            		{extend: "print", className: "btn-sm"},
+          		]
+        	});
+      	}
+    };
+
+    TableManageButtons = function() {
+		"use strict";
+      	return {
+        	init: function() {
+          		handleDataTableButtons();
+			}
+		};
+    }();
+
+    TableManageButtons.init();
+});
+</script>
+</html>
