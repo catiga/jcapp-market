@@ -29,4 +29,5 @@ class QuesItem {
 	
 	Integer flag = 0;
 	
+	List<QuesChoise> choises;
 }

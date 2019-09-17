@@ -5,6 +5,7 @@ import java.sql.Timestamp
 import com.jeancoder.jdbc.bean.JCBean
 import com.jeancoder.jdbc.bean.JCForeign
 import com.jeancoder.jdbc.bean.JCID
+import com.jeancoder.jdbc.bean.JCNotColumn
 
 @JCBean(tbname = "data_tp_quespack")
 class QuesPack {
@@ -32,4 +33,7 @@ class QuesPack {
 	Integer sgutimes = 0;
 	
 	String tplname;
+	
+	@JCNotColumn
+	List<QuesItem> items;
 }
