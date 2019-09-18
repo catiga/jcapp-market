@@ -69,19 +69,6 @@ CREATE TABLE `data_tp_quesresuitem` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21319 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `data_tp_quesresuitem_answer` (
-  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
-  `result_pack_id` bigint(20) DEFAULT NULL,
-  `result_item_id` bigint(20) DEFAULT NULL,
-  `answer_id` bigint(20) DEFAULT NULL,
-  `answer_no` varchar(255) DEFAULT NULL,
-  `answer_name` varchar(255) DEFAULT NULL,
-  `flag` tinyint(4) NOT NULL DEFAULT '0',
-  `basic_id` bigint(20) DEFAULT NULL,
-  `c_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `a_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9538 DEFAULT CHARSET=utf8;
 
 alter table data_tp_quesresuitem add column `choise_id` bigint(20) DEFAULT NULL;
 alter table data_tp_quesresuitem add column `choise_no` varchar(255) DEFAULT NULL;
