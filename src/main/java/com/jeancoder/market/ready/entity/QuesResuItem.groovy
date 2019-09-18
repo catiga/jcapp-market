@@ -25,6 +25,13 @@ class QuesResuItem {
 	@JCForeign
 	BigInteger resu_id;
 	
+	@JCForeign
+	BigInteger choise_id;
+	
+	String choise_no;
+	
+	String choise_name;
+	
 	String result;
 	
 	Timestamp a_time;

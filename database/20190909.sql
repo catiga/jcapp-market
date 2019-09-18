@@ -82,3 +82,8 @@ CREATE TABLE `data_tp_quesresuitem_answer` (
   `a_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9538 DEFAULT CHARSET=utf8;
+
+alter table data_tp_quesresuitem add column `choise_id` bigint(20) DEFAULT NULL;
+alter table data_tp_quesresuitem add column `choise_no` varchar(255) DEFAULT NULL;
+alter table data_tp_quesresuitem add column `choise_name` varchar(255) DEFAULT NULL;
+
