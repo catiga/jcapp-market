@@ -5,6 +5,7 @@ import java.sql.Timestamp
 import com.jeancoder.jdbc.bean.JCBean
 import com.jeancoder.jdbc.bean.JCForeign
 import com.jeancoder.jdbc.bean.JCID
+import com.jeancoder.jdbc.bean.JCNotColumn
 
 @JCBean(tbname = "data_tp_quesitem")
 class QuesItem {
@@ -21,6 +22,11 @@ class QuesItem {
 	
 	String subhead;
 	
+	/**
+	 * 10 : 文本
+	 * 21 : 单选
+	 * 22 : 多选
+	 */
 	String qt;
 	
 	Timestamp a_time;
@@ -29,5 +35,6 @@ class QuesItem {
 	
 	Integer flag = 0;
 	
+	@JCNotColumn
 	List<QuesChoise> choises;
 }
