@@ -1,16 +1,12 @@
 package com.jeancoder.market.internal.coupon
 
-import java.util.Map
-
 import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.CommunicationSource
-import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.market.ready.constant.CouponConstants
 import com.jeancoder.market.ready.constant.JsConstants
-import com.jeancoder.market.ready.coupon.CouponInterface
 import com.jeancoder.market.ready.coupon.CouponFactoryUtil
-import com.jeancoder.market.ready.coupon.CouponUtilAbstract
 import com.jeancoder.market.ready.dto.coupon.CouponCodeDto
 import com.jeancoder.market.ready.dto.coupon.CouponCodeResult
 import com.jeancoder.market.ready.entity.CouponBatch
@@ -28,7 +24,8 @@ import com.jeancoder.market.ready.util.StringUtil
 /**
  * 返回所有可以用的卡劵列表
  */
-JCLogger Logger = LoggerSource.getLogger(this.getClass().getName()+"get_available_coupon_list");
+//JCLogger Logger = LoggerSource.getLogger(this.getClass().getName()+"get_available_coupon_list");
+JCLogger Logger = JCLoggerFactory.getLogger(this.getClass().getName()+"get_available_coupon_list");
 CouponCodeResult mcc = new CouponCodeResult();
 def t_num =  NumberUtil.getSerialNumber();
 try {
