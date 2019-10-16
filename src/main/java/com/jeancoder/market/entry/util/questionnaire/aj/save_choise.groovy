@@ -23,7 +23,7 @@ if(item==null) {
 
 QuesChoise choise = null;
 if(cho_id && cho_id!='0') {
-	choise = JcTemplate.INSTANCE().get(QuesChoise, 'select * from QuesChoise where flag!=? and item_id=?', -1, item.id);
+	choise = JcTemplate.INSTANCE().get(QuesChoise, 'select * from QuesChoise where flag!=? and id=?', -1, cho_id);
 	if(choise==null) {
 		return SimpleAjax.notAvailable('obj_not_found,选项未找到');
 	}
