@@ -17,7 +17,7 @@ JCLogger Logger = LoggerSource.getLogger(this.getClass().getName());
 Result result = new Result();
 try {
 	//Res_MovieListInfoDto res = RemoteUtil.connect(Res_MovieListInfoDto.class, 'ticketingsys', '/plan/projmovies');
-	Res_MovieListInfoDto res = JC.internal.call(Res_MovieListInfoDto.class, 'ticketingsys', '/plan/projmovies');
+	Res_MovieListInfoDto res = JC.internal.call(Res_MovieListInfoDto.class, 'ticketingsys', '/plan/projmovies', null);
 	if (!0.equals(res.code)) {
 		return result.setData(AvailabilityStatus.notAvailable(res.msg));
 	}
