@@ -161,8 +161,8 @@
 												<label class="col-lg-2 control-label">参与方式</label>
 												<div class="col-lg-10">
 													<select class="form-control" id="cnt_when_create_order">
-				                                    	<option value="1">锁座占额</option>
-				                                    	<option value="0">出票占额</option>
+				                                    	<option value="10">锁座占额</option>
+				                                    	<option value="20">出票占额</option>
 				                                    </select>
 												</div>
 											</div>
@@ -230,6 +230,15 @@
 												<label class="col-lg-2 control-label">最低票价票补来源</label>
 												<div class="col-lg-10">
 													<input type="text" class="form-control" id="l_cal_r" placeholder="记录第三方票补信息" disabled>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-lg-2 control-label">手续费设置</label>
+												<div class="col-lg-10">
+													<select name="clear_handle_fee_policy" class="form-control" id="clear_handle_fee_policy">
+                                                        <option value="0">正常收取手续费</option>
+                                                        <option value="1">免于收取手续费</option>
+                                                    </select>
 												</div>
 											</div>
 										</form>
@@ -726,16 +735,6 @@ $(".save").on("click", function() {
 	var clear_handle_fee_policy = $("#clear_handle_fee_policy").val();//手续费政策
 	//alert(low_price_settle + "---" + settle_aim + "---" + clear_handle_fee_policy);
 	
-	//处理会员卡等级选择字段
-	var mc_list ="";
-	$("#mc_list option:selected").each(function(){
-		if(mc_list){mc_l_ht += ",";}
-		mc_l_ht += $(this).val();
-	});
-	if(mc_list==null||mc_list=="") {
-		mc_list = 0;
-	}
-	
 	if(mc_name==null||mc_name.trim()=="") {
 		layer.msg("请输入营销活动名称", {icon: 2});
 		return;
@@ -777,20 +776,23 @@ $(".save").on("click", function() {
 	}
 	
 	var mc_p_streg = null;
+	let mc_p_streg_msg = null;
 	$("select[name='mc_price_streg']").each(function() {
 		var t_v = $(this).val();
 		if(t_v!='00'&&t_v!='10'&&t_v!='20'&&t_v!='50') {
-			layer.msg("请选择正确的营销价格策略", {icon: 2});
+			//layer.msg("请选择正确价格策略类型", {icon: 2});
+			mc_p_streg_msg = "请选择正确价格策略类型"
 			return;
 		} else {
-			var mc_price_value = $(this).parent().parent().find("input[name='mc_price_value']").val();//营销价格变动值
+			var mc_price_value = $(this).parent().parent().parent().find("input[name='mc_price_value']").val();//营销价格变动值
 			if(mc_price_value==null||mc_price_value.trim()=="") {
-				layer.msg("请输入正确的营销价格策略变动值", {icon: 2});
+				//layer.msg("请输入正确价格策略变动值", {icon: 2});
+				mc_p_streg_msg = "请输入正确价格策略变动值"
 				return;
 			}
 		}
-		var mc_p_s_t = $(this).parent().parent().find("select[name='mc_l_mt']").val();//是否限制影片类型
-		var mc_p_s_v = $(this).parent().parent().find("input[name='mc_price_value']").val();//营销价格变动值
+		var mc_p_s_t = $(this).parent().parent().parent().find("select[name='mc_l_mt']").val();//是否限制影片类型
+		var mc_p_s_v = $(this).parent().parent().parent().find("input[name='mc_price_value']").val();//营销价格变动值
 		if(mc_p_s_t!="00") {
 			mc_p_s_v = mc_p_s_t + ":" + mc_p_s_v;
 		}
@@ -801,11 +803,15 @@ $(".save").on("click", function() {
 			mc_p_streg = mc_p_streg + ";" + mc_p_s_v;
 		}
 	});
+	if(mc_p_streg_msg) {
+		layer.msg(mc_p_streg_msg, {icon: 2});
+		return;
+	}
 	// begin to post
 	var index = layer.load();
-	var url = "[[${contextPath}]]/market/do_add_update_2200/?" + Date.parse(new Date());
+	var url = "[[${contextPath}]]/market/do_add_update_2000/?" + Date.parse(new Date());
 	$.post(url, {
-			mc_type:'2200',//1
+			mc_type:'2000',//1
 			mc_name:mc_name,//活动名称 1
 			mc_no:mc_no,//编号1
 			mc_info:mc_info,//活动描述1
@@ -838,7 +844,6 @@ $(".save").on("click", function() {
 			mc_l_cwro:cnt_when_create_order,//是否锁座1
 			l_pds:l_pds,//放映开始日期1
 			l_pde:l_pde,//放映结束日期1
-			mc_list:mc_list,//会员卡等级  1
 			}, function(data){
 		layer.close(index);
 		if(data.available) {
@@ -846,19 +851,12 @@ $(".save").on("click", function() {
 		        skin: 'layui-layer-lan',
 		        shift: 4 //动画类型
 		    }, function(){
-		    	location.href = "[[${contextPath}]]/market/index" + Date.parse(new Date());					    	
+		    	location.href = "/market/market/index?" + new Date().getTime();					    	
 		    });
 		} else {
 			var code = data.messages[0];
-			var msg = code;
-			if(code=="input_param_error") {
-				msg = "输入参数错误";
-			} else if(code=="object_belong_error") {
-				msg = "活动归属错误";
-			}
-			layer.msg(msg, {
-				shift : 6
-			});
+			var msg = data.messages[1];
+			layer.alert(msg, {icon : 2});
 		}
 	});
 });
@@ -1017,39 +1015,48 @@ $(".add_new_price_streg").on("click", function() {
 		return;
 	}
 	
-	var html = '<div class="row">';
-	html = html + '<div class="col-md-3 margin-bottom-15">';
-	html = html + '<label for="mc_price_streg">价格策略</label> ';
-	html = html + '<select name="mc_price_streg" class="form-control margin-bottom-15" id="mc_price_streg">';
+	var html = '<form role="form" class="form-inline">';
+	html = html + '<div class="form-group">';
+	html = html + '<div class="col-md-12">';
+	html = html + '<label for="mc_price_streg">价格策略</label>';
+	html = html + '<select name="mc_price_streg" class="form-control" id="mc_price_streg">';
 	html = html + '<option value="00">销售价格立减</option>';
 	html = html + '<option value="10">固定折扣销售</option>';
 	html = html + '<option value="20">指定销售价格</option>';
-	html = html + '</select></div>';
+	html = html + '</select>';
+	html = html + '</div>';
+	html = html + '</div>';
 	
-	html = html + '<div class="col-md-3 margin-bottom-15">';
-	html = html + '<label for="mc_l_mt">是否限制影片类型</label>';
-	html = html + '<select name="mc_l_mt" class="form-control margin-bottom-15" id="mc_l_mt">';
+	html = html + '<div class="form-group">';
+	html = html + '<div class="col-md-12">';
+	html = html + '<label for="mc_l_mt" class="">影片类型</label>';
+	html = html + '<select name="mc_l_mt" class="form-control" id="mc_l_mt">';
 	html = html + '<option value="00">不限制</option>';
 	html = html + '<option value="2d">2D</option>';
 	html = html + '<option value="3d">3D</option>';
-	html = html + '</select></div>';
-	
-	html = html + '<div class="col-md-4 margin-bottom-15">';
-	html = html + '<label for="mc_price_value">价格变动值</label>';
-	html = html + '<input name="mc_price_value" type="text" class="form-control" id="mc_price_value" placeholder="请输入数字，代表变动价格">';
+	html = html + '</select>';
+	html = html + '</div>';
 	html = html + '</div>';
 	
-	html = html + '<div class="col-md-2 margin-bottom-15">';
-	html = html + '<label for="coupon_app">&nbsp;</label>';
+	html = html + '<div class="form-group">';
+	html = html + '<div class="col-md-12">';
+	html = html + '<label for="mc_price_value" class="">价格变动</label>';
+	html = html + '<input type="text" name="mc_price_value" placeholder="请输入数字，代表变动价格" class="form-control" id="mc_price_value">';
+	html = html + '</div>';
+	html = html + '</div>';
+	
+	html = html + '<div class="form-group">';
+	html = html + '<div class="col-md-12">';
 	html = html + '<button type="button" class="btn btn-primary del_price_streg">删除此项</button>';
 	html = html + '</div>';
-	
 	html = html + '</div>';
 	
-	$(this).parent().parent().after(html);
+	html = html + '</form>';
+	
+	$(this).parent().parent().parent().after(html);
 	
 	$(".del_price_streg").on("click", function() {
-		$(this).parent().parent().fadeOut("fast", function() {
+		$(this).parent().parent().parent().fadeOut("fast", function() {
 			$(this).remove();
 		});
 	});

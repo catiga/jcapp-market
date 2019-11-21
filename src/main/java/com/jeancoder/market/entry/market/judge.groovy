@@ -7,8 +7,6 @@ import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.result.Result
 import com.jeancoder.market.ready.constant.MarketConstants
 
-
-
 Result result = new Result();
 JCRequest request = RequestSource.getRequest();
 JCLogger Logger = LoggerSource.getLogger(this.getClass().getName());
@@ -17,6 +15,8 @@ try{
 List<String> support_mtypes = new ArrayList<String>();
 //support_mtypes.add(MarketConstants._market_type_tc_ss_);
 support_mtypes.add(MarketConstants._market_type_recharge_gift_);
+support_mtypes.add(MarketConstants._market_type_tc_ss_);
+
 //if(project.isCinemaProject()) {
 //	support_mtypes.add(MarketConstants._market_type_tc_ss_);
 //	support_mtypes.add(MarketConstants._market_type_tc_gift_);

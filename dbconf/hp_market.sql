@@ -556,6 +556,33 @@ CREATE TABLE `data_tp_quesresuitem` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21319 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `mm_market_rule_tcss` (
+  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+  `market_id` bigint(20) DEFAULT NULL,
+  `store_id` bigint(20) DEFAULT NULL,
+  `store_name` varchar(255) DEFAULT NULL,
+  `limit_movies` varchar(1024) DEFAULT NULL,
+  `limit_halls` varchar(1024) DEFAULT NULL,
+  `limit_pay_types` varchar(1024) DEFAULT NULL,
+  `plan_start_date` char(10) DEFAULT NULL,
+  `plan_start_time` char(8) DEFAULT NULL,
+  `plan_end_date` char(10) DEFAULT NULL,
+  `plan_end_time` char(8) DEFAULT NULL,
+  `price_policy` varchar(1024) DEFAULT NULL,
+  `number_policy` varchar(1024) DEFAULT NULL,
+  `bind_pay_account` tinyint(4) DEFAULT '0',
+  `first_buy_eff` tinyint(4) DEFAULT '0',
+  `a_time` datetime DEFAULT NULL,
+  `c_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `flag` tinyint(4) NOT NULL DEFAULT '0',
+  `low_price_settle` tinyint(4) DEFAULT '0',
+  `settle_price` decimal(10,2) DEFAULT NULL,
+  `settle_obj` varchar(255) DEFAULT NULL,
+  `handle_fee` decimal(10,2) DEFAULT NULL,
+  `join_type` char(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
 
 INSERT INTO `sys_project_print_setup` VALUES (2, '0002', 1, '{\"height\":\"80\",\"width\":\"180\",\"nodes\":[{\"font_size\":12,\"value_prefix\":\"\",\"top\":10,\"left\":9,\"node_name\":\"ticket_no_qrcode\",\"height\":\"20\",\"width\":\"20\",\"rotate\":\"\"},{\"font_size\":12,\"value_prefix\":\"地址：花果山景区五圣广场\",\"top\":38,\"left\":12,\"node_name\":\"manual\",\"height\":\"\",\"width\":\"\",\"rotate\":90},{\"font_size\":12,\"value_prefix\":\"vip票\",\"top\":37,\"left\":25,\"node_name\":\"manual\",\"height\":\"\",\"width\":\"\",\"rotate\":90},{\"font_size\":12,\"value_prefix\":\"5排12号\",\"top\":38,\"left\":17,\"node_name\":\"manual\",\"height\":\"\",\"width\":\"\",\"rotate\":90},{\"font_size\":18,\"value_prefix\":\"\",\"top\":165,\"left\":28,\"node_name\":\"coupon_code\",\"height\":\"\",\"width\":\"\",\"rotate\":\"\"}]}', '2019-04-23 17:11:43', '2019-04-28 19:05:26', 0);
 

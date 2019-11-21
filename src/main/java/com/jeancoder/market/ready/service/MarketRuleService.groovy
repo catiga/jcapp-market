@@ -1,11 +1,12 @@
 package com.jeancoder.market.ready.service
 
 import java.sql.Timestamp
-import java.util.List
 
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.util.StringUtil
 import com.jeancoder.jdbc.JcTemplate
+import com.jeancoder.market.ready.dto.MarketJsonRule
 import com.jeancoder.market.ready.entity.MarketInfo
 import com.jeancoder.market.ready.entity.MarketJsonRuleWithMC
 import com.jeancoder.market.ready.entity.MarketRuleMemberCardRecharge
@@ -105,6 +106,48 @@ class MarketRuleService {
 		mjrwc.l_playe = mmc.l_playe;
 		mjrwc.l_cwro = mmc.l_cwro;
 		mjrwc.mc_list = mmc.mc_list;
+		Integer mmcNums = jcTemplate.save(mmc);
+		if(mmcNums>0){
+			mk.mru_id = mmcNums;
+			return jcTemplate.save(mk);
+		}
+		return -1;
+	}
+	
+	//保存营销活动
+	public Integer saveItemTcss(MarketInfo mk,MarketJsonRule mmc){
+		MarketInfo mkInfo = new MarketInfo();
+		mkInfo.mtype = mk.mtype;
+		mkInfo.title = mk.title;
+		mkInfo.dnum = mk.dnum;
+		mkInfo.info = mk.info;
+		mkInfo.selectmode=0;
+		mkInfo.start_time = mk.start_time;
+		mkInfo.end_time = mk.end_time;
+		mkInfo.content = mk.content;
+		mkInfo.pid = mk.pid;
+		MarketJsonRule mjrwc = new MarketJsonRule();
+		mjrwc.l_ms = mmc.l_ms;
+		mjrwc.l_cs = mmc.l_cs;
+		mjrwc.l_pts = mmc.l_pts;
+		mjrwc.l_f = mmc.l_f;
+		mjrwc.l_pay = mmc.l_pay;
+		mjrwc.l_cts = mmc.l_cts;
+		mjrwc.cal_t_n = mmc.cal_t_n;
+		mjrwc.cal_t_a = mmc.cal_t_a;
+		mjrwc.cal_sw = mmc.cal_sw;
+		mjrwc.cal_a = mmc.cal_a;
+		mjrwc.cal_r = mmc.cal_r;
+		mjrwc.l_ht = mmc.l_ht;
+		mjrwc.low_price_settle = mmc.low_price_settle;
+		mjrwc.settle_aim = mmc.settle_aim;
+		mjrwc.clear_handle_fee_policy = mmc.clear_handle_fee_policy;
+		mjrwc.cal_t_nw =mmc.cal_t_nw;
+		mjrwc.l_pds = mmc.l_pds;
+		mjrwc.l_pde = mmc.l_pde;
+		mjrwc.l_plays = mmc.l_plays;
+		mjrwc.l_playe = mmc.l_playe;
+		mjrwc.l_cwro = mmc.l_cwro;
 		Integer mmcNums = jcTemplate.save(mmc);
 		if(mmcNums>0){
 			mk.mru_id = mmcNums;
