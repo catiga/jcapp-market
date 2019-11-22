@@ -214,27 +214,28 @@ CREATE TABLE `ma_json_rule_with_mc`  (
 -- Table structure for ma_market_info
 -- ----------------------------
 DROP TABLE IF EXISTS `ma_market_info`;
-CREATE TABLE `ma_market_info`  (
-  `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `pid` bigint(20) NULL DEFAULT NULL,
-  `dnum` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `mtype` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `mstatus` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `start_time` datetime(0) NULL DEFAULT NULL,
-  `end_time` datetime(0) NULL DEFAULT NULL,
-  `a_time` datetime(0) NULL DEFAULT NULL,
-  `c_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
-  `flag` tinyint(4) NOT NULL DEFAULT 0,
-  `cg` int(11) NULL DEFAULT NULL,
-  `cgu` bigint(20) NULL DEFAULT NULL,
-  `selectmode` tinyint(4) NOT NULL DEFAULT 1,
-  `dgid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `mru_id` bigint(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+CREATE TABLE `ma_market_info` (
+  `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` bigint(20) DEFAULT NULL,
+  `dnum` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `info` varchar(255) DEFAULT NULL,
+  `content` text,
+  `mtype` varchar(4) DEFAULT NULL,
+  `mstatus` char(2) DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `a_time` datetime DEFAULT NULL,
+  `c_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `flag` tinyint(4) NOT NULL DEFAULT '0',
+  `cg` int(11) DEFAULT NULL,
+  `cgu` bigint(20) DEFAULT NULL,
+  `selectmode` tinyint(4) NOT NULL DEFAULT '1',
+  `dgid` varchar(255) DEFAULT NULL,
+  `mru_id` bigint(255) DEFAULT NULL,
+  `limit_user` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for ma_movie_coupon_rule

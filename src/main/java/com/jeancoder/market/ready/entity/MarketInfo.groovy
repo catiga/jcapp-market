@@ -49,6 +49,8 @@ class MarketInfo {
 	
 	BigInteger mru_id;
 	
+	Integer limit_user = 0;	//默认不限制用户列表参加
+	
 	@JCNotColumn
 	def rule;
 	@JCNotColumn

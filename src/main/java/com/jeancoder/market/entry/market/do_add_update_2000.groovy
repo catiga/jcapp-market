@@ -82,6 +82,16 @@ mkInfo.content = mc_content;
 mkInfo.a_time = Calendar.getInstance().getTime();
 mkInfo.pid = pid;
 mkInfo.mstatus = MarketConstants._market_status_wait_;
+
+//设置限制用户方式
+if(mc_user_list=='0') {
+	mkInfo.limit_user = 0;
+} else if(mc_user_list=='1') {
+	mkInfo.limit_user = 1;
+} else {
+	//默认不限制
+	mkInfo.limit_user = 0;
+}
 //首先保存活动主表
 mkInfo.id = JcTemplate.INSTANCE().save(mkInfo);
 

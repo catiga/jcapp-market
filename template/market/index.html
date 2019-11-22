@@ -46,6 +46,7 @@
 										<th>状态</th>
 										<th>活动时间</th>
 										<th>选择模式</th>
+										<th>限定用户参加</th>
 										<th>操作</th>
 									</tr>
 								</thead>
@@ -93,6 +94,10 @@
 										<td>
 											<p th:if="${r.selectmode==0 }">系统自选</p>
 											<p th:if="${r.selectmode==1 }">用户选择</p>
+										</td>
+										<td>
+											<p th:if="${r.limit_user==0}">不限制</p>
+											<p th:if="${r.limit_user==1}">限制</p>
 										</td>
 										<td>
 											<a href="javascript:void(0)" th:attr_mt="${r.mtype }" th:attr_ss="${r.mstatus }" th:attr_id="${r.id}" class="btn btn-primary btn-xs fash_edit">
