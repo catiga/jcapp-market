@@ -4,6 +4,7 @@ import java.sql.Timestamp
 
 import com.jeancoder.jdbc.bean.JCBean
 import com.jeancoder.jdbc.bean.JCID
+import com.jeancoder.jdbc.bean.JCNotColumn
 
 @JCBean(tbname = 'mm_market_rule_tcss')
 class MarketRuleTcss {
@@ -58,4 +59,9 @@ class MarketRuleTcss {
 	Timestamp c_time = new Timestamp(Calendar.getInstance().getTimeInMillis());
 	
 	Integer flag = 0;
+	
+	@JCNotColumn
+	String title;
+	@JCNotColumn
+	String info;
 }
