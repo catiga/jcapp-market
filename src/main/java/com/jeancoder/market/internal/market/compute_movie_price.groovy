@@ -14,11 +14,16 @@ import com.jeancoder.market.ready.dto.market.MCCompute
 import com.jeancoder.market.ready.entity.CouponBatch
 import com.jeancoder.market.ready.entity.CouponCode
 import com.jeancoder.market.ready.entity.MarketInfo
+import com.jeancoder.market.ready.entity.MarketMobileBuy
+import com.jeancoder.market.ready.entity.MarketMobileLimit
+import com.jeancoder.market.ready.entity.MarketRuleTcss
 import com.jeancoder.market.ready.service.CouponBatchService
 import com.jeancoder.market.ready.service.CouponService
+import com.jeancoder.market.ready.util.DirectComputePrice
 import com.jeancoder.market.ready.util.JackSonBeanMapper
 import com.jeancoder.market.ready.util.MoneyUtil
 import com.jeancoder.market.ready.util.StringUtil
+import com.jeancoder.market.ready.util.TotalDateUtil
 
 JCLogger Logger = LoggerSource.getLogger(this.getClass().getName()+".compute_movie_price");
 def t_num =   new Date().getTime();
@@ -33,8 +38,9 @@ def oc = JC.internal.param("oc");
 String op = JC.internal.param("op");
 
 def mobile = JC.internal.param('mobile');
+def ap_id = JC.internal.param('ap_id');
 
-Logger.info('compute_movie_price:{t_num=' + t_num + ',p='+p + ',sid=' + sid + ',pid=' + pid + ',op=' + op + ', mobile=' + mobile);
+Logger.info('compute_movie_price:{t_num=' + t_num + ',p='+p + ',sid=' + sid + ',pid=' + pid + ',op=' + op + ', mobile=' + mobile + ', ap_id=' + ap_id);
 
 try {
 	
@@ -48,6 +54,7 @@ try {
 		mcc.msg = "操作类型错误";
 		return mcc;
 	}
+	Logger.info('ppppppp=====' + p);
 	// 转换参数
 	def deto  = JackSonBeanMapper.jsonToMap(p);
 	pid = new BigInteger(pid.toString());
@@ -73,17 +80,98 @@ try {
 		mcc.msg = '活动已经暂停';
 		return mcc;
 	}
+	//查找活动规则，直接写死，先查找选座活动
+	def sql = 'select * from MarketRuleTcss where flag!=? and market_id=?';
+	def params = []; params.add(-1); params.add(market.id);
+	if(sid) {
+		sql += ' and ( store_id=? or store_id is null )';
+		params.add(sid);
+	}
+	sql += ' order by c_time desc';
+	List<MarketRuleTcss> rules = JcTemplate.INSTANCE().find(MarketRuleTcss, sql, params.toArray());
+	if(!rules || rules.empty) {
+		mcc.code = '1000';
+		mcc.msg = '活动规则错误';
+		return mcc;
+	}
+	//开始查找匹配的规则
+	if(market.limit_user!=0) {
+		//说明限制了用户
+		MarketMobileLimit limits = JcTemplate.INSTANCE().get(MarketMobileLimit, 'select * from MarketMobileLimit where flag!=? and market_id=? and mobile=?', -1, market.id, mobile);
+		if(limits==null) {
+			//说明用户不在名单里面，不允许使用
+			mcc.code = '1000';
+			mcc.msg = '手机号不在优惠活动范围内';
+			return mcc;
+		}
+	}
+	//找到目标唯一的规则
+	MarketRuleTcss single_rule = rules.get(0);
+	/**
+	 * 20/2d:15;20/3d:25
+	 * 00/99
+	 */
+	def price_policy = single_rule.price_policy;
 	
-	// 组装商品
-	//[[goods_id,tycode,cat_ids,price,num],[goods_id,tycode,cat_ids,price,num]]
+	/**
+	 * 2,m,
+	 * 8,-1,	//活动哪总数量
+	 * 3,w,3,5	//按照
+	 */
+	def num_policy = single_rule.number_policy;	
+	def arr_num_policy = num_policy.split(',');
+	def unit_total_num = Integer.valueOf(arr_num_policy[0]);
+	def unit_total_unit = arr_num_policy[1];
+	
+	//需要查找该手机号目前已经购票的数量
+	sql = 'select * from MarketMobileBuy where flag!=? and market_id=? and mobile=?';
+	def compute_params = []; compute_params.add(-1); compute_params.add(market.id); compute_params.add(mobile);
+	if(unit_total_unit=='-1') {
+		//要看活动内总数量
+		
+	} else if(unit_total_unit=='w') {
+		//要看每周总数量
+		String week_1 = TotalDateUtil.get_now_time_week_one() + ' 00:00:00';
+		String week_7 = TotalDateUtil.get_now_time_week_seven() + ' 23:59:59';
+		sql += ' and a_time>=? and a_time<=?';
+		compute_params.add(week_1);
+		compute_params.add(week_7);
+	} else if(unit_total_unit=='m') {
+		//要看每月总数量
+		String mon_1 = TotalDateUtil.get_now_time_month_one() + ' 00:00:00';
+		String mon_7 = TotalDateUtil.get_now_time_month_last()() + ' 23:59:59';
+		sql += ' and a_time>=? and a_time<=?';
+		compute_params.add(mon_1);
+		compute_params.add(mon_7);
+	} else if(unit_total_unit=='d') {
+		//要看每天总数量
+		String day_fir = TotalDateUtil.get_now_time() + ' 00:00:00';
+		String day_las = TotalDateUtil.get_now_time() + ' 23:59:59';
+		sql += ' and a_time>=? and a_time<=?';
+		compute_params.add(day_fir);
+		compute_params.add(day_las);
+	}
+	List<MarketMobileBuy> mobile_buy_list = JcTemplate.INSTANCE().find(MarketMobileBuy, sql, compute_params.toArray());
+	if(mobile_buy_list.size()>=unit_total_num) {
+		mcc.code = '1000';
+		mcc.msg = '已经参加过该活动';
+		return mcc;
+	}
+	//开始返回，并计算价格
+	String film_no = deto.film_no;
+	String film_dimensional = deto.film_dimensional;
+	
 	String totalAmount = "0";
 	List<GoodsDto> goods_List = new ArrayList<GoodsDto>();
-	def list = deto.g;
-	String hall_id = deto.hall_id;
-	String film_no = deto.film_no;
-	for (def dto : list) {
+	
+	// deto.g     [x.seat_no,x.sale_fee, x.pub_fee, order.hall_id]
+	
+	for(dto in deto.g) {
 		def goods_id = dto[0];
 		def price = dto[1];
+		
+		//DirectComputePrice.compute(price_policy, film_no, film_dimensional, seat_price)
+		
 		GoodsDto g1 = new GoodsDto();
 		g1.id = goods_id.toString()
 		g1.price = price;
@@ -94,74 +182,25 @@ try {
 		totalAmount = MoneyUtil.add(totalAmount, g1.total_amount);
 		goods_List.add(g1);
 	}
-	// 查询卡劵
-	List<CouponCode>  couponCodeList = CouponService.INSTANSE.get_available_codes_by_ids(coupon_codes, pid);
-	if (couponCodeList == null || couponCodeList.isEmpty()) {
-		mcc.code = JsConstants.unknown;
-		mcc.msg = "未找到卡劵"
-		return mcc;
+	mcc.code = "0";
+	mcc.offerAmount = couponPrice.offerAmount; // 优惠了的价格 原价100， 应付80 ， offerAmount=20
+	mcc.items = goods_List;
+	mcc.totalAmount = couponPrice.totalAmount;
+	if ("use".equals(op)) {
+		//当前是使用操作
+		try {
+			CouponService.INSTANSE.use_by_order(codeIds.toString(),on,oc,pid);
+		} catch (Exception e) {
+			Logger.error("消费卡劵失败codeId=" + codeIds.toString() , e);
+		}
 	}
-
-	CouponBatch batch = null;
-	Map<String,CouponBatch> couponBatch = new HashMap<String, CouponBatch>();
-	StringBuffer codeIds = new StringBuffer();
-	String code_id = null;
-	for (CouponCode couponCode : couponCodeList) {
-		CouponBatch cb = couponBatch.get(couponCode.batch_id.toString());
-		if (cb == null) {
-			cb = CouponBatchService.INSTANSE.getById(couponCode.batch_id);
-			couponBatch.put(couponCode.batch_id.toString(), cb);
-		}
-		if (cb == null) {
-			mcc.code = JsConstants.unknown;
-			mcc.msg = "未找到卡劵"
-			return mcc;
-		}
-		if (!StringUtil.isEmpty(code_id) && !code_id.equals(cb.id)) {
-			mcc.code = JsConstants.unknown;
-			mcc.msg = "不能同时使用不同批次的卡券"
-			return mcc;
-		}
-		code_id = cb.id;
-		batch = cb;
-		if (!CouponConstants._coupon_app_ticket_.equals(cb.crapp)) {
-			mcc.code = JsConstants.unknown;
-			mcc.msg = "卡劵类型使用错误"
-			return mcc;
-		}
-		if (codeIds.length()!=0) {
-			codeIds.append(",");
-		}
-		codeIds.append(couponCode.id);
-	}
-	def util = CouponFactoryUtil.getCouponUtil(CouponConstants._coupon_app_ticket_);
-	def param = [:]
-	param['hall_id'] = hall_id;
-	param['film_no'] = film_no;
-	CouponRule couponPrice = util.consumeCouponPrice(couponCodeList, sid, deto.g,totalAmount,param);
-	if (couponPrice.success) {
-		mcc.code = "0";
-		mcc.offerAmount = couponPrice.offerAmount; // 优惠了的价格 原价100， 应付80 ， offerAmount=20
-		mcc.items = goods_List;
-		mcc.totalAmount = couponPrice.totalAmount;
-		if ("use".equals(op)) {
-			//当前是使用操作
-			try {
-				CouponService.INSTANSE.use_by_order(codeIds.toString(),on,oc,pid);
-			} catch (Exception e) {
-				Logger.error("消费卡劵失败codeId=" + codeIds.toString() , e);
-			}
-		}
-	} else {
-		mcc.code = JsConstants.unknown;
-		mcc.msg = couponPrice.msg
-	}
+	
 	return  mcc;
 } catch (Exception e) {
-	Logger.error("卡劵计算失败", e);
+	Logger.error("活动价格计算失败", e);
 	mcc.code = JsConstants.unknown;
-	mcc.msg = "卡劵计算失败"
+	mcc.msg = "活动价格计算失败"
 	return mcc;
-} finally {
-	Logger.info('compute_movie_price:{t_num= '+t_num+ ' , rules:'+ JackSonBeanMapper.toJson(mcc)+'}');
-}
+} 
+
+
