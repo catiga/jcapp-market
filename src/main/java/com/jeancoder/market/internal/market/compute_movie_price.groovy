@@ -139,7 +139,7 @@ try {
 	} else if(unit_total_unit=='m') {
 		//要看每月总数量
 		String mon_1 = TotalDateUtil.get_now_time_month_one() + ' 00:00:00';
-		String mon_7 = TotalDateUtil.get_now_time_month_last()() + ' 23:59:59';
+		String mon_7 = TotalDateUtil.get_now_time_month_last() + ' 23:59:59';
 		sql += ' and a_time>=? and a_time<=?';
 		compute_params.add(mon_1);
 		compute_params.add(mon_7);
