@@ -152,14 +152,14 @@ try {
 		compute_params.add(day_las);
 	}
 	List<MarketMobileBuy> mobile_buy_list = JcTemplate.INSTANCE().find(MarketMobileBuy, sql, compute_params.toArray());
-	if(mobile_buy_list.size()>=unit_total_num) {
+	if(mobile_buy_list!=null && mobile_buy_list.size()>=unit_total_num) {
 		mcc.code = '1000';
 		mcc.msg = '已经参加过该活动';
 		return mcc;
 	}
 	//开始返回，并计算价格
 	String film_no = deto.film_no;
-	String film_dimensional = deto.film_dimensional;
+	String film_dimen = deto.film_dimen;
 	
 	String totalAmount = "0";
 	List<GoodsDto> goods_List = new ArrayList<GoodsDto>();
