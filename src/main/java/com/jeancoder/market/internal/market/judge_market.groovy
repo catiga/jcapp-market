@@ -14,10 +14,11 @@ def ap_id = JC.internal.param('ap_id');
 def order_no = JC.internal.param('order_no');
 def market_rule_id = JC.internal.param('market_rule_id');
 def tnum = JC.internal.param('tnum');
+def market_id = JC.internal.param('market_id');
 
 //先写死选座的类型
-def sql = 'select * from MarketRuleTcss where flag!=? and id=?';
-MarketRuleTcss rule = JcTemplate.INSTANCE().get(MarketRuleTcss, sql, -1, market_rule_id);
+def sql = 'select * from MarketRuleTcss where flag!=? and id=? and market_id=?';
+MarketRuleTcss rule = JcTemplate.INSTANCE().get(MarketRuleTcss, sql, -1, market_rule_id, market_id);
 if(rule==null) {
 	return SimpleAjax.notAvailable('obj_not_found,活动规则未找到');
 }
