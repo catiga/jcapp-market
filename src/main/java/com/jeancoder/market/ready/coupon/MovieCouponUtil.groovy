@@ -72,7 +72,7 @@ class MovieCouponUtil extends CouponUtilAbstract {
 			}
 			//判断是否有可用的门店、影厅
 			// 判断影城是否符合
-			LOGGER.info('goodsCouponRule.stores===' + goodsCouponRule.stores + ', and s_id====' + s_id);
+			LOGGER.info('goodsCouponRule.stores===' + goodsCouponRule.stores + ', and s_id====' + sid);
 			if(!StringUtil.isEmpty(goodsCouponRule.stores)){
 				boolean flag = true;
 				String[] store_ids = goodsCouponRule.stores.split(",");
