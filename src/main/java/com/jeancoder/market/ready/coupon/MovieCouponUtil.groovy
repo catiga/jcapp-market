@@ -2,6 +2,7 @@ package com.jeancoder.market.ready.coupon
 
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.market.ready.constant.CouponConstants
 import com.jeancoder.market.ready.dto.coupon.CouponRule
 import com.jeancoder.market.ready.entity.CouponBatch
@@ -14,7 +15,8 @@ import com.jeancoder.market.ready.util.MoneyUtil
 import com.jeancoder.market.ready.util.StringUtil
 
 class MovieCouponUtil extends CouponUtilAbstract {
-	private static final JCLogger LOGGER = LoggerSource.getLogger(MovieCouponUtil.class.getName());
+	//private static final JCLogger LOGGER = LoggerSource.getLogger(MovieCouponUtil.class.getName());
+	private static final JCLogger LOGGER = JCLoggerFactory.getLogger('MOVIECOUPONUTIL');
 	@Override
 	public def getCouponDto(def batch, def couponCode, Object rule) {
 		def dto = super.getCouponDto(batch, couponCode, rule);
@@ -70,6 +72,7 @@ class MovieCouponUtil extends CouponUtilAbstract {
 			}
 			//判断是否有可用的门店、影厅
 			// 判断影城是否符合
+			LOGGER.info('goodsCouponRule.stores===' + goodsCouponRule.stores + ', and s_id====' + s_id);
 			if(!StringUtil.isEmpty(goodsCouponRule.stores)){
 				boolean flag = true;
 				String[] store_ids = goodsCouponRule.stores.split(",");
