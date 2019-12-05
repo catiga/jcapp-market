@@ -165,6 +165,8 @@ try {
 	List<GoodsDto> goods_List = new ArrayList<GoodsDto>();
 	
 	// deto.g     [x.seat_no,x.sale_fee, x.pub_fee, order.hall_id]
+	
+	String offer_amount = '0';	//优惠了的金额
 	for(dto in deto.g) {
 		def goods_id = dto[0];
 		def price = dto[1];
@@ -173,15 +175,17 @@ try {
 		GoodsDto g1 = new GoodsDto();
 		g1.id = goods_id.toString()
 		g1.price = price;
-		g1.mc_price = DirectComputePrice.compute(price_policy, film_no, film_dimen, new BigDecimal(price.toString()));
-		g1.pay_amount = price;
+		//计算单座价格
+		g1.mc_price = DirectComputePrice.compute(price_policy, film_no, film_dimen, new BigDecimal(price.toString())).toString();
+		g1.pay_amount = g1.mc_price;
 		g1.total_amount = price;
 		g1.discount = "0";
 		totalAmount = MoneyUtil.add(totalAmount, g1.total_amount);
 		goods_List.add(g1);
+		offer_amount = MoneyUtil.add(offer_amount, MoneyUtil.add(price.toString(), g1.mc_price));
 	}
 	mcc.code = "0";
-	mcc.offerAmount = '50'; // 优惠了的价格 原价100， 应付80 ， offerAmount=20
+	mcc.offerAmount = offer_amount; // 优惠了的价格 原价100， 应付80 ， offerAmount=20
 	mcc.items = goods_List;
 	mcc.totalAmount = totalAmount;
 	if ("use".equals(op)) {
