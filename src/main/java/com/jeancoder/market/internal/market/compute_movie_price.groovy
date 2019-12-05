@@ -192,13 +192,13 @@ try {
 			Logger.error("消费活动失败codeId=" + market.id.toString() , e);
 		}
 	}
-	
-	return  mcc;
 } catch (Exception e) {
 	Logger.error("活动价格计算失败", e);
 	mcc.code = JsConstants.unknown;
 	mcc.msg = "活动价格计算失败"
-	return mcc;
-} 
+}
+
+Logger.info('营销活动价格计算的返回结果：' + JackSonBeanMapper.toJson(mcc));
+return  mcc;
 
 
