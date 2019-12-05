@@ -1,31 +1,26 @@
 package com.jeancoder.market.internal.market
 
 import com.jeancoder.app.sdk.JC
-import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.jdbc.JcTemplate
-import com.jeancoder.market.ready.constant.CouponConstants
 import com.jeancoder.market.ready.constant.JsConstants
 import com.jeancoder.market.ready.constant.MarketConstants
-import com.jeancoder.market.ready.coupon.CouponFactoryUtil
-import com.jeancoder.market.ready.dto.coupon.CouponRule
 import com.jeancoder.market.ready.dto.market.GoodsDto
 import com.jeancoder.market.ready.dto.market.MCCompute
-import com.jeancoder.market.ready.entity.CouponBatch
-import com.jeancoder.market.ready.entity.CouponCode
 import com.jeancoder.market.ready.entity.MarketInfo
 import com.jeancoder.market.ready.entity.MarketMobileBuy
 import com.jeancoder.market.ready.entity.MarketMobileLimit
 import com.jeancoder.market.ready.entity.MarketRuleTcss
-import com.jeancoder.market.ready.service.CouponBatchService
-import com.jeancoder.market.ready.service.CouponService
 import com.jeancoder.market.ready.util.DirectComputePrice
 import com.jeancoder.market.ready.util.JackSonBeanMapper
 import com.jeancoder.market.ready.util.MoneyUtil
 import com.jeancoder.market.ready.util.StringUtil
 import com.jeancoder.market.ready.util.TotalDateUtil
 
-JCLogger Logger = LoggerSource.getLogger(this.getClass().getName()+".compute_movie_price");
+//JCLogger Logger = LoggerSource.getLogger(this.getClass().getName()+".compute_movie_price");
+JCLogger Logger = JCLoggerFactory.getLogger(this.getClass().getName()+".compute_movie_price");
+
 def t_num =   new Date().getTime();
 t_num = t_num.toString() + new Random().nextInt(1000).toString();
 MCCompute mcc = new MCCompute();
