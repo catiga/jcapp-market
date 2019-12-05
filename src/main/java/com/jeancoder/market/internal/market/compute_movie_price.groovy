@@ -182,7 +182,7 @@ try {
 		g1.discount = "0";
 		totalAmount = MoneyUtil.add(totalAmount, g1.total_amount);
 		goods_List.add(g1);
-		offer_amount = MoneyUtil.add(offer_amount, MoneyUtil.add(price.toString(), g1.mc_price));
+		offer_amount = MoneyUtil.add(offer_amount, MoneyUtil.add(price.toString(), '-' + g1.mc_price));
 	}
 	mcc.code = "0";
 	mcc.offerAmount = offer_amount; // 优惠了的价格 原价100， 应付80 ， offerAmount=20
