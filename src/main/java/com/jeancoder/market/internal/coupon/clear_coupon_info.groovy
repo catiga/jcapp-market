@@ -1,6 +1,6 @@
 package com.jeancoder.market.internal.coupon
 
-import com.jeancoder.app.sdk.source.CommunicationSource
+import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.result.Result
@@ -12,8 +12,8 @@ import com.jeancoder.market.ready.util.StringUtil
 
 Result result = new Result();
 JCLogger Logger = LoggerSource.getLogger(this.getClass().getName())
-def p = CommunicationSource.getParameter("orders");
-def pid = CommunicationSource.getParameter("pid");
+def p = JC.internal.param("orders");
+def pid = JC.internal.param("pid");
 Logger.info("orders__" + p)
 try {
 	if (StringUtil.isEmpty(p)||StringUtil.isEmpty(pid)) {
