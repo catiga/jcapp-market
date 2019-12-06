@@ -1,5 +1,7 @@
 package com.jeancoder.market.internal.market
 
+import java.sql.Timestamp
+
 import com.jeancoder.app.sdk.JC
 import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.log.JCLoggerFactory
@@ -187,6 +189,19 @@ try {
 		//当前是使用操作
 		try {
 			//CouponService.INSTANSE.use_by_order(codeIds.toString(),on,oc,pid);
+			def use_time = new Date();
+			for(x in deto.g) {
+				MarketMobileBuy mmb = new MarketMobileBuy();
+				mmb.a_time = use_time;
+				mmb.buy_num = 1;
+				mmb.c_time = new Timestamp(use_time.getTime());
+				mmb.flag = 0;
+				mmb.market_id = market_id;
+				mmb.mobile = mobile;
+				mmb.oc = oc;
+				mmb.order_no = on;
+				JcTemplate.INSTANCE().save(mmb);
+			}
 		} catch (Exception e) {
 			Logger.error("消费活动失败codeId=" + market.id.toString() , e);
 		}
