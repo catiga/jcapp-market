@@ -196,7 +196,7 @@ try {
 				mmb.buy_num = 1;
 				mmb.c_time = new Timestamp(use_time.getTime());
 				mmb.flag = 0;
-				mmb.market_id = market_id;
+				mmb.market_id = single_rule.market_id;
 				mmb.mobile = mobile;
 				mmb.oc = oc;
 				mmb.order_no = on;
