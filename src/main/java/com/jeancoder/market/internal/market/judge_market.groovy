@@ -91,6 +91,6 @@ if(mobile_buy_list!=null && mobile_buy_list.size()>=unit_total_num) {
 	return SimpleAjax.notAvailable('repeat_join_forbid,当前周期内参与次数超限', mobile_buy_list);
 }
 
-return SimpleAjax.available('', (mobile_buy_list.size() - 1));
+return SimpleAjax.available('', (unit_total_num - mobile_buy_list.size()));
 
 
