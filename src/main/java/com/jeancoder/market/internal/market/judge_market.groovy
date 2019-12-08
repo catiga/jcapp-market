@@ -88,7 +88,7 @@ if(unit_total_unit=='-1') {
 }
 List<MarketMobileBuy> mobile_buy_list = JcTemplate.INSTANCE().find(MarketMobileBuy, sql, compute_params.toArray());
 if(mobile_buy_list!=null && mobile_buy_list.size()>=unit_total_num) {
-	return SimpleAjax.notAvailable('repeat_join_forbid,当前周期内参与次数超限');
+	return SimpleAjax.notAvailable('repeat_join_forbid,当前周期内参与次数超限', mobile_buy_list);
 }
 
 return SimpleAjax.available();
