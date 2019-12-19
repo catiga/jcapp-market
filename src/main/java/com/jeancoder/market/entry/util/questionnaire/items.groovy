@@ -17,6 +17,7 @@ def qp_id = JC.request.param('qp_id');
 logger.info('qp_id=' + qp_id + ',' + GlobalHolder.proj.id);
 
 QuesPack pack = JcTemplate.INSTANCE().get(QuesPack, 'select * from QuesPack where id=? and flag!=? and pid=?', qp_id, -1, GlobalHolder.proj.id);
+logger.info(pack==null + '???');
 
 def items = JcTemplate.INSTANCE().find(QuesItem, 'select * from QuesItem where flag!=? and pack=?', -1, pack.id);
 
