@@ -1,6 +1,8 @@
 package com.jeancoder.market.internal.market
 
 import com.jeancoder.app.sdk.JC
+import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.market.ready.common.SimpleAjax
 import com.jeancoder.market.ready.entity.MarketInfo
@@ -8,6 +10,8 @@ import com.jeancoder.market.ready.entity.MarketMobileBuy
 import com.jeancoder.market.ready.entity.MarketMobileLimit
 import com.jeancoder.market.ready.entity.MarketRuleTcss
 import com.jeancoder.market.ready.util.TotalDateUtil
+
+JCLogger logger = JCLoggerFactory.getLogger('judge_market');
 
 def mobile = JC.internal.param('mobile');
 
@@ -86,6 +90,8 @@ if(unit_total_unit=='-1') {
 	compute_params.add(day_fir);
 	compute_params.add(day_las);
 }
+logger.info('sql=' + sql);
+logger.info('mobile=' + mobile);
 List<MarketMobileBuy> mobile_buy_list = JcTemplate.INSTANCE().find(MarketMobileBuy, sql, compute_params.toArray());
 if(mobile_buy_list!=null && mobile_buy_list.size()>=unit_total_num) {
 	return SimpleAjax.notAvailable('repeat_join_forbid,当前周期内参与次数超限', mobile_buy_list);
