@@ -90,13 +90,14 @@ if(unit_total_unit=='-1') {
 	compute_params.add(day_fir);
 	compute_params.add(day_las);
 }
-logger.info('sql=' + sql);
-logger.info('mobile=' + mobile);
 List<MarketMobileBuy> mobile_buy_list = JcTemplate.INSTANCE().find(MarketMobileBuy, sql, compute_params.toArray());
 if(mobile_buy_list!=null && mobile_buy_list.size()>=unit_total_num) {
 	return SimpleAjax.notAvailable('repeat_join_forbid,当前周期内参与次数超限', mobile_buy_list);
 }
-
-return SimpleAjax.available('', (unit_total_num - mobile_buy_list.size()));
+def use_size = 0;
+if(mobile_buy_list!=null) {
+	use_size = mobile_buy_list.size();
+}
+return SimpleAjax.available('', (unit_total_num - use_size));
 
 
