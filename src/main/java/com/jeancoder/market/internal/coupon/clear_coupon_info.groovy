@@ -39,7 +39,7 @@ try {
 		List<OrderCoupon> result_data  = OrderCouponServer.INSTANSE.update_order_coupon(order);
 		resultList.addAll(result_data);
 		
-		//修改并还原手机号对应的订单信息
+		//修改并还原手机号对应的优惠信息
 		def sql = 'select * from MarketMobileBuy where flag!=? and order_no=? and oc=? order by a_time desc limit 1, 10';
 		try {
 			List<MarketMobileBuy> mobile_markets = JcTemplate.INSTANCE().find(MarketMobileBuy, sql, -1, item[0], item[1]);
