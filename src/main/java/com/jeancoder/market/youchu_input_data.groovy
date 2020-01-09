@@ -1,7 +1,7 @@
 package com.jeancoder.market
 
 ClassLoader classLoader = this.getClass().getClassLoader();
-URL data_uri = classLoader.getResource('youchu_mobiles');
+URL data_uri = classLoader.getResource('youchu_mobiles_11');
 
 FileReader fr = new FileReader(data_uri.getFile());
 BufferedReader bf = new BufferedReader(fr);
@@ -23,7 +23,7 @@ while ((str = bf.readLine()) != null) {
 		continue;
 	}
 	index++;
-	def sql = """INSERT INTO `ma_market_limit` (`market_id`, `rule_id`, `mobile`, `buy_num`, `a_time`, `c_time`, `flag`) VALUES (5, NULL, '${mobile}', ${buy_num}, NULL, '2020-01-06 18:40:00', 0);"""
+	def sql = """INSERT INTO `ma_market_limit` (`market_id`, `rule_id`, `mobile`, `buy_num`, `a_time`, `c_time`, `flag`) VALUES (6, NULL, '${mobile}', ${buy_num}, NULL, '2020-01-08 18:40:00', 0);"""
 	//println sql;
 	sql += '\n';
 	out.write(sql.getBytes());
