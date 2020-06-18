@@ -27,7 +27,7 @@ def mod_g_3_3 = FuncUtil.build(303, '调查问卷', 3, 'util/questionnaire/index
 def mod_g_4 = FuncUtil.build(4, '订单列表', null, null, 'fa-shopping-cart');
 def mod_g_4_1 = FuncUtil.build(401, '卡劵使用订单',4, 'order/use_order_list', 'fa-shopping-cart',2);
 
-def mod_g_5 = FuncUtil.build(5, '轮播图设置', null, 'figure/index','fa-shopping-cart');
+def mod_g_5 = FuncUtil.build(5, '广告设置', null, 'figure/index','fa-shopping-cart');
 
 
 List<AppFunction> result = [mod_g_1,mod_g_1_1,mod_g_1_2,mod_g_1_3,mod_g_4,mod_g_4_1];

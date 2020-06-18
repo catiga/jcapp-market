@@ -1,9 +1,11 @@
 package com.jeancoder.market.entry.figure
 
+import com.jeancoder.app.sdk.JC
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.app.sdk.source.RequestSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.jdbc.JcPage
 import com.jeancoder.market.ready.common.AvailabilityStatus
@@ -14,14 +16,14 @@ import com.jeancoder.market.ready.util.StringUtil
 
 import java.text.SimpleDateFormat
 
+String pn_s = JC.request.param("pn");
+String ps_s = JC.request.param("ps");
+String type = JC.request.param("type");
+BigInteger pid = GlobalHolder.proj.id;
+
 Result result = new Result();
-JCRequest request = RequestSource.getRequest();
-JCLogger logger = LoggerSource.getLogger(this.getClass().getName());
+JCLogger logger = JCLoggerFactory.getLogger(this.getClass().getName());
 try {
-	String pn_s = request.getParameter("pn");
-	String ps_s = request.getParameter("ps");
-	String type = request.getParameter("type");
-	BigInteger pid = GlobalHolder.getProj().getId();
 	if (type.equals('H5')) {
 		//H5轮播图
 		type = '0000';

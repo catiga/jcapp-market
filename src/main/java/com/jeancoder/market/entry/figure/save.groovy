@@ -1,9 +1,11 @@
 package com.jeancoder.market.entry.figure
 
 import com.jeancoder.app.sdk.JC
+
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.http.JCRequest
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import org.apache.commons.io.FileUtils;
 import com.jeancoder.core.util.MD5Util
@@ -14,16 +16,21 @@ import com.jeancoder.market.ready.util.GlobalHolder
 import com.jeancoder.market.ready.util.StringUtil
 
 import org.apache.commons.fileupload.FileItem
+
 def cdn_root_path = '/data/cdn/jc';
 def rel_path = 'market/figure';
+
 def title = JC.request.param('title')?.trim();
 def info = JC.request.param('info')?.trim();
 def url_msg = JC.request.param('url_msg')?.trim();
 def type = JC.request.param('type')?.trim();
 def figure_type = JC.request.param('figure_type')?.trim();
+def jump_type = JC.request.param('jump_type');
+
 Result result = new Result();
-JCLogger logger=LoggerSource.getLogger(this.getClass().getName());
-BigInteger pid = GlobalHolder.getProj().getId();
+JCLogger logger = JCLoggerFactory.getLogger(this.getClass().getName());
+BigInteger pid = GlobalHolder.proj.id;
+
 try {
 	def logo_file = null;
 	JCRequest req = JC.request.get();
@@ -58,6 +65,15 @@ try {
 	item.type = type;
 	item.url_msg = url_msg;
 	item.figure_type = figure_type;
+	item.jump_type = jump_type;
+	if(jump_type=='10') {
+		//跳转类型为商品，这里需要构建商品id信息
+		try {
+			item.jump_id = new BigInteger(url_msg);
+		} catch(any) {
+			
+		}
+	}
 	def num = FigureInfoService.INSTANSE.save(item);
 	if (num>0) {
 		result.setData(AvailabilityStatus.available());

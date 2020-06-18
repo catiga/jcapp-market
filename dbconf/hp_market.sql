@@ -625,8 +625,14 @@ CREATE TABLE `ma_figure_data` (
   `a_time` datetime DEFAULT NULL,
   `c_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `figure_type` varchar(255) DEFAULT NULL,
+  `content` text,
+  `jump_type` char(2) DEFAULT '00',
+  `jump_id` bigint(20) DEFAULT NULL,
+  `jump_name` varchar(255) DEFAULT NULL,
+  `jump_img` varchar(255) DEFAULT NULL,
+  `jump_info` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 INSERT INTO `sys_project_print_setup` VALUES (2, '0002', 1, '{\"height\":\"80\",\"width\":\"180\",\"nodes\":[{\"font_size\":12,\"value_prefix\":\"\",\"top\":10,\"left\":9,\"node_name\":\"ticket_no_qrcode\",\"height\":\"20\",\"width\":\"20\",\"rotate\":\"\"},{\"font_size\":12,\"value_prefix\":\"地址：花果山景区五圣广场\",\"top\":38,\"left\":12,\"node_name\":\"manual\",\"height\":\"\",\"width\":\"\",\"rotate\":90},{\"font_size\":12,\"value_prefix\":\"vip票\",\"top\":37,\"left\":25,\"node_name\":\"manual\",\"height\":\"\",\"width\":\"\",\"rotate\":90},{\"font_size\":12,\"value_prefix\":\"5排12号\",\"top\":38,\"left\":17,\"node_name\":\"manual\",\"height\":\"\",\"width\":\"\",\"rotate\":90},{\"font_size\":18,\"value_prefix\":\"\",\"top\":165,\"left\":28,\"node_name\":\"coupon_code\",\"height\":\"\",\"width\":\"\",\"rotate\":\"\"}]}', '2019-04-23 17:11:43', '2019-04-28 19:05:26', 0);

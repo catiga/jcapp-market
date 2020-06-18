@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[[${str}]] | 轮播图设置</title>
+<title>[[${str}]] | 广告设置</title>
 <link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
 <link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
 <link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
@@ -16,63 +16,82 @@
 	<div id="wrapper">
 		<div th:replace="../common/nav"></div>
 		<div id="page-wrapper" class="gray-bg">
-			<div th:replace="../common/top"></div>   <!-- 顶部 -->
-			<div class="row wrapper border-bottom white-bg page-heading">  <!-- tab栏目 -->
+			<div th:replace="../common/top"></div>
+			<!-- 顶部 -->
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<!-- tab栏目 -->
 				<div class="col-sm-4">
-					<h2>轮播图设置</h2>
+					<h2>广告设置</h2>
 					<ol class="breadcrumb">
 					</ol>
 				</div>
 			</div>
-		      <div class="row">
-                 <div style="position:absolute;z-index:1;left:296px;top:170px;"><img th:src="@{{sp}/img/phone.png(sp=${pub_bucket})}" width="155px"></div>
-				 <div style="position:absolute;z-index:1;left:607px;top:246px;"><img th:src="@{{sp}/img/counter_view.png(sp=${pub_bucket})}" width="297px"></div>
-				 <div th:if="${first_h5_info.picture==''||first_h5_info.picture==null}" style="position:absolute;z-index:2;left:311px;top:213px;"><img th:src="@{{sp}/img/phone_icon.png(sp=${pub_bucket})}" width="127px"></div> 
-				 <div th:if="${first_counter_info.picture==''||first_counter_info.picture==null}" style="position:absolute;z-index:2;left:627px;top:275px;"><img th:src="@{{sp}/img/counter_view_icon.png(sp=${pub_bucket})}" width="253px"></div>
-				 <div>
-				 		<a style="position:absolute;left:308px;top:527px;font-size:18px;" class="edit_view" th:attr_mt="H5">公众号轮播图设置</a>
-				 		<a style="position:absolute;left:690px;top:527px;font-size:18px;" class="edit_view" th:attr_mt="counter">收银台轮播图设置</a>
-				 </div>
-              </div> 
-              <div id="H5_info_data">[[${H5_info}]]</div>
-			  <div id="counter_info_data">[[${counter_info}]]</div>
-              <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-					<!-- 轮播（Carousel）指标 -->
-					<ol  class="carousel-indicators" style="position:absolute;z-index:2;left:361px;top:175px;">
-							<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-							<li data-target="#carousel-example-generic" data-slide-to="1"></li>
-							<li data-target="#carousel-example-generic" data-slide-to="2"></li>
-							<li data-target="#carousel-example-generic" data-slide-to="3"></li>
-							<li data-target="#carousel-example-generic" data-slide-to="4"></li>
-					</ol>   
-						<!-- 轮播（Carousel）项目 -->
-					 <div id="h5_data" class="carousel-inner"  style="position:absolute;z-index:2;left:298px;top:80px;width:120px;height: 100px;">
-						<div class="item active" th:if="${first_h5_info.picture!=''&&first_h5_info.picture!=null}">
-							<img th:src="|${root_path}/${first_h5_info.picture}|"  alt="">
-						</div>
-					 </div>
-				</div> 
-				  <div id="myCarousel" class="carousel slide">
-					<!-- 轮播（Carousel）指标 -->
-					<ol class="carousel-indicators" style="position:absolute;z-index:2;left:737px;top:270px;">
-							<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-							<li data-target="#myCarousel" data-slide-to="1"></li>
-							<li data-target="#myCarousel" data-slide-to="2"></li>
-							<li data-target="#myCarousel" data-slide-to="3"></li>
-							<li data-target="#myCarousel" data-slide-to="4"></li>
-					</ol>   
-						<!-- 轮播（Carousel）项目 -->
-					 <div id="counter_data" class="carousel-inner"  style="position:absolute;z-index:2;left:615px;top:132px;width: 253px;height: 141px;">
-						<div class="item active" th:if="${first_counter_info.picture!=''&&first_counter_info.picture!=null}">
-							<img th:src="|${root_path}/${first_counter_info.picture}|"  alt=""> 
-						</div>
-					 </div>
-				</div> 
-			<div th:replace="../common/foot"></div>  <!-- 页脚 -->
+			<div class="row">
+				<div style="position: absolute; z-index: 1; left: 296px; top: 170px;">
+					<img th:src="@{{sp}/img/phone.png(sp=${pub_bucket})}" width="155px">
+				</div>
+				<div style="position: absolute; z-index: 1; left: 607px; top: 246px;">
+					<img th:src="@{{sp}/img/counter_view.png(sp=${pub_bucket})}" width="297px">
+				</div>
+				<div th:if="${first_h5_info.picture==''||first_h5_info.picture==null}" style="position: absolute; z-index: 2; left: 311px; top: 213px;">
+					<img th:src="@{{sp}/img/phone_icon.png(sp=${pub_bucket})}" width="127px">
+				</div>
+				<div th:if="${first_counter_info.picture==''||first_counter_info.picture==null}" style="position: absolute; z-index: 2; left: 627px; top: 275px;">
+					<img th:src="@{{sp}/img/counter_view_icon.png(sp=${pub_bucket})}" width="253px">
+				</div>
+				<div>
+					<a style="position: absolute; left: 308px; top: 527px; font-size: 18px;" class="edit_view" th:attr_mt="H5">用户界面广告设置</a> 
+					<a style="position: absolute; left: 690px; top: 527px; font-size: 18px;" class="edit_view" th:attr_mt="counter">收银台广告设置</a>
+				</div>
+			</div>
+			<div id="H5_info_data">[[${H5_info}]]</div>
+			<div id="counter_info_data">[[${counter_info}]]</div>
+			<div id="carousel-example-generic" class="carousel slide"
+				data-ride="carousel">
+				<!-- 轮播（Carousel）指标 -->
+				<ol class="carousel-indicators"
+					style="position: absolute; z-index: 2; left: 361px; top: 175px;">
+					<li data-target="#carousel-example-generic" data-slide-to="0"
+						class="active"></li>
+					<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+					<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+					<li data-target="#carousel-example-generic" data-slide-to="3"></li>
+					<li data-target="#carousel-example-generic" data-slide-to="4"></li>
+				</ol>
+				<!-- 轮播（Carousel）项目 -->
+				<div id="h5_data" class="carousel-inner"
+					style="position: absolute; z-index: 2; left: 298px; top: 80px; width: 120px; height: 100px;">
+					<div class="item active"
+						th:if="${first_h5_info.picture!=''&&first_h5_info.picture!=null}">
+						<img th:src="|${root_path}/${first_h5_info.picture}|" alt="">
+					</div>
+				</div>
+			</div>
+			<div id="myCarousel" class="carousel slide">
+				<!-- 轮播（Carousel）指标 -->
+				<ol class="carousel-indicators"
+					style="position: absolute; z-index: 2; left: 737px; top: 270px;">
+					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+					<li data-target="#myCarousel" data-slide-to="1"></li>
+					<li data-target="#myCarousel" data-slide-to="2"></li>
+					<li data-target="#myCarousel" data-slide-to="3"></li>
+					<li data-target="#myCarousel" data-slide-to="4"></li>
+				</ol>
+				<!-- 轮播（Carousel）项目 -->
+				<div id="counter_data" class="carousel-inner"
+					style="position: absolute; z-index: 2; left: 615px; top: 132px; width: 253px; height: 141px;">
+					<div class="item active"
+						th:if="${first_counter_info.picture!=''&&first_counter_info.picture!=null}">
+						<img th:src="|${root_path}/${first_counter_info.picture}|" alt="">
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+			<!-- 页脚 -->
 		</div>
 	</div>
-	
-	   
+
+
 	<!-- Mainly scripts -->
 	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
 	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>

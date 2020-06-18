@@ -2,6 +2,7 @@ package com.jeancoder.market.entry.figure
 
 import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.log.JCLogger
+import com.jeancoder.core.log.JCLoggerFactory
 import com.jeancoder.core.result.Result
 import com.jeancoder.market.ready.common.AvailabilityStatus
 import com.jeancoder.market.ready.entity.FigureInfo
@@ -9,10 +10,9 @@ import com.jeancoder.market.ready.service.FigureInfoService
 import com.jeancoder.market.ready.util.GlobalHolder
 import com.jeancoder.market.ready.util.JackSonBeanMapper
 
-
 Result result = new Result();
-JCLogger logger = LoggerSource.getLogger(this.getClass().getName());
-BigInteger pid = GlobalHolder.getProj().getId();
+JCLogger logger = JCLoggerFactory.getLogger(this.getClass().getName());
+BigInteger pid = GlobalHolder.proj.id;
 try {
 	//得到所有的轮播图
 	List<FigureInfo> info = FigureInfoService.INSTANSE.get_all_figure(pid);
