@@ -27,10 +27,22 @@ def jump_name = JC.internal.param('jump_name');
 def jump_img = JC.internal.param('jump_img');
 def jump_info = JC.internal.param('jump_info');
 
+try {
+	pid = new BigInteger(pid.toString());
+} catch(any) {
+	pid = null;
+}
+if(!pid) {
+	return SimpleAjax.notAvailable('pid_param_error');
+}
+
 def update = true;
 FigureInfo ad = null;
-if(id && id!='0' && id>0) {
+if(id && id!='0' && id!=0) {
 	ad = JcTemplate.INSTANCE().get(FigureInfo, 'select * from FigureInfo where flag!=? and pid=? and id=?', -1, pid, id);
+	if(ad==null) {
+		return SimpleAjax.notAvailable('obj_not_found');
+	}
 } else {
 	ad = new FigureInfo();
 	ad.pid = pid;
@@ -39,28 +51,52 @@ if(id && id!='0' && id>0) {
 	update = false;
 }
 
+if(picture)
+	ad.picture = picture;
 
-ad.picture = picture;
-ad.title = title;
-ad.info = info;
-ad.url_msg = url_msg;
-ad.type = type;
-ad.start_time = start_time;
-ad.end_time = end_time;
+if(title)
+	ad.title = title;
 
-ad.figure_type = figure_type;
-ad.content = content;
-ad.jump_type = jump_type;
+if(info)
+	ad.info = info;
 
-try {
-	ad.jump_id = jump_id;
-}catch(any) {
-	ad.jump_id = 0;
+if(url_msg)
+	ad.url_msg = url_msg;
+
+if(type)
+	ad.type = type;
+
+if(start_time)
+	ad.start_time = start_time;
+
+if(end_time)
+	ad.end_time = end_time;
+
+if(figure_type)
+	ad.figure_type = figure_type;
+
+if(content)
+	ad.content = content;
+
+if(jump_type)
+	ad.jump_type = jump_type;
+
+if(jump_id) {
+	try {
+		ad.jump_id = jump_id;
+	}catch(any) {
+		ad.jump_id = 0;
+	}
 }
 
-ad.jump_name = jump_name;
-ad.jump_img = jump_img;
-ad.jump_info = jump_info;
+if(jump_name)
+	ad.jump_name = jump_name;
+
+if(jump_img)
+	ad.jump_img = jump_img;
+
+if(jump_info)
+	ad.jump_info = jump_info;
 
 if(update) {
 	JcTemplate.INSTANCE().update(ad);
