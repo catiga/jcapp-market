@@ -24,6 +24,6 @@ SysProjectInfo project = NativeUtil.connect(SysProjectInfo.class, 'project', '/i
 GlobalHolder.setProj(project);
 request.setAttribute("current_project", project);
 //request.setAttribute('pub_bucket', 'https://cdn.iplaysky.com/static/');
-request.setAttribute('pub_bucket', 'http://static.jcloudapp.chinaren.xyz/static/')
-
+//request.setAttribute('pub_bucket', 'http://static.jcloudapp.chinaren.xyz/static/')
+request.setAttribute('pub_bucket', 'https://static.hash.bid/static/')
 return true;
