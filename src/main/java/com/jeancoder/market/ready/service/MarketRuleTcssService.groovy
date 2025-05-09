@@ -9,8 +9,8 @@ class MarketRuleTcssService {
     private static final JcTemplate jcTemplate = JcTemplate.INSTANCE();
 
     //根据id查询
-    public MarketRuleTcss getItem(BigInteger pid, BigInteger market_id){
-        String sql = "select * from MarketRuleTcss where pid =? and market_id = ?";
-        jcTemplate.get(MarketRuleTcss.class, sql, pid,market_id);
+    public MarketRuleTcss getItem(BigInteger market_id){
+        String sql = "select * from MarketRuleTcss where market_id = ?";
+        jcTemplate.get(MarketRuleTcss.class, sql,market_id);
     }
 }

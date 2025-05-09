@@ -42,7 +42,7 @@ try{
 			result.addObject("end_time", format2);
 			result.addObject("detail", detail);
 		} else if ("2000".equals(mtype)) {
-			MarketRuleTcss detail = MarketRuleTcssService.INSTANSE.getItem(pid, mInfo.id);
+			MarketRuleTcss detail = MarketRuleTcssService.INSTANSE.getItem(mInfo.id);
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String format1 = format.format(mInfo.start_time);
 			String format2 = format.format(mInfo.end_time);
