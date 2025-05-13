@@ -14,6 +14,8 @@ import com.jeancoder.market.ready.util.RemoteUtil
 
 JCLogger logger = JCLoggerFactory.getLogger(this.getClass().getName());
 
+String id = JC.request.param("id")
+
 String mc_type = JC.request.param("mc_type");//1
 String mc_name = JC.request.param("mc_name");//活动名称 1
 String mc_no = JC.request.param("mc_no");//编号1
@@ -69,7 +71,15 @@ if(start_time==null||end_time==null) {
 	return SimpleAjax.notAvailable(JsConstants.input_param_error + ',请设置活动开始和结束时间')
 }
 
+def update = false;
 MarketInfo mkInfo = new MarketInfo();
+if (id) {
+	mkInfo = JcTemplate.INSTANCE().get(MarketInfo, 'select * from MarketInfo where flag != ? and id = ?', -1, id);
+	if (mkInfo != null) {
+		update = true;
+	}
+}
+
 mkInfo.mtype = mc_type;
 mkInfo.title = mc_name;
 mkInfo.dnum = mc_no==""?generate_coupon_no(pid):mc_no;
@@ -91,7 +101,11 @@ if(mc_user_list=='0') {
 	mkInfo.limit_user = 0;
 }
 //首先保存活动主表
-mkInfo.id = JcTemplate.INSTANCE().save(mkInfo);
+if (!update) {
+	mkInfo.id = JcTemplate.INSTANCE().save(mkInfo);
+} else {
+	JcTemplate.INSTANCE().update(mkInfo);
+}
 
 //保存规则逻辑
 List<MarketRuleTcss> real_rules = [];
