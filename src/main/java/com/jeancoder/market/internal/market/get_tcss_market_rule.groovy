@@ -31,7 +31,7 @@ try {
 		list.start_time = sdf.format(item.start_time);
 		list.end_time = sdf.format(item.end_time);
 		List<MarketTicketRuleDto> dto =new ArrayList();
-		List<MarketRuleTcss> ticket = MarketRuleService.INSTANSE.getTcssItemByInfo_id(new BigInteger(pid), item.id);
+		List<MarketRuleTcss> ticket = MarketRuleService.INSTANSE.getTcssItemByInfo_id(item.id);
 		for (MarketRuleTcss ticket1:ticket) {
 			MarketTicketRuleDto dto1 = new MarketTicketRuleDto();
 			dto1.id = ticket1.id.toString();
