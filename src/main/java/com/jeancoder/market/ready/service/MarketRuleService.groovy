@@ -176,8 +176,8 @@ class MarketRuleService {
 		return jcTemplate.find(MarketInfo.class, sql, pid, MarketConstants._market_type_tc_ss_, '20');
 	}
 
-	public List<MarketRuleTcss> getTcssItemByInfo_id(BigInteger pid, BigInteger market_info_id){
-		String sql = "select * from MarketRuleTcss where pid =? and market_id=? and flag!=?";
-		return jcTemplate.find(MarketRuleTcss.class, sql, pid,market_info_id,-1);
+	public List<MarketRuleTcss> getTcssItemByInfo_id(BigInteger market_info_id){
+		String sql = "select * from MarketRuleTcss where market_id=? and flag!=?";
+		return jcTemplate.find(MarketRuleTcss.class, sql,market_info_id,-1);
 	}
 }
