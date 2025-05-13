@@ -7,10 +7,8 @@ import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.market.ready.common.SimpleAjax
 import com.jeancoder.market.ready.constant.JsConstants
 import com.jeancoder.market.ready.constant.MarketConstants
-import com.jeancoder.market.ready.dto.MarketJsonRule
 import com.jeancoder.market.ready.entity.MarketInfo
 import com.jeancoder.market.ready.entity.MarketRuleTcss
-import com.jeancoder.market.ready.service.MarketRuleService
 import com.jeancoder.market.ready.util.DateUtil
 import com.jeancoder.market.ready.util.RemoteUtil
 
