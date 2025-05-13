@@ -1,5 +1,6 @@
 package com.jeancoder.market.ready.service
 
+import com.jeancoder.market.ready.constant.MarketConstants
 import com.jeancoder.market.ready.entity.MarketRuleTcss
 
 import java.sql.Timestamp
@@ -172,7 +173,7 @@ class MarketRuleService {
 	//查询所有已开启的票务营销活动
 	public List<MarketInfo> get_all_market_info(def pid){
 		String sql = "select * from MarketInfo where pid =? and flag!=-1 and mtype=? and mstatus=?";
-		return jcTemplate.find(MarketInfo.class, sql, pid,'2200','20');
+		return jcTemplate.find(MarketInfo.class, sql, pid, MarketConstants._market_type_tc_ss_, '20');
 	}
 
 	public List<MarketRuleTcss> getTcssItemByInfo_id(BigInteger pid, BigInteger market_info_id){
