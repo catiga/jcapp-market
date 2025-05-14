@@ -323,13 +323,13 @@
 											<div class="form-group">
 												<label class="col-lg-2 control-label" for="play_date_start">放映开始日期</label>
 												<div class="col-lg-10">
-													<input type="text" class="form-control" id="play_date_start" placeholder="不输入即不限制" readonly>
+													<input type="text" class="form-control" id="play_date_start" placeholder="不输入即不限制" readonly th:value="${detail.plan_start_date}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-2 control-label" for="play_time_start">放映开始时段</label>
 												<div class="col-lg-10">
-													<input type="text" class="form-control" id="play_time_start" placeholder="不输入即不限制" readonly>
+													<input type="text" class="form-control" id="play_time_start" placeholder="不输入即不限制" readonly th:value="${detail.plan_start_time}">
 												</div>
 											</div>
 										</form>
@@ -339,13 +339,13 @@
 											<div class="form-group">
 												<label class="col-lg-2 control-label" for="play_date_end">放映结束日期</label>
 												<div class="col-lg-10">
-													<input type="text" class="form-control" id="play_date_end" placeholder="不输入即不限制" readonly>
+													<input type="text" class="form-control" id="play_date_end" placeholder="不输入即不限制" readonly th:value="${detail.plan_end_date}">
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-2 control-label" for="play_time_end">放映结束时段</label>
 												<div class="col-lg-10">
-													<input type="text" class="form-control" id="play_time_end" placeholder="不输入即不限制" readonly>
+													<input type="text" class="form-control" id="play_time_end" placeholder="不输入即不限制" readonly th:value="${detail.plan_end_time}">
 												</div>
 											</div>
 										</form>
