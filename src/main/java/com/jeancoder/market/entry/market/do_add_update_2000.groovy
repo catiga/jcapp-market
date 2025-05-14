@@ -50,6 +50,7 @@ String l_plays = JC.request.param("l_plays");//放映时间段开始1
 String l_playe = JC.request.param("l_playe");//放映时间段结束1
 String mc_l_cwro = JC.request.param("mc_l_cwro");//是否锁座1
 
+logger.info("mc_l_ms: {}", mc_l_ms)
 BigInteger pid = RemoteUtil.getProj().getId();
 
 //参数处理
