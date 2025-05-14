@@ -898,6 +898,7 @@ $(function() {
     });
     
     //影城
+    var store_id = "[[${detail.store_id}]]";
     $.post("[[${contextPath}]]/common/storeInfoList",function(data){
     	if(data.available) {
     		for(var i=0;i<data.obj.length;i++){
@@ -906,9 +907,16 @@ $(function() {
         	}
     	}
     	$("#v_mc_l_cs_v").select2({placeholder:'选择参与活动的影城，为空则不限制'});
+    	$("#v_mc_l_cs_v").val(store_id).trigger('change');
     });
+
     //影厅
+    var limit_halls = "[[${detail.limit_halls}]]";
     $("#mc_l_ht").select2({placeholder:'暂不支持影厅类型选择'});
+    if (limit_halls.length > 0) {
+    	$("#mc_l_ht").val(limit_halls).trigger('change');
+    }
+
     //支付方式
     $("#mc_l_pt").select2({placeholder:'限定支付方式'});
 });
