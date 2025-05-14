@@ -912,6 +912,7 @@ $(function() {
 
     //影厅
     var limit_halls = "[[${detail.limit_halls}]]";
+    limit_halls = limit_halls.split(",");
     $("#mc_l_ht").select2({placeholder:'暂不支持影厅类型选择'});
     if (limit_halls.length > 0) {
     	$("#mc_l_ht").val(limit_halls).trigger('change');
