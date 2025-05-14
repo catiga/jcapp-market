@@ -12,6 +12,7 @@ import com.jeancoder.market.ready.entity.MarketRuleTcss
 import com.jeancoder.market.ready.service.MarketInfoServer
 import com.jeancoder.market.ready.service.MarketRuleRechargeService
 import com.jeancoder.market.ready.service.MarketRuleTcssService
+import com.jeancoder.market.ready.util.JackSonBeanMapper
 import com.jeancoder.market.ready.util.RemoteUtil
 import java.text.SimpleDateFormat
 
@@ -49,6 +50,8 @@ try{
 			result.addObject("start_time", format1);
 			result.addObject("end_time", format2);
 			result.addObject("detail", detail);
+
+			Logger.info("market detail: {}", JackSonBeanMapper.toJson(detail));
 		}
 	}
 

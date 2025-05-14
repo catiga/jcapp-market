@@ -72,7 +72,7 @@
                     		<div class="ibox-title">
 								<h5>基本信息</h5>
 								<div class="ibox-tools">
-									<button type="button" class="btn btn-primary save">保存</button>
+									<button type="button" class="btn btn-primary save" th:id="${mInfo.id}">保存</button>
 									<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a> 
 								</div>
 							</div>
@@ -628,6 +628,7 @@
 </body>
 <script type="text/javascript">
 $(".save").on("click", function() {
+	var market_id = $(this).attr("id");
 	var mc_name = $("#mc_name").val();//活动名称
 	var mc_no = $("#mc_no").val();//活动编号
 	var mc_info = $("#mc_info").val();//活动简介
@@ -811,6 +812,7 @@ $(".save").on("click", function() {
 	var index = layer.load();
 	var url = "[[${contextPath}]]/market/do_add_update_2000/?" + Date.parse(new Date());
 	$.post(url, {
+			id: market_id,
 			mc_type:'2000',//1
 			mc_name:mc_name,//活动名称 1
 			mc_no:mc_no,//编号1
