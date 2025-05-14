@@ -50,7 +50,8 @@ String l_plays = JC.request.param("l_plays");//放映时间段开始1
 String l_playe = JC.request.param("l_playe");//放映时间段结束1
 String mc_l_cwro = JC.request.param("mc_l_cwro");//是否锁座1
 
-logger.info("movie limitation: mc_l_ms-{}", mc_l_ms)
+logger.info("movie limitation: mc_l_ms-{}", mc_l_ms);
+logger.info("price limitation: mc_p_streg-{}", mc_p_streg);
 BigInteger pid = RemoteUtil.getProj().getId();
 
 //参数处理
@@ -112,10 +113,10 @@ if (!update) {
 List<MarketRuleTcss> real_rules = [];
 
 def a_time = Calendar.getInstance().getTime();
-if(mc_l_ms && mc_l_ms!='') {
-	//设置了限制的影城信息，需要生成多条
-	def mc_l_ms_arr = mc_l_ms.split(',');
-	for(x in mc_l_ms_arr) {
+if(mc_l_cs && mc_l_cs!='') {
+	//设置了限制的影片信息，需要生成多条
+	def mc_l_cs_arr = mc_l_cs.split(',');
+	for(x in mc_l_cs_arr) {
 		MarketRuleTcss rule = new MarketRuleTcss();
 		rule.market_id = mkInfo.id;
 		rule.store_id = new BigInteger(x);
@@ -140,7 +141,7 @@ for(x in real_rules) {
 	x.bind_pay_account = mc_l_pay=='1' ? 1 : 0;
 	x.first_buy_eff = mc_l_f&&mc_l_f=='1'? 1 : 0;
 	x.limit_halls = mc_l_ht;
-	x.limit_movies = mc_l_cs;
+	x.limit_movies = mc_l_ms;
 	x.limit_pay_types = mc_l_pt;
 	x.number_policy = mc_l_u + ',' + mc_l_u_f + ',' + mc_l_u_v;
 	x.plan_end_date = l_pde;
@@ -158,6 +159,11 @@ for(x in real_rules) {
 //开始保存数据
 
 try{
+	//首先需要删除所有当是更新情况下的规则数据
+	if (update) {
+		def delNum = JcTemplate.INSTANCE().batchExecute('delete from MarketRuleTcss where market_id = ?', id)
+		logger.info("deleted data count: {}", delNum);
+	}
 	for(x in real_rules) {
 		JcTemplate.INSTANCE().save(x);
 	}
