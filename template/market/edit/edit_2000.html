@@ -868,7 +868,20 @@ $(function() {
 	var post_err_msg = "[[${error_msg}]]";
     if(post_err_msg){
         layer.msg(post_err_msg, {icon: 2}); 
-    } 
+    }
+    var number_policy = "[[${detail.number_policy}]]";
+    number_policy = number_policy.split(",");
+    $("#mc_l_u").val(number_policy[0]);
+    if (number_policy.length > 1) {
+    	$("#mc_l_u_f").val(number_policy[1]);
+    }
+    if (number_policy.length > 2) {
+    	$("#mc_l_u_v").val(number_policy[2]);
+    }
+
+    var limit_movies = "[[${detail.limit_movies}]]";
+    limit_movies = limit_movies.split(",");
+
     //ajax处理显示限制影片、影城、城市
     //影片
     $.post("[[${contextPath}]]/common/movieListInfoList",function(data){
@@ -879,6 +892,9 @@ $(function() {
         	}
     	}
     	$("#v_mc_l_ms").select2({placeholder:'选择参与活动的影片，为空则不限制'});
+    	if (limit_movies.length > 0) {
+			$("#v_mc_l_ms").val(limit_movies).trigger('change');
+		}
     });
     
     //影城
