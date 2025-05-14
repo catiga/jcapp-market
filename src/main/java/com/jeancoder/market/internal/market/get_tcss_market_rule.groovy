@@ -38,17 +38,24 @@ try {
 			dto1.market_info_id = ticket1.market_id.toString();
 			dto1.mc_rule_name = item.title;
 			dto1.desi_movie = ticket1.limit_movies;
-			dto1.spru_time_spec = ticket1.spru_time_spec;
+//			dto1.spru_time_spec = ticket1.spru_time_spec;
 			dto1.mc_p_streg = ticket1.price_policy;
-			dto1.mc_l_u = ticket1.number_policy;
-			dto1.mc_l_u_f = ticket1.mc_l_u_f;
-			dto1.mc_l_u_v = ticket1.mc_l_u_v;
+
+			String[] arr_num_policy = ticket1.number_policy.split(",")
+
+			dto1.mc_l_u = arr_num_policy[0];
+			if (arr_num_policy.length > 1) {
+				dto1.mc_l_u_f = arr_num_policy[1];
+			}
+			if (arr_num_policy.length > 2) {
+				dto1.mc_l_u_v = arr_num_policy[2];
+			}
 //			dto1.is_mc_rule = String.valueOf(ticket1.is_mc_rule);
 //			dto1.member_card_rule = ticket1.member_card_rule;
-			dto1.time_type = ticket1.time_type;
-			dto1.hall_id = ticket1.hall_id;
+//			dto1.time_type = ticket1.time_type;
+			dto1.hall_id = ticket1.limit_halls;
 			dto1.store_id = ticket1.store_id;
-			dto1.film_no = ticket1.film_no;
+			dto1.film_no = ticket1.limit_movies;
 			dto.add(dto1)
 		}
 		list.market = dto;
