@@ -35,14 +35,14 @@ try {
 	
 	Logger.info('{t_num= '+t_num+ ',mobile='+mobile + ',pid='+pid);
 	
-	if (StringUtil.isEmpty(pid) || StringUtil.isEmpty(mobile)) {
+	if (StringUtil.isEmpty(pid)) {
 		mcc.code = JsConstants.unknown;;
 		mcc.msg = "参数不能为空";
 		return mcc;
 	}
 	List<CouponCode> list = null;
 	if(ap_id) {
-		list = CouponService.INSTANSE.get_available_codes_by_mobile(mobile, ap_id, new BigInteger(pid));
+		list = CouponService.INSTANSE.get_available_codes_by_apid(ap_id, new BigInteger(pid));
 	} else {
 		list = CouponService.INSTANSE.get_available_codes_by_mobile(mobile, new BigInteger(pid));
 	}

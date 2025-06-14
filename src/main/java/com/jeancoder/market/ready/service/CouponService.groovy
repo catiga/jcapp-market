@@ -72,6 +72,11 @@ class CouponService {
 		return jcTemplate.find(CouponCode.class, sql, pid, CouponConstants._coupon_batch_enable_, -1, -1 , mobile, ap_id, CouponConstants._coupon_code_status_touse_);
 	}
 
+	public List<CouponCode> get_available_codes_by_apid(def ap_id, BigInteger pid){
+		String sql = "select cc.* from CouponBatch cb, CouponCode cc where cb.pid=? and cb.cbstatus=? and cb.flag !=? and cb.id = cc.batch_id and cc.flag !=? and ( cc.account_project_id=? ) and cc.status =?";
+		return jcTemplate.find(CouponCode.class, sql, pid, CouponConstants._coupon_batch_enable_, -1, -1 , ap_id, CouponConstants._coupon_code_status_touse_);
+	}
+
 	/**
 	 * 根据id 字符串查询卡劵列表
 	 * @param ids id,id,id
