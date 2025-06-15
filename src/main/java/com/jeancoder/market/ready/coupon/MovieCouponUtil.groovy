@@ -238,6 +238,7 @@ class MovieCouponUtil extends CouponUtilAbstract {
 			def couponSun = couponCodes.size();
 			String rule_type = batch.coupon_type;
 			String value = goodsCouponRule.rule_value;
+			LOGGER.info("compute coupon by rule {}-{}", rule_type, value);
 			if(CouponConstants._coupon_type_voucher_.equals(rule_type)){   //代金
 				String kims_money  = value;
 				if( sum != -100  &&  couponSun > sum ){

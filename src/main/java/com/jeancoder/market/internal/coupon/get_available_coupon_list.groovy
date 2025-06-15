@@ -20,6 +20,7 @@ import com.jeancoder.market.ready.service.ServerCouponRuleServer
 import com.jeancoder.market.ready.util.JackSonBeanMapper
 import com.jeancoder.market.ready.util.NumberUtil
 import com.jeancoder.market.ready.util.StringUtil
+import org.slf4j.ILoggerFactory
 
 /**
  * 返回所有可以用的卡劵列表
@@ -33,7 +34,7 @@ try {
 	String pid = CommunicationSource.getParameter("pid");
 	def ap_id = JC.internal.param('ap_id');
 	
-	Logger.info('{t_num= '+t_num+ ',mobile='+mobile + ',pid='+pid);
+	Logger.info('{t_num= {}', t_num, ',mobile= {}', mobile, ',pid={}', pid, ", ap_id={}", ap_id);
 	
 	if (StringUtil.isEmpty(pid)) {
 		mcc.code = JsConstants.unknown;;
@@ -46,6 +47,7 @@ try {
 	} else {
 		list = CouponService.INSTANSE.get_available_codes_by_mobile(mobile, new BigInteger(pid));
 	}
+	Logger.info("user coupons: {}", JackSonBeanMapper.listToJson(list))
 	
 	Map<String,CouponBatch> couponBatch = new HashMap<String, CouponBatch>();
 	List<CouponCodeDto> avacps= new ArrayList<CouponCodeDto>();
