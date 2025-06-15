@@ -16,7 +16,7 @@ def mobile = JC.internal.param('mobile');
 def pid = JC.internal.param('pid');
 def oc = JC.internal.param("oc");
 if (!oc) {
-	oc = "2000";
+	oc = "1000";
 }
 
 if(!coupon_code) {
